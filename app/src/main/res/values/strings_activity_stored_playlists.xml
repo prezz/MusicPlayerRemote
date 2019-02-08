@@ -1,0 +1,27 @@
+<resources>
+
+    <string name="stored_playlist_activity_title">Stored playlists</string>
+
+    <string name="stored_playlists_choice_menu">Playlist choice menu</string>
+    <string name="stored_playlists_control_menu">Playlist control menu</string>
+    
+    <string-array name="stored_playlists_selected_menu">
+        <item>Load</item>
+        <item>Clear and load</item>
+        <item>Clear, load and play</item>
+    </string-array>
+    <string name="stored_playlists_loaded_playlist_toast">%1$s loaded</string>
+    
+    <string-array name="stored_playlists_choice_menu">
+        <item>Save current playlist</item>
+        <item>Delete playlists</item>
+    </string-array>
+    
+    <string name="stored_playlist_nothing_to_delete_toast">No playlists to delete</string>
+    
+    <string name="stored_playlist_file_exist_title">Playlist exist</string>
+    <string name="stored_playlist_file_exist_message">A playlist with the name %1$s already exist. Overwrite?</string>
+
+    <string name="stored_playlist_server_error_toast">Server returned an error. Changes might not have been saved.</string>
+    
+</resources>

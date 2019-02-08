@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="control_volume_down">Volume down</string>
+    <string name="control_volume_up">Volume up</string>
+    <string name="control_play">Play</string>
+    <string name="control_next">Next</string>
+    <string name="control_previous">Previous</string>
+    
+    <string name="control_volume_text_unknown">0%</string>
+    <string name="control_volume_text_format">%1$d%%</string>
+    <string name="control_volume_text_no_mixer">N/A</string>
+    <string name="control_playing_info_none">No information</string>
+    
+</resources>

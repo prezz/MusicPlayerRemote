@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MPD Remote</string>
+    <string name="search_hint">Search</string>
+
+    <string name="general_volume_text_format">Volume: %1$d%%</string>
+    <string name="general_volume_text_no_mixer">Volume: N/A</string>
+    <string name="general_player_state_play">Play</string>
+    <string name="general_player_state_stop">Stop</string>
+    <string name="general_player_state_pause">Pause</string>
+
+    <string name="widget_button_content_description">Widget button</string>
+    
+    <string name="database_build_building_database_toast">One moment. Building local library database.</string>
+    <string name="database_build_error_updating_title">Update job running</string>
+    <string name="database_build_error_updating_message">The local library database could not be build at this time. The MPD server is in the process of updating its database.</string>
+    <string name="database_build_error_buffer_title">Error getting full library</string>
+    <string name="database_build_error_buffer_message">Error getting the full library from the MPD server. This can happen when the max_output_buffer_size is to small. Please edit the mpd.conf file located on the MPD server and increase the value of max_output_buffer_size (try starting with a value of 16384). Then restart the MPD server</string>
+
+    <string name="notification_media_player_channel_id">media_player_channel</string>
+    <string name="notification_media_player_channel_name">Media Player Notification</string>
+
+    <string name="notification_streaming_service_title">MPD Streaming</string>
+    <string name="notification_streaming_service_waiting">Buffering...</string>
+    <string name="notification_streaming_channel_id">streaming_channel</string>
+    <string name="notification_streaming_channel_name">Streaming Notification</string>
+
+    <string name="library_hide_folders_header">Select root folders to hide</string>
+
+</resources>

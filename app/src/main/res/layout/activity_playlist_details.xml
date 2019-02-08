@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    tools:context=".PlaylistDetailsActivity" >
+
+    <net.prezz.mpr.ui.view.DragListView
+        android:id="@+id/playlist_details_list_view_browse"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:fastScrollEnabled="true" />
+    
+    <ProgressBar
+        android:id="@+id/playlist_details_progress_bar_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
+    
+	<include layout="@layout/view_mini_control" />	
+    
+	<View
+	    android:id="@+id/playlist_details_choice_bar_seperator"
+	    android:layout_width="match_parent"
+	    android:layout_height="1dp"
+	    android:background="@android:color/darker_gray" />
+    
+	<LinearLayout
+	    android:id="@+id/playlist_details_choice_bar"
+	    android:layout_width="match_parent"
+	    android:background="?choiceBarColor"
+	    android:layout_height="50dp" >
+
+		<View
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="2" />
+		
+		<ImageButton
+		    android:id="@+id/playlist_details_button_choice_menu"
+		    android:layout_width="0dp"
+		    android:layout_height="52dp"
+		    android:layout_gravity="center"
+		    android:layout_weight="1"
+			android:background="?android:attr/selectableItemBackground"
+		    android:contentDescription="@string/playlist_details_choice_menu"
+		    android:onClick="onChoiceMenuClick"
+		    android:scaleType="center"
+			android:tint="?iconColor"
+		    android:src="@drawable/ic_choice_menu" />
+				
+		<View
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1" />
+		
+		<ImageButton
+		    android:id="@+id/playlist_details_button_control_menu"
+		    android:layout_width="0dp"
+		    android:layout_height="52dp"
+		    android:layout_gravity="center"
+		    android:layout_weight="1"
+			android:background="?android:attr/selectableItemBackground"
+			android:padding="10dp"
+		    android:contentDescription="@string/playlist_details_control_menu"
+		    android:onClick="onControlMenuClick"
+		    android:scaleType="fitEnd"
+			android:tint="?iconColor"
+		    android:src="@drawable/ic_expand" />
+				
+	</LinearLayout>
+
+</LinearLayout>

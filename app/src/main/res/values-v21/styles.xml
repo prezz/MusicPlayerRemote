@@ -1,0 +1,33 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme for API 21+. This theme completely replaces
+        AppBaseTheme from BOTH res/values/styles.xml and
+        res/values-v14/styles.xml on API 21+ devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Material.Light">
+        <!-- API 21 theme customizations can go here. -->
+
+        <item name="choiceBarColor">?android:colorBackground</item>
+        <item name="iconColor">#ff2d2b2b</item>
+        <item name="playlistDragColor">#c0e3e3e3</item>
+        <item name="redFocusColor">#ffd32a2a</item>
+
+	    <item name="android:colorPrimaryDark">#666666</item>
+	    <item name="android:colorPrimary">#aaaaaa</item>
+	    <item name="android:textColor">#ff2d2b2b</item>
+
+	</style>
+
+    <style name="AppDarkTheme" parent="android:Theme.Material">
+
+        <item name="choiceBarColor">#ff212121</item>
+        <item name="iconColor">#ffbebebe</item>
+        <item name="playlistDragColor">#c0535353</item>
+        <item name="redFocusColor">#ffe31a1a</item>
+
+        <item name="android:textColor">#ffbebebe</item>
+
+    </style>
+
+</resources>

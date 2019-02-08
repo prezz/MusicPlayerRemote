@@ -1,0 +1,7 @@
+.gradle
+.idea
+local.properties
+MusicPlayerRemote.iml
+app/app.iml
+app/build/
+build/

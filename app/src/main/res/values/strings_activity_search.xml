@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="search_activity_title">Search</string>
+    <string name="search_action_hide_folders">Hidden root folders</string>
+    <string name="search_action_search">Search</string>
+    <string name="search_choice_menu">Search choice menu</string>
+    <string name="search_artist_section">Artists</string>
+    <string name="search_album_artist_section">Album Artists</string>
+    <string name="search_composer_section">Composers</string>
+    <string name="search_albums_section">Albums</string>
+    <string name="search_titles_section">Tracks</string>
+        
+    <string-array name="search_selected_menu">
+        <item>Add</item>
+        <item>Enqueue</item>
+        <item>Clear and add</item>
+        <item>Clear, add and play</item>
+    </string-array>
+
+    <string name="search_added_to_playlist_toast">%1$s added</string>
+    
+</resources>

@@ -1,0 +1,19 @@
+<resources>
+
+    <string name="database_activity_title">Update library</string>
+
+    <string name="database_update_header">Update MPD server library</string>
+    <string name="database_update_text">Select the \"Update\" button to tell MPD to update its library database. Do this when files have been, added, updated or removed on the MPD server. Then \"Refresh\" the server update status until the update job has finished.</string>
+    <string name="database_update_button">Update</string>
+    
+    <string name="database_refresh_header">Server update status</string>
+    <string name="database_refresh_text_statistics">Artists: %1$d\nAlbums: %2$d\nTracks: %3$d</string>
+    <string name="database_refresh_text_running">Update running.</string>
+    <string name="database_refresh_button">Refresh</string>
+    
+    <string name="database_delete_header">Delete local library database</string>
+    <string name="database_delete_text">After the MPD server update job has finished, delete the local library database. The local library database will be automatically rebuilt again when requested for the first time.</string>
+    <string name="database_delete_button">Delete</string>
+    <string name="database_delete_toast">Local library database deleted</string>
+    
+</resources>

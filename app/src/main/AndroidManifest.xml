@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.prezz.mpr" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:name="net.prezz.mpr.ui.ApplicationActivator"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true">
+		
+		<receiver android:name="net.prezz.mpr.phone.PhoneStateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+		</receiver>
+
+		<receiver android:name="net.prezz.mpr.widget.RemoteWidgetProvider">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_provider"></meta-data>
+		</receiver>
+
+		<service android:enabled="true" android:name="net.prezz.mpr.service.StreamingService" />
+        <service android:enabled="true" android:name="net.prezz.mpr.service.PlaybackService" />
+
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.player.PlayerActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.playlists.StoredPlaylistsActivity"
+            android:label="@string/stored_playlist_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.playlists.PlaylistDetailsActivity"
+            android:label="@string/playlist_details_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.library.LibraryActivity"
+            android:label="@string/library_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.settings.SettingsActivity"
+            android:label="@string/settings_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.settings.servers.ServersActivity"
+            android:label="@string/servers_activity_title" >
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.settings.servers.AddEditServerActivity"
+            android:label="@string/add_edit_server_activity_title" >
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.AboutActivity"
+            android:label="@string/about_activity_title" >
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.DatabaseActivity"
+            android:label="@string/database_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="standard"
+            android:name="net.prezz.mpr.ui.library.filtered.FilteredAlbumAndTitleActivity"
+            android:label="@string/library_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="standard"
+            android:name="net.prezz.mpr.ui.library.filtered.FilteredArtistActivity"
+            android:label="@string/library_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="standard"
+            android:name="net.prezz.mpr.ui.library.filtered.FilteredTrackAndTitleActivity"
+            android:label="@string/library_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="standard"
+            android:name="net.prezz.mpr.ui.library.filtered.FilteredUriActivity"
+            android:label="@string/library_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.CoverActivity"
+            android:label="@string/cover_activity_title" >
+        </activity>
+        
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.search.SearchActivity"
+            android:label="@string/search_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+            <meta-data
+			    android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+        </activity>
+
+    </application>
+</manifest>

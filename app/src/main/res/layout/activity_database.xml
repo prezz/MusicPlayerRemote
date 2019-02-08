@@ -1,0 +1,141 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".DatabaseActivity" >
+    
+    <LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="@dimen/activity_horizontal_margin"
+	    android:gravity="top"
+	    android:orientation="vertical" >
+	
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="2dp"
+	        android:text="@string/database_update_header"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <TextView
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="2dp"
+	            android:layout_marginRight="4dp"
+	            android:layout_marginTop="2dp"
+	            android:layout_weight="5"
+	            android:text="@string/database_update_text" />
+	
+	        <Button
+	            android:id="@+id/database_button_update"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="bottom"
+	            android:layout_weight="2"
+				android:background="?android:attr/selectableItemBackground"
+	            android:onClick="onUpdateClick"
+	            android:text="@string/database_update_button" />
+	
+	    </LinearLayout>
+	
+		<View
+		    android:layout_width="match_parent"
+		    android:layout_height="1dp"
+		    android:layout_marginBottom="10dp"
+		    android:layout_marginTop="10dp"
+		    android:background="@android:color/darker_gray" />
+	
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="2dp"
+	        android:text="@string/database_refresh_header"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+				
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+		
+	        <TextView
+	            android:id="@+id/database_text_statistics"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:layout_marginBottom="2dp"
+	            android:layout_marginRight="4dp"
+	            android:layout_marginTop="2dp"
+	            android:layout_weight="5" />
+
+	        <TextView
+	            android:id="@+id/database_text_running"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:layout_marginBottom="2dp"
+	            android:layout_marginRight="4dp"
+	            android:layout_marginTop="2dp"
+	            android:layout_weight="5" />
+	        	        	        
+	        <Button
+	            android:id="@+id/database_button_refresh"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="bottom"
+	            android:layout_weight="4"
+				android:background="?android:attr/selectableItemBackground"
+	            android:onClick="onRefreshClick"
+	            android:text="@string/database_refresh_button" />
+	
+	    </LinearLayout>
+				
+		<View
+		    android:layout_width="match_parent"
+		    android:layout_height="1dp"
+		    android:layout_marginTop="10dp"
+		    android:background="@android:color/darker_gray" />
+				
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dp"
+	        android:text="@string/database_delete_header"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <TextView
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="2dp"
+	            android:layout_marginRight="4dp"
+	            android:layout_marginTop="2dp"
+	            android:layout_weight="5"
+	            android:text="@string/database_delete_text" />
+	
+	        <Button
+	            android:id="@+id/database_button_download"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="bottom"
+	            android:layout_weight="2"
+				android:background="?android:attr/selectableItemBackground"
+	            android:onClick="onDeleteClick"
+	            android:text="@string/database_delete_button" />
+	
+	    </LinearLayout>
+	    
+		<View
+		    android:layout_width="match_parent"
+		    android:layout_height="1dp"
+		    android:layout_marginTop="10dp"
+		    android:background="@android:color/darker_gray" />
+	    
+	</LinearLayout>
+</ScrollView>

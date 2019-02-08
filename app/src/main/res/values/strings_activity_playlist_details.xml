@@ -1,0 +1,32 @@
+<resources>
+
+    <string name="playlist_details_activity_title">Details</string>
+
+    <string name="playlist_details_choice_menu">Details choice menu</string>
+    <string name="playlist_details_control_menu">Details control menu</string>
+    
+    <string-array name="playlist_details_selected_menu">
+        <item>Add</item>
+        <item>Enqueue</item>
+        <item>Clear and add</item>
+        <item>Clear, add and play</item>
+        <item>Remove track</item>
+    </string-array>
+    <string name="playlist_details_added_to_playlist_toast">%1$s added</string>
+    
+    <string-array name="playlist_details_choice_menu">
+        <item>Load</item>
+        <item>Clear and load</item>
+        <item>Clear, load and play</item>
+        <item>Remove duplicate tracks</item>
+        <item>Add custom URL (Radio stream)</item>
+    </string-array>
+    
+    <string name="playlist_details_add_url_title">Add custom URL (Radio stream)</string>
+    
+    <string name="playlist_details_loaded_playlist_toast">%1$s loaded</string>
+    <string name="playlist_details_duplicates_removed_toast">Removing %1$d duplicate tracks</string>
+    <string name="playlist_details_added_url_toast">%1$s added</string>
+    <string name="playlist_details_added_error_url_toast">Error adding URL</string>
+    
+</resources>

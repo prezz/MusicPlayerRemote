@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="cover_activity_title">Find cover</string>
+
+    <string name="cover_artist_hint">Artist</string>
+    <string name="cover_album_hint">Album</string>
+    
+    <string name="cover_album_image">Cover image</string>
+    <string name="cover_previous_button">Previous</string>
+    <string name="cover_select_button">Use</string>
+    <string name="cover_next_button">Next</string>
+    <string name="cover_searching_covers">Searching&#8230;</string>
+    <string name="cover_no_covers">No covers found</string>
+    
+</resources>

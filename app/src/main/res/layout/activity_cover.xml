@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="vertical" >
+
+	<!-- Dummy item to prevent text views from receiving focus -->
+	<LinearLayout
+	    android:focusable="true"
+	    android:focusableInTouchMode="true"
+	    android:layout_width="0dp"
+	    android:layout_height="0dp"/>
+    
+    <EditText
+        android:id="@+id/cover_artist_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:hint="@string/cover_artist_hint"
+        android:imeOptions="actionNext"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/cover_album_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:hint="@string/cover_album_hint"
+        android:imeOptions="actionSearch"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/cover_index_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+    
+    <ImageView
+        android:id="@+id/cover_album_image"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/cover_album_image" />
+    
+    <LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+        
+        <Button
+            android:id="@+id/cover_button_previous"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onPreviousClick"
+            android:text="@string/cover_previous_button"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/cover_button_select"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSelectClick"
+            android:text="@string/cover_select_button"
+            android:background="?android:attr/selectableItemBackground" />
+        
+        <Button
+            android:id="@+id/cover_button_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onNextClick"
+            android:text="@string/cover_next_button"
+            android:background="?android:attr/selectableItemBackground" />
+        
+	</LinearLayout>
+	
+</LinearLayout>

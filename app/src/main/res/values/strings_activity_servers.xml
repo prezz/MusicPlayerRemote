@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="servers_activity_title">Configure MPD servers</string>
+    
+    <string name="servers_add_button">Add server</string>
+    
+    <string-array name="servers_context_menu">
+        <item>Delete</item>
+    </string-array>
+    
+    <string name="add_edit_server_activity_title">Add/Edit MPD server</string>
+
+    <string name="add_edit_server_add_title">Add MPD server</string>
+    <string name="add_edit_server_edit_title">Edit MPD server</string>
+    
+    <string name="add_edit_server_name_label">Name:</string>
+    <string name="add_edit_server_name_hint">e.g. My MPD Server</string>
+    <string name="add_edit_server_host_label">Hostname or IP address:</string>
+    <string name="add_edit_server_host_hint">e.g. 127.0.0.1</string>
+    <string name="add_edit_server_port_label">Port:</string>
+    <string name="add_edit_server_port_hint">Default is 6600</string>
+    <string name="add_edit_server_password_label">Password:</string>
+    <string name="add_edit_server_password_hint">Optional server password</string>
+    <string name="add_edit_server_output_label">Default output:</string>
+    <string name="add_edit_server_output_hint">Optional name of output</string>
+    <string name="add_edit_server_streaming_switch">Enable streaming</string>
+    <string name="add_edit_server_streaming_url_hint">Optional streaming url</string>
+    <string name="add_edit_server_save_button">OK</string>
+    
+</resources>

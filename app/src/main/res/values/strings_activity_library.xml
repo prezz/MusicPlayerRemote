@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="library_activity_title">Library</string>
+    <string name="library_action_hide_folders">Hidden root folders</string>
+    <string name="library_musicians">Musicians</string>
+    <string name="library_artists">Artists</string>
+    <string name="library_album_artists">Album Artists</string>
+    <string name="library_composers">Composers</string>
+    <string name="library_albums">Albums</string>
+    <string name="library_genres">Genres</string>
+    <string name="library_files">Files</string>
+    <string name="library_albums_section">Albums</string>
+    <string name="library_titles_section">Tracks</string>
+    <string name="library_directories_section">Directories</string>
+    <string name="library_files_section">Files</string>
+    <string name="library_entity_cover_image">Cover image</string>
+    
+    <string name="library_choice_menu">Library choice menu</string>
+    <string name="library_control_menu">Library control menu</string>
+    
+    <string-array name="library_root_menu">
+        <item>Clear and add random</item>
+        <item>Clear and add all</item>
+        <item>Clear, add all and play</item>
+    </string-array>
+
+    <string-array name="library_uri_root_menu">
+        <item>Clear and add all</item>
+        <item>Clear, add all and play</item>
+    </string-array>
+    
+    <string-array name="library_selected_menu">
+        <item>Add</item>
+        <item>Enqueue</item>
+        <item>Clear and add</item>
+        <item>Clear, add and play</item>
+        <item>Add to stored playlist&#8230;</item>
+    </string-array>
+    
+    <string-array name="library_album_selected_menu">
+        <item>Add</item>
+        <item>Enqueue</item>
+        <item>Clear and add</item>
+        <item>Clear, add and play</item>
+        <item>Add to stored playlist&#8230;</item>
+        <item>Go to artist</item>
+    </string-array>
+
+    <string-array name="library_playlist_selected_menu">
+        <item>Load</item>
+        <item>Clear and load</item>
+        <item>Clear, load and play</item>
+    </string-array>
+
+    <string name="library_add_to_stored_playlist">Add to stored playlist&#8230;</string>
+    <string name="library_no_stored_playlists">No stored playlists to add to</string>
+    <string name="library_new_stored_playlist">(New playlist)</string>
+    <string name="library_new_stores_playlist_server_error">Server returned an error. Playlist might not have been saved.</string>
+    
+    <string name="library_added_to_playlist_toast">%1$s added</string>
+
+    <string name="library_musician_count">musician</string>
+    <string name="library_musicians_count">musicians</string>
+    <string name="library_track_count">track</string>
+    <string name="library_tracks_count">tracks</string>
+    <string name="library_length">Length: %1$s</string>
+    <string name="library_year">Year: %1$s</string>
+    <string name="library_genre">Genre: %1$s</string>
+    <string name="library_image_album_cover">Album cover</string>
+    <string name="library_directory">Directory</string>
+    <string name="library_file">File</string>
+    <string name="library_file_playlist">File (playlist)</string>
+
+    <string name="library_action_change_cover">Find cover</string>
+    <string name="library_action_clear_cover">Remove cover</string>
+    <string name="library_action_lastfm">Search Last.fm</string>
+    <string name="library_action_not_possible">Not possible</string>
+
+    <string name="library_swipe_hint_header">Swipe navigation</string>
+    <string name="library_swipe_hint_message">Swipe left and right to navigate between musicians, album, genres and files.</string>
+    <string name="library_swipe_hint_button">Yes Got It</string>
+
+</resources>

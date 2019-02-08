@@ -1,0 +1,159 @@
+<resources>
+
+    <!-- Strings related to Settings -->
+    <string name="settings_activity_title">Settings</string>
+    <string name="settings_category_connection">Connection settings</string>
+    
+    <string name="settings_servers_title">Configure MPD servers</string>
+    <string name="settings_servers_key">configure_servers</string>
+    <string name="settings_servers_summary">Add, edit or remove MPD servers</string>
+
+    <string name="settings_delete_library_database_toast">Local library database deleted</string>
+
+    <string name="settings_connection_mpd_host_key">connection_host</string>
+    <string name="settings_connection_mpd_port_key">connection_port</string>
+    <string name="settings_connection_mpd_password_key">connection_password</string>
+
+    <string name="settings_category_interface">Interface settings</string>
+
+    <string name="settings_interface_dark_theme_title">Use dark theme</string>
+    <string name="settings_interface_dark_theme_key">dark_theme</string>
+    <string name="settings_interface_dark_theme_summary_on">The non default dark theme is currently used</string>
+    <string name="settings_interface_dark_theme_summary_off">The default light theme is currently used</string>
+
+    <string name="settings_category_player">Player settings</string>
+
+    <string name="settings_default_player_fragment_title">Default start screen</string>
+    <string name="settings_default_player_fragment_key">default_player_fragment</string>
+    <string-array name="settings_default_player_fragment_entries">
+        <item>Playlist</item>
+        <item>Remote control</item>
+    </string-array>
+    <string-array name="settings_default_player_fragment_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    
+    <string name="settings_playlist_track_click_behaviour_title">Playlist click to play</string>
+    <string name="settings_playlist_track_click_behaviour_key">playlist_click_behaviour</string>
+    <string name="settings_playlist_track_click_behaviour_summary_on">Click a track to play it</string>
+    <string name="settings_playlist_track_click_behaviour_summary_off">Clicking a track is ignored</string>
+
+    <string name="settings_volume_control_amount_title">Volume adjust amount</string>
+    <string name="settings_volume_control_amount_key">volume_adjust_amount</string>
+    <string-array name="settings_volume_control_amount_entries">
+        <item>1 step</item>
+        <item>2 steps</item>
+        <item>3 steps</item>
+        <item>4 steps</item>
+        <item>5 steps</item>
+    </string-array>
+    <string-array name="settings_volume_control_amount_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string name="settings_streaming_player_title">Streaming App</string>
+    <string name="settings_streaming_player_key">selected_streaming_app</string>
+    <string-array name="settings_streaming_player_entries">
+        <item>Media Player</item>
+        <item>VLC</item>
+    </string-array>
+    <string-array name="settings_streaming_player_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="settings_playlist_show_priority_in_playlist_title">Show track priority in playlist</string>
+    <string name="settings_playlist_show_priority_in_playlist_key">show_priority_in_playlist</string>
+    <string name="settings_playlist_show_priority_in_playlist_summary_on">Track priority will be shown in playlist (requires MPD 0.17 or greater)</string>
+    <string name="settings_playlist_show_priority_in_playlist_summary_off">Track priority will not be shown in playlist</string>
+
+    <string name="settings_control_options_show_toast_title">Consume toggle explanation</string>
+    <string name="settings_control_options_show_toast_key">control_options_toast_enabled</string>
+    <string name="settings_control_options_show_toast_summary_on">Explanation will be shown when toggling consume mode</string>
+    <string name="settings_control_options_show_toast_summary_off">No explanation shown when toggling consume mode</string>
+
+    <string name="settings_category_library">Library interface settings</string>
+    
+    <string name="settings_library_sort_album_by_artist_title">Sort albums by artist</string>
+    <string name="settings_library_sort_album_by_artist_key">sort_albums_by_artist</string>
+    <string name="settings_library_sort_album_by_artist_summary_on">Albums will be sorted by artist</string>
+    <string name="settings_library_sort_album_by_artist_summary_off">Albums will be sorted by title</string>
+
+    <string name="settings_library_proper_sort_title">Proper sorting</string>
+    <string name="settings_library_proper_sort_key">proper_sorting</string>
+    <string name="settings_library_proper_sort_summary_on">Artists and albums are sorted as \"Something, The\"</string>
+    <string name="settings_library_proper_sort_summary_off">Artists and albums are sorted as \"The Something\"</string>
+
+    <string name="settings_library_show_covers_for_all_albums_title">Show all album covers</string>
+    <string name="settings_library_show_covers_for_all_albums_key">show_covers_all_albums</string>
+    <string name="settings_library_show_covers_for_all_albums_summary_on">Covers will be shown in all albums list in library</string>
+    <string name="settings_library_show_covers_for_all_albums_summary_off">Covers will not be shown in all albums list in library</string>
+    
+    <string name="settings_library_show_covers_for_artist_albums_title">Show musician album covers</string>
+    <string name="settings_library_show_covers_for_artist_albums_key">show_covers_artist_albums</string>
+    <string name="settings_library_show_covers_for_artist_albums_summary_on">Covers will be shown in a musicians albums list in library</string>
+    <string name="settings_library_show_covers_for_artist_albums_summary_off">Covers will not be shown in a musicians albums list in library</string>
+
+    <string name="settings_library_browse_uri_title">File fragment in library</string>
+    <string name="settings_library_browse_uri_key">file_browsing_in_library</string>
+    <string name="settings_library_browse_uri_summary_on">File browsing fragment is displayed in library</string>
+    <string name="settings_library_browse_uri_summary_off">File browsing fragment is not visible in library</string>
+    
+    <string name="settings_library_search_uri_title">Search files and directories</string>
+    <string name="settings_library_search_uri_key">search_files_and_directories</string>
+    <string name="settings_library_search_uri_summary_on">Files and directory names will be included in library search results</string>
+    <string name="settings_library_search_uri_summary_off">Files and directory names will not be included in library search results</string>
+
+    <string name="settings_category_covers">Cover settings</string>
+
+    <string name="settings_covers_local_screen_title">Configure local cover server</string>
+    <string name="settings_covers_local_screen_summary">Setup cover download from local HTTP server</string>
+    <string name="settings_covers_local_enabled_title">Download covers from local server</string>
+    <string name="settings_covers_local_enabled_key">local_cover_enabled</string>
+    <string name="settings_covers_local_path_title">Path</string>
+    <string name="settings_covers_local_path_key">local_cover_path_v2</string>
+    <string name="settings_covers_local_port_title">Port</string>
+    <string name="settings_covers_local_port_key">local_cover_port</string>
+    <string name="settings_covers_local_file_title">Filename</string>
+    <string name="settings_covers_local_file_key">local_cover_filename</string>
+
+    <string name="settings_covers_gracenote_client_id_title">Configure Gracenote client id</string>
+    <string name="settings_covers_gracenote_client_id_summary">Add client id required to retrieve covers from Gracenote</string>
+    <string name="settings_covers_gracenote_client_id_key">gracentore_client_id_</string>
+    <string name="settings_covers_gracenote_user_id_key">gracentore_user_id_</string>
+
+    <string name="settings_covers_amazon_access_key_screen_title">Configure Amazon access keys</string>
+    <string name="settings_covers_amazon_access_key_screen_summary">Add access key required to retrieve covers from Amazon</string>
+    <string name="settings_covers_amazon_access_key_id_title">Access Key Id</string>
+    <string name="settings_covers_amazon_access_key_id_key">amazon_access_key_id</string>
+    <string name="settings_covers_amazon_secret_key_title">Secret Key</string>
+    <string name="settings_covers_amazon_secret_key_key">amazon_secret_key</string>
+
+    <string name="settings_category_behavior">Behavior settings</string>
+    
+    <string name="settings_behavior_pause_on_phonecall_title">Pause on phone call</string>
+    <string name="settings_behavior_pause_on_phonecall_key">pause_on_phonecall</string>
+    <string name="settings_behavior_pause_on_phonecall_summary_on">Send pause command on phone call (Requires MPD Remote to be running)</string>
+    <string name="settings_behavior_pause_on_phonecall_summary_off">Do not send pause command on phone call</string>
+    
+    <string name="settings_behavior_show_notification_title">Show notification</string>
+    <string name="settings_behavior_show_notification_key">show_notification</string>
+    <string name="settings_behavior_show_notification_summary_on">Show info and control notification</string>
+    <string name="settings_behavior_show_notification_summary_off">Do not show info and control notification</string>
+
+    <string name="settings_behavior_override_volume_buttons_title">Override volume buttons</string>
+    <string name="settings_behavior_override_volume_buttons_key">override_volume_buttons</string>
+    <string name="settings_behavior_override_volume_buttons_summary_on">Override volume buttons for volume control</string>
+    <string name="settings_behavior_override_volume_buttons_summary_off">Do not override volume buttons</string>
+
+    <string name="settings_category_other">Other</string>
+    <string name="settings_about_title">About MPD Remote</string>
+    <string name="settings_about_key">about_app</string>
+    <string name="settings_about_summary">Version</string>
+    
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="about_activity_title">About covers</string>
+
+    <string name="about_privacy_policy_text"><u>Privacy Policy</u></string>
+
+    <string name="about_covers_text">Covers provided by</string>
+
+    <string name="about_cover_image">Cover image</string>
+
+</resources>

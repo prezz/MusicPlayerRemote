@@ -1,0 +1,37 @@
+<resources>
+
+    <!--
+        Base application theme for API 11+.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+
+        <item name="choiceBarColor">#fffafafa</item>
+        <item name="iconColor">#ff323232</item>
+        <item name="playlistDragColor">#c0e3e3e3</item>
+        <item name="redFocusColor">#ffd32a2a</item>
+
+    </style>
+
+    <!--
+        Dark application theme for API 11+.
+    -->
+    <style name="AppDarkTheme" parent="android:Theme.Holo">
+
+        <item name="choiceBarColor">#ff1a1c1e</item>
+        <item name="iconColor">#ffbebebe</item>
+        <item name="playlistDragColor">#c0333333</item>
+        <item name="redFocusColor">#ffd32a2a</item>
+
+    </style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+    </style>
+
+    <style name="AppThemeDark" parent="AppDarkTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+    </style>
+
+</resources>
