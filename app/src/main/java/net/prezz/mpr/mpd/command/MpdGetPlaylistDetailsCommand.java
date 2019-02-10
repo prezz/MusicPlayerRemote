@@ -1,6 +1,5 @@
 package net.prezz.mpr.mpd.command;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,13 +26,12 @@ public class MpdGetPlaylistDetailsCommand extends MpdConnectionCommand<StoredPla
         List<PlaylistEntity> result = new LinkedList<PlaylistEntity>();
 
         connection.writeCommand(String.format("listplaylistinfo \"%s\"\n", storedPlaylist.getPlaylistName()));
-        BufferedReader reader = connection.getReader();
         int position = -1;
         boolean sort = false;
         boolean add = false;
         String artist = null;
         String line = null;
-        while ((line = reader.readLine()) != null) {
+        while ((line = connection.readLine()) != null) {
             if (line.startsWith(MpdConnection.OK)) {
                 break;
             }

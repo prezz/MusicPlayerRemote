@@ -202,10 +202,6 @@ public class MpdConnection {
 		return readResponse(OK, ACK, filter);
 	}
 
-	public BufferedReader getReader() throws UnsupportedEncodingException {
-		return new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-	}
-
 	public String readLine() throws IOException {
 	    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 

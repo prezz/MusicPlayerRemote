@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 import net.prezz.mpr.R;
@@ -60,11 +59,10 @@ public class MpdDatabaseBuilder {
 			libraryDatabaseHelper.cleanDatabase();
 
 			connection.writeCommand("listallinfo\n");
-			BufferedReader reader = connection.getReader();
 			MusicLibraryRecord record = new MusicLibraryRecord();
 			boolean add = false;
 			String line = null;
-			while ((line = reader.readLine()) != null) {
+			while ((line = connection.readLine()) != null) {
 				if (line.startsWith(MpdConnection.OK)) {
 					break;
 				}

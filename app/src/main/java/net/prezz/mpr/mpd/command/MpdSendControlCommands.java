@@ -1,6 +1,5 @@
 package net.prezz.mpr.mpd.command;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -391,7 +390,6 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
         }
 
         connection.writeCommand(String.format("playlistinfo\n"));
-        BufferedReader reader = connection.getReader();
 
         TreeMap<Integer, Integer> unprioritizeMap = new TreeMap<Integer, Integer>();
         TreeMap<Integer, Integer> reprioritizeMap = new TreeMap<Integer, Integer>();
@@ -400,7 +398,7 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
         boolean prioritized = false;
         boolean reprioritize = true;
         String line = null;
-        while ((line = reader.readLine()) != null) {
+        while ((line = connection.readLine()) != null) {
             if (line.startsWith(MpdConnection.OK)) {
                 break;
             }
