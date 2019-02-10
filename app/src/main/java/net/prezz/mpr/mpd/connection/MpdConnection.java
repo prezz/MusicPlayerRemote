@@ -222,6 +222,10 @@ public class MpdConnection {
 	    return buffer;
     }
 
+    public void readBinary(byte[] buffer, int offset, int length) throws IOException {
+        inputStream.read(buffer, offset, length);
+    }
+
 	private String[] readResponse(String successTerminator, String errorTerminator, Filter filter) throws IOException {
 		if (isConnected()) {
 			List<String> buffer = new LinkedList<String>();

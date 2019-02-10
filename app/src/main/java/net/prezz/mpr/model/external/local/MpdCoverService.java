@@ -29,7 +29,7 @@ public class MpdCoverService implements CoverService {
                 MpdPlayerSettings mpdSettings = MpdPlayerSettings.create(context);
                 String mpdHost = mpdSettings.getMpdHost();
 
-                Set<String> files = getFiles(context, mpdHost, artist, album);
+                Set<String> files = getDirectories(context, mpdHost, artist, album);
                 List<String> result = getValidUrls(mpdSettings, files);
                 return result;
             }
@@ -40,7 +40,7 @@ public class MpdCoverService implements CoverService {
         return Collections.emptyList();
     }
 
-    private static Set<String> getFiles(Context context, String mpdHost, String artist, String album) {
+    private static Set<String> getDirectories(Context context, String mpdHost, String artist, String album) {
         Set<String> result = new HashSet<String>();
 
         MpdLibraryDatabaseHelper databaseHelper = new MpdLibraryDatabaseHelper(context, mpdHost);
@@ -49,9 +49,9 @@ public class MpdCoverService implements CoverService {
             try {
                 if (c.moveToFirst()) {
                     do {
-                        String file = c.getString(0);
-                        String f = file.substring(0, file.lastIndexOf(UriEntity.DIR_SEPERATOR));
-                        result.add(f + "/.");
+                        String uri = c.getString(0);
+                        String dir = uri.substring(0, uri.lastIndexOf(UriEntity.DIR_SEPERATOR));
+                        result.add(dir + "/.");
                     } while (c.moveToNext());
                 }
             } finally {
@@ -69,7 +69,7 @@ public class MpdCoverService implements CoverService {
 
         for (String uri : uris) {
             if (uriExists(mpdSettings, uri)) {
-                result.add(uri);
+                result.add("mpd://" + uri);
             }
         }
 
@@ -79,10 +79,10 @@ public class MpdCoverService implements CoverService {
     private static boolean uriExists(MpdPlayerSettings mpdSettings, String uri) {
         MpdConnection connection = new MpdConnection(mpdSettings);
 
-        boolean exists = false;
         try {
             connection.connect();
             if (connection.isMinimumVersion(0, 21, 0)) {
+                boolean exists = false;
 
                 connection.writeCommand("albumart \"" + uri + "\" 0\n");
 
@@ -100,6 +100,8 @@ public class MpdCoverService implements CoverService {
                         exists = true;
                     }
                 }
+
+                return exists;
             }
         } catch (Exception ex) {
             Log.e(MpdCoverService.class.getName(), "Error checking if mpd cover exists", ex);
@@ -107,6 +109,6 @@ public class MpdCoverService implements CoverService {
             connection.disconnect();
         }
 
-        return exists;
+        return false;
     }
 }

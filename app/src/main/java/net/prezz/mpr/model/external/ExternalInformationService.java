@@ -1,5 +1,6 @@
 package net.prezz.mpr.model.external;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -19,8 +20,12 @@ import net.prezz.mpr.model.external.gracenote.GracenoteCoverService;
 import net.prezz.mpr.model.external.lastfm.LastFmCoverAndInfoService;
 import net.prezz.mpr.model.external.local.HttpCoverService;
 import net.prezz.mpr.model.external.local.MpdCoverService;
+import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.ui.ApplicationActivator;
 import net.prezz.mpr.R;
+import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -518,7 +523,69 @@ public class ExternalInformationService {
 		return null;
 	}
 
-	private static byte[] downloadCoverImage(String coverUrl) {
+    private static byte[] downloadCoverImage(String coverUrl) {
+	    if (coverUrl == null) {
+	        return null;
+        }
+
+        if (coverUrl.startsWith("mpd://")) {
+            return downloadCoverImageFromMpd(coverUrl.substring(6));
+        }
+
+	    if (coverUrl.startsWith("http://") || coverUrl.startsWith("https://")) {
+            return downloadCoverImageFromHttp(coverUrl);
+        }
+
+        return null;
+    }
+
+    private static byte[] downloadCoverImageFromMpd(String coverUrl) {
+        Context context = ApplicationActivator.getContext();
+        MpdPlayerSettings mpdSettings = MpdPlayerSettings.create(context);
+        MpdConnection connection = new MpdConnection(mpdSettings);
+
+        try {
+            connection.connect();
+            if (connection.isMinimumVersion(0, 21, 0)) {
+                byte[] buffer = null;
+                int size = 0;
+                int offset = 0;
+
+                do {
+                    connection.writeCommand("albumart \"" + coverUrl + "\" " + offset + "\n");
+
+                    String line = null;
+                    while ((line = connection.readLine()) != null) {
+                        if (line.startsWith(MpdConnection.OK)) {
+                            break;
+                        }
+                        if (line.startsWith(MpdConnection.ACK)) {
+                            break;
+                        }
+                        if (line.startsWith("size: ") && buffer == null) {
+                            size = Integer.parseInt(line.substring(6));
+                            buffer = new byte[size];
+                        }
+                        if (line.startsWith("binary: ") && buffer != null) {
+                            int length = Integer.parseInt(line.substring(8));
+                            connection.readBinary(buffer, offset, length);
+                            offset += length;
+                        }
+                    }
+                } while (offset < size);
+
+                return buffer;
+            }
+        } catch (Exception ex) {
+            Log.e(MpdCoverService.class.getName(), "Error checking if mpd cover exists", ex);
+        } finally {
+            connection.disconnect();
+        }
+
+        return null;
+    }
+
+    private static byte[] downloadCoverImageFromHttp(String coverUrl) {
 		try {
 			URL url = new URL(coverUrl);
 			URLConnection connection = url.openConnection();
