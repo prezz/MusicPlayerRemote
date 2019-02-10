@@ -17,7 +17,8 @@ import net.prezz.mpr.model.external.amazon.AmazonCoverService;
 import net.prezz.mpr.model.external.cache.CoverCache;
 import net.prezz.mpr.model.external.gracenote.GracenoteCoverService;
 import net.prezz.mpr.model.external.lastfm.LastFmCoverAndInfoService;
-import net.prezz.mpr.model.external.local.LocalCoverService;
+import net.prezz.mpr.model.external.local.HttpCoverService;
+import net.prezz.mpr.model.external.local.MpdCoverService;
 import net.prezz.mpr.ui.ApplicationActivator;
 import net.prezz.mpr.R;
 import android.graphics.Bitmap;
@@ -54,7 +55,8 @@ public class ExternalInformationService {
 		    ;	
 	
 	private static CoverCache coverCache = new CoverCache();
-	private static LocalCoverService localCoverService = new LocalCoverService();
+	private static MpdCoverService mpdCoverService = new MpdCoverService();
+	private static HttpCoverService httpCoverService = new HttpCoverService();
     private static LastFmCoverAndInfoService lastFmCoverAndInfoService = new LastFmCoverAndInfoService();
     private static GracenoteCoverService gracenoteCoverService = new GracenoteCoverService();
 	private static AmazonCoverService amazonCoverService = new AmazonCoverService();
@@ -158,7 +160,15 @@ public class ExternalInformationService {
 	}
 
 	private static String getCoverUrlInternal(String artistParam, String albumParam) {
-		List<String> coverUrlList = localCoverService.getCoverUrls(artistParam, albumParam);
+
+        List<String> coverUrlList = new ArrayList<>();
+
+        coverUrlList.addAll(mpdCoverService.getCoverUrls(artistParam, albumParam));
+        if (!coverUrlList.isEmpty()) {
+            return coverUrlList.get(0);
+        }
+
+		coverUrlList.addAll(httpCoverService.getCoverUrls(artistParam, albumParam));
 		if (!coverUrlList.isEmpty()) {
 			return coverUrlList.get(0);
 		}
@@ -238,8 +248,11 @@ public class ExternalInformationService {
 						String artistParam = (params[0] != null) ? (String)params[0] : "";
 						String albumParam = (params[1] != null) ? (String)params[1] : "";
 
-						List<String> localUrlList = localCoverService.getCoverUrls(artistParam, albumParam);
-						result.addAll(localUrlList);
+                        List<String> mpdUrlList = mpdCoverService.getCoverUrls(artistParam, albumParam);
+                        result.addAll(mpdUrlList);
+
+						List<String> httpUrlList = httpCoverService.getCoverUrls(artistParam, albumParam);
+						result.addAll(httpUrlList);
 
 						List<String> artists = createQueryStrings(artistParam, false);
 						List<String> albums = createQueryStrings(albumParam, true);

@@ -1,12 +1,18 @@
 package net.prezz.mpr.mpd.connection;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +31,7 @@ public class MpdConnection {
 	private int readTimeout;
 	private Socket socket;
 	private BufferedWriter writer;
-	private BufferedReader reader;
+	private BufferedInputStream inputStream;
 	private String version;
 
 	
@@ -52,9 +58,9 @@ public class MpdConnection {
 				socket.setSoTimeout(readTimeout);
 				
 				writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-				reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+                inputStream = new BufferedInputStream(socket.getInputStream());
 				
-				String response = reader.readLine();
+				String response = readLine();
 				String[] split = response.split(" ");
 				
 				if (split.length != 3) {
@@ -74,7 +80,7 @@ public class MpdConnection {
 				String password = settings.getMpdPassword();
 				if (password != null && !password.isEmpty()) {
 					writeCommand(String.format("password %s\n", password));
-					response = reader.readLine();
+					response = readLine();
 					if (!"OK".equals(response)) {
 						throw new IOException("Invalid MPD password");
 					}
@@ -96,7 +102,7 @@ public class MpdConnection {
 			}
 			
 			try {
-				reader.close();
+                inputStream.close();
 			} catch (IOException ex) {
 				Log.e(MpdConnection.class.getName(), "error closing reader", ex);
 			}
@@ -109,7 +115,7 @@ public class MpdConnection {
 		}
 
 		writer = null;
-		reader = null;
+        inputStream = null;
 		socket = null;
 	}
 	
@@ -196,15 +202,35 @@ public class MpdConnection {
 		return readResponse(OK, ACK, filter);
 	}
 
-	public BufferedReader getReader() {
-		return reader;
+	public BufferedReader getReader() throws UnsupportedEncodingException {
+		return new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 	}
-	
+
+	public String readLine() throws IOException {
+	    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+	    int next;
+	    while ((next = inputStream.read()) != -1) {
+	        if (next == '\n') {
+	            break;
+            }
+            bytes.write(next);
+        }
+
+	    return (bytes.size() == 0 && next == -1) ? null : new String(bytes.toByteArray(), "UTF-8");
+    }
+
+    public byte[] readBinary(int length) throws IOException {
+	    byte[] buffer = new byte[length];
+	    inputStream.read(buffer, 0, length);
+	    return buffer;
+    }
+
 	private String[] readResponse(String successTerminator, String errorTerminator, Filter filter) throws IOException {
 		if (isConnected()) {
 			List<String> buffer = new LinkedList<String>();
 			String line = null;
-			while ((line = reader.readLine()) != null) {
+			while ((line = readLine()) != null) {
 				if (line.startsWith(successTerminator)) {
 					break;
 				}

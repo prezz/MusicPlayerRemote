@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LocalCoverService implements CoverService {
+public class HttpCoverService implements CoverService {
 
     @Override
     public List<String> getCoverUrls(String artist, String album) {
@@ -44,7 +44,7 @@ public class LocalCoverService implements CoverService {
                 return result;
             }
         } catch (Exception ex) {
-            Log.e(LocalCoverService.class.getName(), "Error getting covers from Local cover service", ex);
+            Log.e(HttpCoverService.class.getName(), "Error getting covers from Local cover service", ex);
         }
 
         return Collections.emptyList();
@@ -97,7 +97,7 @@ public class LocalCoverService implements CoverService {
                 URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
                 result.add(uri);
             } catch (Exception ex) {
-                Log.e(LocalCoverService.class.getName(), "Error encoding url", ex);
+                Log.e(HttpCoverService.class.getName(), "Error encoding url", ex);
             }
         }
 
@@ -130,7 +130,7 @@ public class LocalCoverService implements CoverService {
                 }
             }
         } catch (Exception ex) {
-            Log.e(LocalCoverService.class.getName(), "Error checking if url exists", ex);
+            Log.e(HttpCoverService.class.getName(), "Error checking if url exists", ex);
         }
         return false;
     }
