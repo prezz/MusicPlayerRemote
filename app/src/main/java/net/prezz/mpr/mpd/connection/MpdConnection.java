@@ -219,7 +219,7 @@ public class MpdConnection {
     public int readBinary(byte[] buffer, int offset, int length) throws IOException {
 	    int total = 0;
 
-		while (length > 0) {
+	    while (length > 0) {
             int read = inputStream.read(buffer, offset, length);
             if (read == -1) {
                 break;
