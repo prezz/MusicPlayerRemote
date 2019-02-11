@@ -216,14 +216,12 @@ public class MpdConnection {
 	    return (bytes.size() == 0 && next == -1) ? null : new String(bytes.toByteArray(), "UTF-8");
     }
 
-    public byte[] readBinary(int length) throws IOException {
-	    byte[] buffer = new byte[length];
-	    inputStream.read(buffer, 0, length);
-	    return buffer;
-    }
-
     public void readBinary(byte[] buffer, int offset, int length) throws IOException {
-        inputStream.read(buffer, offset, length);
+		int read = 0;
+		while ((length > 0) && ((read = inputStream.read(buffer, offset, length)) != -1)) {
+			offset += read;
+			length -= read;
+		}
     }
 
 	private String[] readResponse(String successTerminator, String errorTerminator, Filter filter) throws IOException {

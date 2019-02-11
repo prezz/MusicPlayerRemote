@@ -14,8 +14,10 @@ import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MpdCoverService implements CoverService {
@@ -29,7 +31,7 @@ public class MpdCoverService implements CoverService {
                 MpdPlayerSettings mpdSettings = MpdPlayerSettings.create(context);
                 String mpdHost = mpdSettings.getMpdHost();
 
-                Set<String> files = getDirectories(context, mpdHost, artist, album);
+                Set<String> files = getFileFromEachDirectories(context, mpdHost, artist, album);
                 List<String> result = getValidUrls(mpdSettings, files);
                 return result;
             }
@@ -40,8 +42,8 @@ public class MpdCoverService implements CoverService {
         return Collections.emptyList();
     }
 
-    private static Set<String> getDirectories(Context context, String mpdHost, String artist, String album) {
-        Set<String> result = new HashSet<String>();
+    private static Set<String> getFileFromEachDirectories(Context context, String mpdHost, String artist, String album) {
+        Map<String, String> result = new HashMap<String, String>();
 
         MpdLibraryDatabaseHelper databaseHelper = new MpdLibraryDatabaseHelper(context, mpdHost);
         try {
@@ -51,7 +53,7 @@ public class MpdCoverService implements CoverService {
                     do {
                         String uri = c.getString(0);
                         String dir = uri.substring(0, uri.lastIndexOf(UriEntity.DIR_SEPERATOR));
-                        result.add(dir + "/.");
+                        result.put(dir, uri);
                     } while (c.moveToNext());
                 }
             } finally {
@@ -61,7 +63,7 @@ public class MpdCoverService implements CoverService {
             databaseHelper.close();
         }
 
-        return result;
+        return new HashSet<>(result.values());
     }
 
     private static List<String> getValidUrls(MpdPlayerSettings mpdSettings, Collection<String> uris) {
@@ -95,8 +97,9 @@ public class MpdCoverService implements CoverService {
                         break;
                     }
                     if (line.startsWith("binary: ")) {
-                        int size = Integer.parseInt(line.substring(8));
-                        connection.readBinary(size);
+                        int length = Integer.parseInt(line.substring(8));
+                        byte[] buffer = new byte[length];
+                        connection.readBinary(buffer, 0, length);
                         exists = true;
                     }
                 }
