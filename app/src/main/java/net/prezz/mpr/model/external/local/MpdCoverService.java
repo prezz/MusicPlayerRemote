@@ -79,32 +79,36 @@ public class MpdCoverService implements CoverService {
     }
 
     private static boolean uriExists(MpdPlayerSettings mpdSettings, String uri) {
+        boolean result = false;
+
         MpdConnection connection = new MpdConnection(mpdSettings);
 
         try {
             connection.connect();
             if (connection.isMinimumVersion(0, 21, 0)) {
-                boolean exists = false;
 
                 connection.writeCommand("albumart \"" + uri + "\" 0\n");
 
+                boolean exists = false;
                 String line = null;
                 while ((line = connection.readLine()) != null) {
                     if (line.startsWith(MpdConnection.OK)) {
+                        result = exists;
                         break;
                     }
                     if (line.startsWith(MpdConnection.ACK)) {
                         break;
                     }
+                    if (line.startsWith("size: ")) {
+                        int size = Integer.parseInt(line.substring(6));
+                        exists = (size <= 2097152); // 2MB
+                    }
                     if (line.startsWith("binary: ")) {
                         int length = Integer.parseInt(line.substring(8));
                         byte[] buffer = new byte[length];
                         connection.readBinary(buffer, 0, length);
-                        exists = true;
                     }
                 }
-
-                return exists;
             }
         } catch (Exception ex) {
             Log.e(MpdCoverService.class.getName(), "Error checking if mpd cover exists", ex);
@@ -112,6 +116,6 @@ public class MpdCoverService implements CoverService {
             connection.disconnect();
         }
 
-        return false;
+        return result;
     }
 }

@@ -568,8 +568,13 @@ public class ExternalInformationService {
                         }
                         if (line.startsWith("binary: ") && buffer != null) {
                             int length = Integer.parseInt(line.substring(8));
-                            connection.readBinary(buffer, offset, length);
-                            offset += length;
+                            int read = connection.readBinary(buffer, offset, length);
+                            offset += read;
+
+                            if (read == 0) {
+                                // if we fail to read anything set offset to size to break the loop
+                                offset = size;
+                            }
                         }
                     }
                 } while (offset < size);
