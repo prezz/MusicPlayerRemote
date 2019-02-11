@@ -1,6 +1,5 @@
 package net.prezz.mpr.model.external;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.net.URL;
 import java.net.URLConnection;
