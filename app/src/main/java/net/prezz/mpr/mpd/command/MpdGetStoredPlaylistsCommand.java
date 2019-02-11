@@ -17,36 +17,36 @@ import net.prezz.mpr.mpd.connection.MpdConnection;
 
 public class MpdGetStoredPlaylistsCommand extends MpdConnectionCommand<Void, StoredPlaylistEntity[]>{
 
-	public MpdGetStoredPlaylistsCommand() {
-		super(null);
-	}
+    public MpdGetStoredPlaylistsCommand() {
+        super(null);
+    }
 
-	@Override
-	protected StoredPlaylistEntity[] doExecute(MpdConnection connection, Void param) throws Exception {
-		String[] lines = connection.writeResponseCommand("listplaylists\n");
-		
-		List<StoredPlaylistEntity> result = new ArrayList<StoredPlaylistEntity>();
-		
-		for (String line : lines) {
-			if (line.startsWith("playlist: ")) {
-				String playlistName = line.substring(10);
-				result.add(new StoredPlaylistEntity(playlistName));
-			}
-		}
-		
-		Collections.sort(result, new Comparator<StoredPlaylistEntity>() {
-			@Override
-			public int compare(StoredPlaylistEntity lhs, StoredPlaylistEntity rhs) {
-				return lhs.getPlaylistName().compareToIgnoreCase(rhs.getPlaylistName());
-			}
-		});
-		
-		return result.toArray(new StoredPlaylistEntity[result.size()]);
-	}
+    @Override
+    protected StoredPlaylistEntity[] doExecute(MpdConnection connection, Void param) throws Exception {
+        String[] lines = connection.writeResponseCommand("listplaylists\n");
 
-	@Override
-	protected StoredPlaylistEntity[] onError() {
-		return new StoredPlaylistEntity[0];
-	}
-	
+        List<StoredPlaylistEntity> result = new ArrayList<StoredPlaylistEntity>();
+
+        for (String line : lines) {
+            if (line.startsWith("playlist: ")) {
+                String playlistName = line.substring(10);
+                result.add(new StoredPlaylistEntity(playlistName));
+            }
+        }
+
+        Collections.sort(result, new Comparator<StoredPlaylistEntity>() {
+            @Override
+            public int compare(StoredPlaylistEntity lhs, StoredPlaylistEntity rhs) {
+                return lhs.getPlaylistName().compareToIgnoreCase(rhs.getPlaylistName());
+            }
+        });
+
+        return result.toArray(new StoredPlaylistEntity[result.size()]);
+    }
+
+    @Override
+    protected StoredPlaylistEntity[] onError() {
+        return new StoredPlaylistEntity[0];
+    }
+
 }

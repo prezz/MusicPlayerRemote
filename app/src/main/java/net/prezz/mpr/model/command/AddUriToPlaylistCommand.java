@@ -4,17 +4,17 @@ import net.prezz.mpr.model.UriEntity;
 
 public class AddUriToPlaylistCommand implements Command {
 
-	private UriEntity[] entity;
+    private UriEntity[] entity;
 
-	public AddUriToPlaylistCommand(UriEntity entity) {
-		this.entity = new UriEntity[] { entity };
-	}
-	
-	public AddUriToPlaylistCommand(UriEntity[] entities) {
-		this.entity = entities;
-	}
+    public AddUriToPlaylistCommand(UriEntity entity) {
+        this.entity = new UriEntity[] { entity };
+    }
 
-	public UriEntity[] getEntities() {
-		return entity;
-	}
+    public AddUriToPlaylistCommand(UriEntity[] entities) {
+        this.entity = entities;
+    }
+
+    public UriEntity[] getEntities() {
+        return entity;
+    }
 }

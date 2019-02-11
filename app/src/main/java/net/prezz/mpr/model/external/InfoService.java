@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface InfoService {
 
-	List<String> getArtistInfoUrls(String artist);
+    List<String> getArtistInfoUrls(String artist);
 
-	List<String> getAlbumInfoUrls(String artist, String album);
+    List<String> getAlbumInfoUrls(String artist, String album);
 }

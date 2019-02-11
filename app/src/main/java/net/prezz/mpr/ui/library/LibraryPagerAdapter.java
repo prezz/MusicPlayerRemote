@@ -11,53 +11,53 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 class LibraryPagerAdapter extends FragmentPagerAdapter {
 
-	private Context context;
+    private Context context;
 
-	public LibraryPagerAdapter(FragmentManager fm, Context context) {
-		super(fm);
-		
-		this.context = context;
-	}
+    public LibraryPagerAdapter(FragmentManager fm, Context context) {
+        super(fm);
 
-	public String getTitle(int i) {
-		switch (i) {
-		case 0:
-			return context.getString(R.string.library_musicians);
-		case 1:
-			return context.getString(R.string.library_albums);
-		case 2:
-			return context.getString(R.string.library_genres);
-		case 3:
-			return context.getString(R.string.library_files);
-		}
-		
-		return "";
-	}
-	
-	@Override
-	public Fragment getItem(int i) {
-		switch (i) {
-		case 0:
-			return new LibraryArtistFragment();
-		case 1:
-			return new LibraryAlbumFragment();
-		case 2:
-			return new LibraryGenreFragment();
-		case 3:
-			return new LibraryUriFragment();
-		}
-		
-		return null;
-	}
+        this.context = context;
+    }
 
-	@Override
-	public int getCount() {
-		return (browseUri()) ? 4 : 3;
-	}
-	
-	private boolean browseUri() {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		Resources resources = context.getResources();
-		return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_browse_uri_key), true);
-	}
-}	
+    public String getTitle(int i) {
+        switch (i) {
+        case 0:
+            return context.getString(R.string.library_musicians);
+        case 1:
+            return context.getString(R.string.library_albums);
+        case 2:
+            return context.getString(R.string.library_genres);
+        case 3:
+            return context.getString(R.string.library_files);
+        }
+
+        return "";
+    }
+
+    @Override
+    public Fragment getItem(int i) {
+        switch (i) {
+        case 0:
+            return new LibraryArtistFragment();
+        case 1:
+            return new LibraryAlbumFragment();
+        case 2:
+            return new LibraryGenreFragment();
+        case 3:
+            return new LibraryUriFragment();
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getCount() {
+        return (browseUri()) ? 4 : 3;
+    }
+
+    private boolean browseUri() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Resources resources = context.getResources();
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_browse_uri_key), true);
+    }
+}

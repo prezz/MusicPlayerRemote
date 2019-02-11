@@ -13,11 +13,11 @@
         <item name="playlistDragColor">#c0e3e3e3</item>
         <item name="redFocusColor">#ffd32a2a</item>
 
-	    <item name="android:colorPrimaryDark">#666666</item>
-	    <item name="android:colorPrimary">#aaaaaa</item>
-	    <item name="android:textColor">#ff2d2b2b</item>
+        <item name="android:colorPrimaryDark">#666666</item>
+        <item name="android:colorPrimary">#aaaaaa</item>
+        <item name="android:textColor">#ff2d2b2b</item>
 
-	</style>
+    </style>
 
     <style name="AppDarkTheme" parent="android:Theme.Material">
 

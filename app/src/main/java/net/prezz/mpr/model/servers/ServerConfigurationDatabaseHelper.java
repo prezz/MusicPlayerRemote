@@ -82,7 +82,7 @@ public class ServerConfigurationDatabaseHelper extends SQLiteOpenHelper {
         db.insert("server", null, values);
     }
 
-    public void updateServer(Integer id, String name, String host, String port,	String password, String output, String streaming) {
+    public void updateServer(Integer id, String name, String host, String port,    String password, String output, String streaming) {
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("host", host);

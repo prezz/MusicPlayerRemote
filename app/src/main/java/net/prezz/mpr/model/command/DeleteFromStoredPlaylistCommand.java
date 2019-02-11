@@ -4,19 +4,19 @@ import net.prezz.mpr.model.StoredPlaylistEntity;
 
 public class DeleteFromStoredPlaylistCommand implements Command {
 
-	private StoredPlaylistEntity storedPlaylist;
-	private int pos;
+    private StoredPlaylistEntity storedPlaylist;
+    private int pos;
 
-	public DeleteFromStoredPlaylistCommand(StoredPlaylistEntity storedPlaylist, int pos) {
-		this.storedPlaylist = storedPlaylist;
-		this.pos = pos;
-	}
+    public DeleteFromStoredPlaylistCommand(StoredPlaylistEntity storedPlaylist, int pos) {
+        this.storedPlaylist = storedPlaylist;
+        this.pos = pos;
+    }
 
-	public StoredPlaylistEntity getStoredPlaylist() {
-		return storedPlaylist;
-	}
+    public StoredPlaylistEntity getStoredPlaylist() {
+        return storedPlaylist;
+    }
 
-	public int getPos() {
-		return pos;
-	}
+    public int getPos() {
+        return pos;
+    }
 }

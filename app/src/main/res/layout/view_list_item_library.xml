@@ -2,63 +2,63 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="bottom"
-	android:orientation="horizontal" >
+    android:orientation="horizontal" >
 
     <ImageView
         android:id="@+id/library_list_item_cover_image"
         android:layout_width="@dimen/library_list_view_cover_size"
         android:layout_height="match_parent"
-		android:adjustViewBounds="true"
+        android:adjustViewBounds="true"
         android:layout_marginBottom="1dp"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"
         android:layout_marginTop="1dp"
         android:contentDescription="@string/library_entity_cover_image"
         android:scaleType="centerInside"
-		android:layout_gravity="center_vertical"
+        android:layout_gravity="center_vertical"
         android:visibility="gone" />
     
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
     
-	    <TextView
-	        android:id="@+id/library_list_item_text1"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:ellipsize="end"
-	        android:paddingLeft="1dp"
-	        android:paddingRight="1dp"
-	        android:singleLine="true"
-	        android:textSize="14sp" />
-	
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" >
-	
-			    <TextView
-			        android:id="@+id/library_list_item_text2"
-			        android:layout_width="0dp"
-			        android:layout_height="wrap_content"
-			        android:ellipsize="end"
-			        android:layout_weight="1"
-			        android:paddingLeft="1dp"
-			        android:paddingRight="1dp"
-			        android:singleLine="true"
-			        android:textSize="20sp"
-			        android:textStyle="bold" />
-	
-	            <TextView
-	                android:id="@+id/library_list_item_time"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-		            android:paddingLeft="1dp"
-		            android:paddingRight="1dp"
-		            android:singleLine="true"
-		            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/library_list_item_text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:singleLine="true"
+            android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/library_list_item_text2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_weight="1"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="1dp"
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/library_list_item_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="1dp"
+                    android:singleLine="true"
+                    android:textSize="16sp" />
         
-        	</LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

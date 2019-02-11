@@ -300,11 +300,11 @@ public class PlaybackService extends Service {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setShowWhen(false)
 
-                .addAction(R.drawable.ic_volume_down_w, "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0))	// #0
-                .addAction(R.drawable.ic_volume_up_w, "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0))		// #1
-                .addAction(R.drawable.ic_previous_w, "", PendingIntent.getBroadcast(this, 0, prevIntent, 0))			// #2
-                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0))						// #3
-                .addAction(R.drawable.ic_next_w, "", PendingIntent.getBroadcast(this, 0, nextIntent, 0))				// #4
+                .addAction(R.drawable.ic_volume_down_w, "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0))    // #0
+                .addAction(R.drawable.ic_volume_up_w, "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0))        // #1
+                .addAction(R.drawable.ic_previous_w, "", PendingIntent.getBroadcast(this, 0, prevIntent, 0))            // #2
+                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0))                        // #3
+                .addAction(R.drawable.ic_next_w, "", PendingIntent.getBroadcast(this, 0, nextIntent, 0))                // #4
 
                 .setStyle(new Notification.MediaStyle().setShowActionsInCompactView(3)) // #3 play toggle button
                 .setContentTitle(title)
@@ -332,9 +332,9 @@ public class PlaybackService extends Service {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setShowWhen(false)
 
-                .addAction(R.drawable.ic_volume_down_w, "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0))	// #0
-                .addAction(R.drawable.ic_volume_up_w, "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0))	    // #1
-                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0))				        // #2
+                .addAction(R.drawable.ic_volume_down_w, "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0))    // #0
+                .addAction(R.drawable.ic_volume_up_w, "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0))        // #1
+                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0))                        // #2
 
                 .setContentTitle(title)
                 .setContentText(artist)

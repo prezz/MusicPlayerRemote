@@ -4,17 +4,17 @@ import net.prezz.mpr.model.LibraryEntity;
 
 public class PrioritizeCommand implements Command {
 
-	private LibraryEntity[] entity;
+    private LibraryEntity[] entity;
 
-	public PrioritizeCommand(LibraryEntity entity) {
-		this.entity = new LibraryEntity[] { entity };
-	}
-	
-	public PrioritizeCommand(LibraryEntity[] entities) {
-		this.entity = entities;
-	}
+    public PrioritizeCommand(LibraryEntity entity) {
+        this.entity = new LibraryEntity[] { entity };
+    }
 
-	public LibraryEntity[] getEntities() {
-		return entity;
-	}
+    public PrioritizeCommand(LibraryEntity[] entities) {
+        this.entity = entities;
+    }
+
+    public LibraryEntity[] getEntities() {
+        return entity;
+    }
 }

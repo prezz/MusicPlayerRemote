@@ -22,25 +22,25 @@ public class MpdGetUriCommand extends MpdDatabaseCommand<MpdGetUriCommand.Param,
         }
     }
 
-	public MpdGetUriCommand(UriEntity uriEntity, Set<String> uriFilter) {
-		super(new Param(uriEntity, uriFilter));
-	}
+    public MpdGetUriCommand(UriEntity uriEntity, Set<String> uriFilter) {
+        super(new Param(uriEntity, uriFilter));
+    }
 
-	@Override
-	protected UriEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception {
-	    UriEntity uriEntity = param.uriEntity;
+    @Override
+    protected UriEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception {
+        UriEntity uriEntity = param.uriEntity;
         Set<String> uriFilter = param.uriFilter;
 
-		TreeSet<UriEntity> uriSet = new TreeSet<UriEntity>(MpdCommandHelper.getUriComparator());
+        TreeSet<UriEntity> uriSet = new TreeSet<UriEntity>(MpdCommandHelper.getUriComparator());
 
-		String uriPath = (uriEntity != null) ? uriEntity.getFullUriPath(true) : "";
+        String uriPath = (uriEntity != null) ? uriEntity.getFullUriPath(true) : "";
 
-		Cursor c = uriPath.isEmpty() ? databaseHelper.selectMusicEntitiesRootUri(uriFilter) : databaseHelper.selectMusicEntitiesUri(uriPath);
-		try {
+        Cursor c = uriPath.isEmpty() ? databaseHelper.selectMusicEntitiesRootUri(uriFilter) : databaseHelper.selectMusicEntitiesUri(uriPath);
+        try {
             addToSet(uriSet, c, uriPath, FileType.MUSIC);
-		} finally {
-			c.close();
-		}
+        } finally {
+            c.close();
+        }
 
         c = uriPath.isEmpty() ? databaseHelper.selectPlaylistEntitiesRootUri(uriFilter) : databaseHelper.selectPlaylistEntitiesUri(uriPath);
         try {
@@ -49,15 +49,15 @@ public class MpdGetUriCommand extends MpdDatabaseCommand<MpdGetUriCommand.Param,
             c.close();
         }
 
-		return uriSet.toArray(new UriEntity[uriSet.size()]);
-	}
+        return uriSet.toArray(new UriEntity[uriSet.size()]);
+    }
 
-	@Override
-	protected UriEntity[] onError() {
-		return new UriEntity[0];
-	}
+    @Override
+    protected UriEntity[] onError() {
+        return new UriEntity[0];
+    }
 
-	private void addToSet(TreeSet<UriEntity> uriSet, Cursor c, String uriPath, FileType fileType) {
+    private void addToSet(TreeSet<UriEntity> uriSet, Cursor c, String uriPath, FileType fileType) {
         if (c.moveToFirst()) {
             do {
                 String uri = c.getString(0);

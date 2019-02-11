@@ -7,8 +7,8 @@ import android.view.MotionEvent;
 
 public class SwipeToggleViewPager extends ViewPager {
 
-	private boolean swipeEnabled = true;
-	
+    private boolean swipeEnabled = true;
+
     public SwipeToggleViewPager(Context context) {
         super(context);
     }
@@ -28,6 +28,6 @@ public class SwipeToggleViewPager extends ViewPager {
     }
     
     public void setSwipeEnabled(boolean enabled) {
-    	this.swipeEnabled = enabled;
+        this.swipeEnabled = enabled;
     }
 }

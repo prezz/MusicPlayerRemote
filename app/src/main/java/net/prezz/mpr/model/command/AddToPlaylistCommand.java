@@ -4,17 +4,17 @@ import net.prezz.mpr.model.LibraryEntity;
 
 public class AddToPlaylistCommand implements Command {
 
-	private LibraryEntity[] entity;
+    private LibraryEntity[] entity;
 
-	public AddToPlaylistCommand(LibraryEntity entity) {
-		this.entity = new LibraryEntity[] { entity };
-	}
-	
-	public AddToPlaylistCommand(LibraryEntity[] entities) {
-		this.entity = entities;
-	}
+    public AddToPlaylistCommand(LibraryEntity entity) {
+        this.entity = new LibraryEntity[] { entity };
+    }
 
-	public LibraryEntity[] getEntities() {
-		return entity;
-	}
+    public AddToPlaylistCommand(LibraryEntity[] entities) {
+        this.entity = entities;
+    }
+
+    public LibraryEntity[] getEntities() {
+        return entity;
+    }
 }

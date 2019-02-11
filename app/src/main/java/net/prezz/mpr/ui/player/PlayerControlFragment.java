@@ -399,7 +399,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
             toastText = "?";
         }
         Boast toast = Boast.makeText(getActivity(), toastText);
-//		toast.setGravity(Gravity.CENTER, 0, -40);
+//        toast.setGravity(Gravity.CENTER, 0, -40);
         toast.show();
     }
 

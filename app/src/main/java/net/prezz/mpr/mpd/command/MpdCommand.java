@@ -7,6 +7,6 @@ import java.util.concurrent.Executor;
 public abstract class MpdCommand {
 
     protected static final Executor executor = Utils.createExecutor();
-	protected static final Object lock = new Object();
+    protected static final Object lock = new Object();
 
 }

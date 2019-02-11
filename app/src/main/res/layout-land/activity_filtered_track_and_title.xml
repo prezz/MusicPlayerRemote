@@ -14,20 +14,20 @@
         android:layout_weight="1"
         android:orientation="horizontal" >
 
-	    <LinearLayout
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
-	        android:orientation="vertical" >
-        	
+            android:orientation="vertical" >
+
             <TextView
                 android:id="@+id/filtered_track_title_album_track_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="2dp"
-				android:layout_marginLeft="@dimen/activity_horizontal_margin"
-				android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textSize="14sp" />
@@ -38,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
-				android:layout_marginLeft="@dimen/activity_horizontal_margin"
-				android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textSize="14sp" />
@@ -50,8 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
-				android:layout_marginLeft="@dimen/activity_horizontal_margin"
-				android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textSize="14sp" />
@@ -62,113 +62,113 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="1dp"
-				android:layout_marginLeft="@dimen/activity_horizontal_margin"
-				android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textSize="14sp" />
 
-			<View
-			    android:layout_width="match_parent"
-			    android:layout_height="1dp"
-			    android:background="@android:color/darker_gray" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
             
-	        <ImageView
-	            android:id="@+id/filtered_track_title_cover_image"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/filtered_track_title_cover_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-				android:layout_marginLeft="@dimen/activity_horizontal_margin"
-				android:layout_marginRight="@dimen/activity_horizontal_margin"
-	            android:contentDescription="@string/library_image_album_cover"
-	            android:scaleType="fitCenter" />
-		        
-	    </LinearLayout>
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:contentDescription="@string/library_image_album_cover"
+                android:scaleType="fitCenter" />
+
+        </LinearLayout>
         
-		<View
-		    android:layout_width="1dp"
-		    android:layout_height="match_parent"
-		    android:background="@android:color/darker_gray" />
-	    
-	    <LinearLayout
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
-	        android:orientation="vertical" >
-	    
-		    <net.prezz.mpr.ui.view.KitKatFixedListView
-		        android:id="@+id/filtered_list_view_browse"
-		        android:layout_width="match_parent"
-		        android:layout_height="0dp"
-		        android:layout_weight="1"
-				android:layout_marginLeft="@dimen/activity_horizontal_margin"
-				android:layout_marginRight="@dimen/activity_horizontal_margin"
-		        android:fastScrollEnabled="true" />
-		    
-		    <ProgressBar
-		        android:id="@+id/filtered_progress_bar_load"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:indeterminate="true"
-		        android:visibility="gone" />
-	    		    		    
-	    </LinearLayout>
-		    	    
+            android:orientation="vertical" >
+
+            <net.prezz.mpr.ui.view.KitKatFixedListView
+                android:id="@+id/filtered_list_view_browse"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:fastScrollEnabled="true" />
+
+            <ProgressBar
+                android:id="@+id/filtered_progress_bar_load"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
     </LinearLayout>
-	
+
     <!-- Remove this incude to fix rendering issue in editor -->
     <include layout="@layout/view_mini_control" />
     
-	<View
-	    android:id="@+id/filtered_choice_bar_seperator"
-	    android:layout_width="match_parent"
-	    android:layout_height="1dp"
-	    android:background="@android:color/darker_gray" />
-    		
-	<LinearLayout
-	    android:id="@+id/filtered_choice_bar"
-	    android:layout_width="match_parent"
-	    android:background="?choiceBarColor"
-	    android:layout_height="50dp" >
+    <View
+        android:id="@+id/filtered_choice_bar_seperator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
-		<View
-		    android:layout_width="0dp"
-		    android:layout_height="match_parent"
-		    android:layout_weight="2" />
-		
-		<ImageButton
-		    android:id="@+id/filtered_button_choice_menu"
-		    android:layout_width="0dp"
-		    android:layout_height="52dp"
-		    android:layout_gravity="center"
-		    android:layout_weight="1"
-			android:background="?android:attr/selectableItemBackground"
-		    android:contentDescription="@string/library_choice_menu"
-		    android:onClick="onChoiceMenuClick"
-		    android:scaleType="center"
-			android:tint="?iconColor"
-		    android:src="@drawable/ic_choice_menu" />
-				
-		<View
-		    android:layout_width="0dp"
-		    android:layout_height="match_parent"
-		    android:layout_weight="1" />
-		
-		<ImageButton
-		    android:id="@+id/library_button_control_menu"
-		    android:layout_width="0dp"
-		    android:layout_height="52dp"
-		    android:layout_gravity="center"
-		    android:layout_weight="1"
-			android:background="?android:attr/selectableItemBackground"
-			android:padding="10dp"
-		    android:contentDescription="@string/library_control_menu"
-		    android:onClick="onControlMenuClick"
-		    android:scaleType="fitEnd"
-			android:tint="?iconColor"
-		    android:src="@drawable/ic_expand" />
-				
-	</LinearLayout>
+    <LinearLayout
+        android:id="@+id/filtered_choice_bar"
+        android:layout_width="match_parent"
+        android:background="?choiceBarColor"
+        android:layout_height="50dp" >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <ImageButton
+            android:id="@+id/filtered_button_choice_menu"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/library_choice_menu"
+            android:onClick="onChoiceMenuClick"
+            android:scaleType="center"
+            android:tint="?iconColor"
+            android:src="@drawable/ic_choice_menu" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/library_button_control_menu"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="10dp"
+            android:contentDescription="@string/library_control_menu"
+            android:onClick="onControlMenuClick"
+            android:scaleType="fitEnd"
+            android:tint="?iconColor"
+            android:src="@drawable/ic_expand" />
+
+    </LinearLayout>
 
 </LinearLayout>

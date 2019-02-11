@@ -5,12 +5,12 @@
     android:gravity="bottom|center_horizontal"
     android:orientation="vertical" >
 
-	<!-- Dummy item to prevent text views from receiving focus -->
-	<LinearLayout
-	    android:focusable="true"
-	    android:focusableInTouchMode="true"
-	    android:layout_width="0dp"
-	    android:layout_height="0dp"/>
+    <!-- Dummy item to prevent text views from receiving focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
     
     <EditText
         android:id="@+id/cover_artist_text"
@@ -49,8 +49,8 @@
         android:contentDescription="@string/cover_album_image" />
     
     <LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
         
         <Button
             android:id="@+id/cover_button_previous"
@@ -79,6 +79,6 @@
             android:text="@string/cover_next_button"
             android:background="?android:attr/selectableItemBackground" />
         
-	</LinearLayout>
-	
+    </LinearLayout>
+
 </LinearLayout>

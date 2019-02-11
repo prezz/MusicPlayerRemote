@@ -60,38 +60,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-        	android:layout_weight="1"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingBottom="4dp"
             android:paddingTop="4dp" >
 
-	        <TextView
-	            android:id="@+id/player_text_seek_elapsed"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/player_seek_time"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	
-	        <SeekBar
-	            android:id="@+id/player_seek_bar_time"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="2dp"
-	            android:layout_marginRight="2dp"
-	            android:layout_weight="1" />
-	
-			<TextView
-			    android:id="@+id/player_text_seek_total"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:text="@string/player_seek_time"
-			    android:textAppearance="?android:attr/textAppearanceSmall" />
-		</LinearLayout>
-            				
+            <TextView
+                android:id="@+id/player_text_seek_elapsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/player_seek_time"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <SeekBar
+                android:id="@+id/player_seek_bar_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/player_text_seek_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/player_seek_time"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-        	android:layout_weight="1"
+            android:layout_weight="1"
             android:gravity="center_vertical" >
 
             <ImageButton
@@ -141,7 +141,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-        	android:layout_weight="1" >
+            android:layout_weight="1" >
 
             <ImageButton
                 android:id="@+id/player_button_repeat"
@@ -192,7 +192,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-        	android:layout_weight="1" >
+            android:layout_weight="1" >
 
             <ImageButton
                 android:id="@+id/player_button_previous"

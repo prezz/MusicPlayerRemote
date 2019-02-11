@@ -41,266 +41,266 @@ import net.prezz.mpr.ui.ApplicationActivator;
 
 public class MpdPlayer implements MusicPlayer {
 
-	private MpdConnection connection;
-	private MpdStatusMonitor monitor;
-	private MpdLibraryDatabaseHelper databaseHelper;
-	
-	
-	public MpdPlayer(MpdSettings settings) {
-		this.connection = new MpdConnection(settings);
-		this.monitor = new MpdStatusMonitor(settings);
-		this.databaseHelper = new MpdLibraryDatabaseHelper(ApplicationActivator.getContext(), settings.getMpdHost());
-	}
-	
-	@Override
-	public void dispose() {
-		connection = null;
-		
-		if (monitor != null) {
-			monitor.setStatusListener(null);
-			monitor = null;
-		}
-	
-		if (databaseHelper != null) {
-			databaseHelper.close();
-			databaseHelper = null;
-		}
-	}
+    private MpdConnection connection;
+    private MpdStatusMonitor monitor;
+    private MpdLibraryDatabaseHelper databaseHelper;
 
-	@Override
-	public void setStatusListener(StatusListener listener) {
-		monitor.setStatusListener(listener);
-	}
 
-	@Override
-	public TaskHandle deleteLocalLibraryDatabase(final ResponseReceiver<Boolean> responseReceiver) {
-		MpdDeleteLocalLibraryDatabaseCommand command = new MpdDeleteLocalLibraryDatabaseCommand(databaseHelper);
-		return command.execute(connection, new MpdConnectionCommandReceiver<Boolean>() {
-			@Override
-			public void receive(Boolean result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    public MpdPlayer(MpdSettings settings) {
+        this.connection = new MpdConnection(settings);
+        this.monitor = new MpdStatusMonitor(settings);
+        this.databaseHelper = new MpdLibraryDatabaseHelper(ApplicationActivator.getContext(), settings.getMpdHost());
+    }
 
-	@Override
-	public TaskHandle getHideableUriFolders(final ResponseReceiver<String[]> responseReceiver) {
-		MpdGetHideableUriFolders command = new MpdGetHideableUriFolders();
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<String[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+    @Override
+    public void dispose() {
+        connection = null;
 
-			@Override
-			public void receive(String[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+        if (monitor != null) {
+            monitor.setStatusListener(null);
+            monitor = null;
+        }
 
-	@Override
-	public TaskHandle getAllArtistsFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		MpdGetAllArtistsCommand command = new MpdGetAllArtistsCommand(uriFilter);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
-			
-			@Override
-			public void receive(LibraryEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
-	
-	@Override
-	public TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		MpdGetAllAlbumsCommand command = new MpdGetAllAlbumsCommand(sortByArtist, uriFilter);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+        if (databaseHelper != null) {
+            databaseHelper.close();
+            databaseHelper = null;
+        }
+    }
 
-			@Override
-			public void receive(LibraryEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public void setStatusListener(StatusListener listener) {
+        monitor.setStatusListener(listener);
+    }
 
-	@Override
-	public TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		MpdGetAllGenresCommand command = new MpdGetAllGenresCommand(uriFilter);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+    @Override
+    public TaskHandle deleteLocalLibraryDatabase(final ResponseReceiver<Boolean> responseReceiver) {
+        MpdDeleteLocalLibraryDatabaseCommand command = new MpdDeleteLocalLibraryDatabaseCommand(databaseHelper);
+        return command.execute(connection, new MpdConnectionCommandReceiver<Boolean>() {
+            @Override
+            public void receive(Boolean result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-			@Override
-			public void receive(LibraryEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public TaskHandle getHideableUriFolders(final ResponseReceiver<String[]> responseReceiver) {
+        MpdGetHideableUriFolders command = new MpdGetHideableUriFolders();
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<String[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
 
-	@Override
-	public TaskHandle getFilteredAlbumsAndTitlesFromLibrary(final LibraryEntity entity, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		MpdGetFilteredAlbumsAndTitlesCommand command = new MpdGetFilteredAlbumsAndTitlesCommand(entity);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+            @Override
+            public void receive(String[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-			@Override
-			public void receive(LibraryEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public TaskHandle getAllArtistsFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetAllArtistsCommand command = new MpdGetAllArtistsCommand(uriFilter);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
 
-	@Override
-	public TaskHandle getFilteredArtistsFromLibrary(LibraryEntity entity, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		MpdGetFilteredArtistsCommand command = new MpdGetFilteredArtistsCommand(entity);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+            @Override
+            public void receive(LibraryEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-			@Override
-			public void receive(LibraryEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetAllAlbumsCommand command = new MpdGetAllAlbumsCommand(sortByArtist, uriFilter);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
 
-	@Override
-	public TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		MpdGetFilteredTracksAndTitlesCommand command = new MpdGetFilteredTracksAndTitlesCommand(entity);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+            @Override
+            public void receive(LibraryEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-			@Override
-			public void receive(LibraryEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetAllGenresCommand command = new MpdGetAllGenresCommand(uriFilter);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
 
-	@Override
-	public TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, final ResponseReceiver<UriEntity[]> responseReceiver) {
-		MpdGetUriCommand command = new MpdGetUriCommand(uriEntity, uriFilter);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<UriEntity[]>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+            @Override
+            public void receive(LibraryEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-			@Override
-			public void receive(UriEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
-	
-	@Override
-	public TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, final ResponseReceiver<SearchResult> responseReceiver) {
-		MpdSearchLibraryCommand command = new MpdSearchLibraryCommand(query.trim(), searchUri, uriFilter);
-		return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<SearchResult>() {
-			@Override
-			public void build() {
-				responseReceiver.buildingDatabase();
-			}
+    @Override
+    public TaskHandle getFilteredAlbumsAndTitlesFromLibrary(final LibraryEntity entity, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetFilteredAlbumsAndTitlesCommand command = new MpdGetFilteredAlbumsAndTitlesCommand(entity);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
 
-			@Override
-			public void receive(SearchResult result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
-	
-	@Override
-	public TaskHandle getPlaylist(final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
-		MpdGetPlaylistCommand command = new MpdGetPlaylistCommand();
-		return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
-			@Override
-			public void receive(PlaylistEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+            @Override
+            public void receive(LibraryEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-	@Override
-	public TaskHandle getPlaylistEntity(int position, final ResponseReceiver<PlaylistEntity> responseReceiver) {
-		MpdGetPlaylistEntityCommand command = new MpdGetPlaylistEntityCommand(position);
-		return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity>() {
-			@Override
-			public void receive(PlaylistEntity result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
-	
-	@Override
-	public TaskHandle getStoredPlaylists(final ResponseReceiver<StoredPlaylistEntity[]> responseReceiver) {
-		MpdGetStoredPlaylistsCommand command = new MpdGetStoredPlaylistsCommand();
-		return command.execute(connection, new MpdConnectionCommandReceiver<StoredPlaylistEntity[]>() {
-			@Override
-			public void receive(StoredPlaylistEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public TaskHandle getFilteredArtistsFromLibrary(LibraryEntity entity, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetFilteredArtistsCommand command = new MpdGetFilteredArtistsCommand(entity);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
 
-	@Override
-	public TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
-		MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(storedPlaylist);
-		return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
-			@Override
-			public void receive(PlaylistEntity[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
-	
-	@Override
-	public TaskHandle getOutputs(final ResponseReceiver<AudioOutput[]> responseReceiver) {
-		MpdGetOutputsCommand command = new MpdGetOutputsCommand();
-		return command.execute(connection, new MpdConnectionCommandReceiver<AudioOutput[]>() {
-			@Override
-			public void receive(AudioOutput[] result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+            @Override
+            public void receive(LibraryEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 
-	@Override
-	public TaskHandle getStatistics(final ResponseReceiver<Statistics> responseReceiver) {
-		MpdGetStatisticsCommand command = new MpdGetStatisticsCommand();
-		return command.execute(connection, new MpdConnectionCommandReceiver<Statistics>() {
-			@Override
-			public void receive(Statistics result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
-	
-	@Override
-	public TaskHandle sendControlCommands(List<Command> commands, final ResponseReceiver<ResponseResult> responseReceiver) {
-		MpdSendControlCommands command = new MpdSendControlCommands(commands);
-		return command.execute(connection, new MpdConnectionCommandReceiver<ResponseResult>() {
-			@Override
-			public void receive(ResponseResult result) {
-				responseReceiver.receiveResponse(result);
-			}
-		});
-	}
+    @Override
+    public TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetFilteredTracksAndTitlesCommand command = new MpdGetFilteredTracksAndTitlesCommand(entity);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(LibraryEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, final ResponseReceiver<UriEntity[]> responseReceiver) {
+        MpdGetUriCommand command = new MpdGetUriCommand(uriEntity, uriFilter);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<UriEntity[]>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(UriEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, final ResponseReceiver<SearchResult> responseReceiver) {
+        MpdSearchLibraryCommand command = new MpdSearchLibraryCommand(query.trim(), searchUri, uriFilter);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<SearchResult>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(SearchResult result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getPlaylist(final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
+        MpdGetPlaylistCommand command = new MpdGetPlaylistCommand();
+        return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
+            @Override
+            public void receive(PlaylistEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getPlaylistEntity(int position, final ResponseReceiver<PlaylistEntity> responseReceiver) {
+        MpdGetPlaylistEntityCommand command = new MpdGetPlaylistEntityCommand(position);
+        return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity>() {
+            @Override
+            public void receive(PlaylistEntity result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getStoredPlaylists(final ResponseReceiver<StoredPlaylistEntity[]> responseReceiver) {
+        MpdGetStoredPlaylistsCommand command = new MpdGetStoredPlaylistsCommand();
+        return command.execute(connection, new MpdConnectionCommandReceiver<StoredPlaylistEntity[]>() {
+            @Override
+            public void receive(StoredPlaylistEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
+        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(storedPlaylist);
+        return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
+            @Override
+            public void receive(PlaylistEntity[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getOutputs(final ResponseReceiver<AudioOutput[]> responseReceiver) {
+        MpdGetOutputsCommand command = new MpdGetOutputsCommand();
+        return command.execute(connection, new MpdConnectionCommandReceiver<AudioOutput[]>() {
+            @Override
+            public void receive(AudioOutput[] result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getStatistics(final ResponseReceiver<Statistics> responseReceiver) {
+        MpdGetStatisticsCommand command = new MpdGetStatisticsCommand();
+        return command.execute(connection, new MpdConnectionCommandReceiver<Statistics>() {
+            @Override
+            public void receive(Statistics result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle sendControlCommands(List<Command> commands, final ResponseReceiver<ResponseResult> responseReceiver) {
+        MpdSendControlCommands command = new MpdSendControlCommands(commands);
+        return command.execute(connection, new MpdConnectionCommandReceiver<ResponseResult>() {
+            @Override
+            public void receive(ResponseResult result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
 }

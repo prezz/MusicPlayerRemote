@@ -13,30 +13,30 @@ import android.view.View;
 
 public class AboutActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		ThemeHelper.applyTheme(this);
-		setContentView(R.layout.activity_about);
-	}
+        ThemeHelper.applyTheme(this);
+        setContentView(R.layout.activity_about);
+    }
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event){
-		if (VolumeButtonsHelper.handleKeyDown(this, keyCode, event)) {
-			return true;
-		}
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (VolumeButtonsHelper.handleKeyDown(this, keyCode, event)) {
+            return true;
+        }
 
-		return super.onKeyDown(keyCode, event);
-	}
+        return super.onKeyDown(keyCode, event);
+    }
 
     public void onPrivacyPolicyClick(View view) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/a/prezz.net/mpr/"));
         startActivity(browserIntent);
     }
 
-	public void onLastfmClick(View view) {
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm/"));
-		startActivity(browserIntent);		
-	}
+    public void onLastfmClick(View view) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm/"));
+        startActivity(browserIntent);
+    }
 }

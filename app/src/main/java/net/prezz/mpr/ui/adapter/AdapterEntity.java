@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public interface AdapterEntity extends Serializable {
 
-	String getSectionIndexText();
-	
-	String getText();
+    String getSectionIndexText();
+
+    String getText();
 }

@@ -24,71 +24,71 @@ import android.widget.ListAdapter;
 
 public class LibraryArtistFragment extends LibraryFragment {
 
-	private static final int FRAGMENT_POSITION = 0;
+    private static final int FRAGMENT_POSITION = 0;
 
-	@Override
-	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-		AdapterEntity adapterEntity = getAdapterEntity(position);
-		if (adapterEntity instanceof ArtistAdapterEntity) {
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        AdapterEntity adapterEntity = getAdapterEntity(position);
+        if (adapterEntity instanceof ArtistAdapterEntity) {
             ArtistAdapterEntity libraryAdapterEntity = (ArtistAdapterEntity)adapterEntity;
-			LibraryEntity entity = libraryAdapterEntity.getEntity();
-			
-	    	Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
-			Bundle args = new Bundle();
-			args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, libraryAdapterEntity.getEntityText());
-			args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, entity);
-			intent.putExtras(args);
-	    	startActivity(intent);
-		}
-	}
+            LibraryEntity entity = libraryAdapterEntity.getEntity();
 
-	@Override
-	protected int getFragmentPosition() {
-		return FRAGMENT_POSITION;
-	}
+            Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
+            Bundle args = new Bundle();
+            args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, libraryAdapterEntity.getEntityText());
+            args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, entity);
+            intent.putExtras(args);
+            startActivity(intent);
+        }
+    }
 
-	@Override
-	protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
-		return MusicPlayerControl.getAllArtistsFromLibrary(hiddenUriFolders, responseReceiver);
-	}
-	
-	@Override
-	protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
-		ArrayList<AdapterEntity> result = new ArrayList<AdapterEntity>(entities.length + 3);
-		
-		boolean addArtistSection = true;
-		boolean addAlbumArtistSection = true;
-		boolean addComposerSection = true;
-		for (int i = 0; i < entities.length; i++) {
-			if (entities[i].getTag() == Tag.ARTIST) {
-				if (addArtistSection) {
-					result.add(new SectionAdapterEntity(getString(R.string.library_artists)));
-					addArtistSection = false;
-				}
-				result.add(new ArtistAdapterEntity(entities[i]));
-			}
-			if (entities[i].getTag() == Tag.ALBUM_ARTIST) {
-				if (addAlbumArtistSection) {
-					result.add(new SectionAdapterEntity(getString(R.string.library_album_artists)));
-					addAlbumArtistSection = false;
-				}
-				result.add(new ArtistAdapterEntity(entities[i]));
-			}
-			if (entities[i].getTag() == Tag.COMPOSER) {
-				if (addComposerSection) {
-					result.add(new SectionAdapterEntity(getString(R.string.library_composers)));
-					addComposerSection = false;
-				}
-				result.add(new ArtistAdapterEntity(entities[i]));
-			}
-		}
+    @Override
+    protected int getFragmentPosition() {
+        return FRAGMENT_POSITION;
+    }
 
-		return result.toArray(new AdapterEntity[result.size()]);
-	}
+    @Override
+    protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
+        return MusicPlayerControl.getAllArtistsFromLibrary(hiddenUriFolders, responseReceiver);
+    }
 
-	@Override
-	protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
-		return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, SectionSortedAdapterIndexStrategy.INSTANCE, false);
-	}
+    @Override
+    protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
+        ArrayList<AdapterEntity> result = new ArrayList<AdapterEntity>(entities.length + 3);
+
+        boolean addArtistSection = true;
+        boolean addAlbumArtistSection = true;
+        boolean addComposerSection = true;
+        for (int i = 0; i < entities.length; i++) {
+            if (entities[i].getTag() == Tag.ARTIST) {
+                if (addArtistSection) {
+                    result.add(new SectionAdapterEntity(getString(R.string.library_artists)));
+                    addArtistSection = false;
+                }
+                result.add(new ArtistAdapterEntity(entities[i]));
+            }
+            if (entities[i].getTag() == Tag.ALBUM_ARTIST) {
+                if (addAlbumArtistSection) {
+                    result.add(new SectionAdapterEntity(getString(R.string.library_album_artists)));
+                    addAlbumArtistSection = false;
+                }
+                result.add(new ArtistAdapterEntity(entities[i]));
+            }
+            if (entities[i].getTag() == Tag.COMPOSER) {
+                if (addComposerSection) {
+                    result.add(new SectionAdapterEntity(getString(R.string.library_composers)));
+                    addComposerSection = false;
+                }
+                result.add(new ArtistAdapterEntity(entities[i]));
+            }
+        }
+
+        return result.toArray(new AdapterEntity[result.size()]);
+    }
+
+    @Override
+    protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
+        return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, SectionSortedAdapterIndexStrategy.INSTANCE, false);
+    }
 }

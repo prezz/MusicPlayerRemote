@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.vending.BILLING" />
@@ -17,21 +17,21 @@
         android:theme="@style/AppTheme"
         android:largeHeap="true"
         android:usesCleartextTraffic="true">
-		
-		<receiver android:name="net.prezz.mpr.phone.PhoneStateReceiver">
+
+        <receiver android:name="net.prezz.mpr.phone.PhoneStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
-		</receiver>
+        </receiver>
 
-		<receiver android:name="net.prezz.mpr.widget.RemoteWidgetProvider">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
-			</intent-filter>
-			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_provider"></meta-data>
-		</receiver>
+        <receiver android:name="net.prezz.mpr.widget.RemoteWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_provider"></meta-data>
+        </receiver>
 
-		<service android:enabled="true" android:name="net.prezz.mpr.service.StreamingService" />
+        <service android:enabled="true" android:name="net.prezz.mpr.service.StreamingService" />
         <service android:enabled="true" android:name="net.prezz.mpr.service.PlaybackService" />
 
         <activity
@@ -164,14 +164,14 @@
             android:label="@string/search_activity_title"
             android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
             <intent-filter>
-				<action android:name="android.intent.action.SEARCH" />
-			</intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.prezz.mpr.ui.player.PlayerActivity" />
             <meta-data
-			    android:name="android.app.searchable"
-				android:resource="@xml/searchable" />
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
 
     </application>

@@ -6,9 +6,9 @@ import net.prezz.mpr.model.PlaylistEntity;
 
 public interface PlayerFragment {
 
-	void statusUpdated(PlayerStatus status);
-	
-	void playlistUpdated(PlaylistEntity[] playlistEntities);
-	
-	void onChoiceMenuClick(View view);
+    void statusUpdated(PlayerStatus status);
+
+    void playlistUpdated(PlaylistEntity[] playlistEntities);
+
+    void onChoiceMenuClick(View view);
 }

@@ -41,12 +41,12 @@ public class SettingsFragment extends PreferenceFragment {
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 3003;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setupSimplePreferencesScreen();
-	}
+        setupSimplePreferencesScreen();
+    }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -62,75 +62,75 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupSimplePreferencesScreen() {
-		addPreferencesFromResource(R.xml.settings_screen);
-		
-		setupServersPreferences();
+        addPreferencesFromResource(R.xml.settings_screen);
+
+        setupServersPreferences();
         setupThemePreferences();
         setupProperSortingPreferences();
         setupGracenoteCoverPreferences();
         setupPauseOnPhoneCallPreferences();
         setupNotificationPreferences();
-		setupAboutPreferences();
-		
-		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
-		// their values. When their values change, their summaries are updated
-		// to reflect the new value, per the Android Design guidelines.
-		bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_default_player_fragment_key)));
+        setupAboutPreferences();
+
+        // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
+        // their values. When their values change, their summaries are updated
+        // to reflect the new value, per the Android Design guidelines.
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_default_player_fragment_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_volume_control_amount_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_streaming_player_key)));
-		bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_path_key)));
-		bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_port_key)));
-		bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_file_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_path_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_port_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_file_key)));
 
-	}
-	
-	private static void bindPreferenceSummaryToValue(Preference preference) {
-		preference.setOnPreferenceChangeListener(bindPreferenceSummaryToValueListener);
+    }
 
-		// Trigger the listener immediately with the preference's current value.
-		bindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
-	}
-	
-	private static Preference.OnPreferenceChangeListener bindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-		@Override
-		public boolean onPreferenceChange(Preference preference, Object value) {
-			String stringValue = value.toString();
+    private static void bindPreferenceSummaryToValue(Preference preference) {
+        preference.setOnPreferenceChangeListener(bindPreferenceSummaryToValueListener);
 
-			if (preference instanceof ListPreference) {
-				ListPreference listPreference = (ListPreference) preference;
-				int index = listPreference.findIndexOfValue(stringValue);
-				preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-			} else {
-				boolean password = false;
-				if (preference instanceof EditTextPreference) {
-					int inputMask = ((EditTextPreference)preference).getEditText().getInputType();
-					password = ((inputMask & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0);
-				}
-				preference.setSummary(password ? createString(stringValue.length(), '*') : stringValue);
-			}
-			return true;
-		}
-	};
-	
-	private static String createString(int length, char fillChar) {
-		if (length > 0) {
-			char[] array = new char[length];
-			Arrays.fill(array, fillChar);
-			return new String(array);
-		}
-		return "";
-	}
-	
-	private void setupServersPreferences() {
-		Preference serversPreference = findPreference(getString(R.string.settings_servers_key));
-		serversPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        // Trigger the listener immediately with the preference's current value.
+        bindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
+    }
+
+    private static Preference.OnPreferenceChangeListener bindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+            String stringValue = value.toString();
+
+            if (preference instanceof ListPreference) {
+                ListPreference listPreference = (ListPreference) preference;
+                int index = listPreference.findIndexOfValue(stringValue);
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+            } else {
+                boolean password = false;
+                if (preference instanceof EditTextPreference) {
+                    int inputMask = ((EditTextPreference)preference).getEditText().getInputType();
+                    password = ((inputMask & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0);
+                }
+                preference.setSummary(password ? createString(stringValue.length(), '*') : stringValue);
+            }
+            return true;
+        }
+    };
+
+    private static String createString(int length, char fillChar) {
+        if (length > 0) {
+            char[] array = new char[length];
+            Arrays.fill(array, fillChar);
+            return new String(array);
+        }
+        return "";
+    }
+
+    private void setupServersPreferences() {
+        Preference serversPreference = findPreference(getString(R.string.settings_servers_key));
+        serversPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), ServersActivity.class);
                 startActivity(intent);
                 return true;
             }
         });
- 	}
+     }
 
     private void setupThemePreferences() {
         Preference themePreference = findPreference(getString(R.string.settings_interface_dark_theme_key));
@@ -199,7 +199,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-	private void setupNotificationPreferences() {
+    private void setupNotificationPreferences() {
         Preference notificationPreference = findPreference(getString(R.string.settings_behavior_show_notification_key));
         notificationPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
@@ -223,44 +223,44 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
-	}
-	
-	private void setupAboutPreferences() {
-		String version = getVersion();
-		String buildTime = ""; //" (" + getBuildTime() + ")";
+    }
 
-		Preference aboutPreference = findPreference(getString(R.string.settings_about_key));
-		aboutPreference.setSummary(getString(R.string.settings_about_summary) + " " + version + buildTime);
-		
- 		aboutPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			public boolean onPreferenceClick(Preference preference) {
-	        	Intent intent = new Intent(getActivity(), AboutActivity.class);
-	        	startActivity(intent);
- 				return true;
- 			}
- 		});
- 	}
- 	
- 	private String getVersion() {
- 		try {
-			Activity activity = getActivity();
-			PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
-			return info.versionName ;
- 		} catch (Exception ex) {
- 		}
- 		
- 		return "-";
- 	}
- 	
-//	private String getBuildTime() {
-//		try {
+    private void setupAboutPreferences() {
+        String version = getVersion();
+        String buildTime = ""; //" (" + getBuildTime() + ")";
+
+        Preference aboutPreference = findPreference(getString(R.string.settings_about_key));
+        aboutPreference.setSummary(getString(R.string.settings_about_summary) + " " + version + buildTime);
+
+         aboutPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), AboutActivity.class);
+                startActivity(intent);
+                 return true;
+             }
+         });
+     }
+
+     private String getVersion() {
+         try {
+            Activity activity = getActivity();
+            PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
+            return info.versionName ;
+         } catch (Exception ex) {
+         }
+
+         return "-";
+     }
+
+//    private String getBuildTime() {
+//        try {
 //            Activity activity = getActivity();
 //            PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
 //            Date date = new Date(info.lastUpdateTime);
 //            return date.toString();
-//		} catch (Exception e) {
-//		}
+//        } catch (Exception e) {
+//        }
 //
-//		return "-";
-//	}
+//        return "-";
+//    }
 }

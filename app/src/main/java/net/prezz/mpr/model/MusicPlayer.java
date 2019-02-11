@@ -6,42 +6,42 @@ import java.util.Set;
 import net.prezz.mpr.model.command.Command;
 
 public interface MusicPlayer {
-	
-	void dispose();
-	
-	void setStatusListener(StatusListener listener);
 
-	TaskHandle deleteLocalLibraryDatabase(ResponseReceiver<Boolean> responseReceiver);
+    void dispose();
 
-	TaskHandle getHideableUriFolders(ResponseReceiver<String[]> responseReceiver);
+    void setStatusListener(StatusListener listener);
 
-	TaskHandle getAllArtistsFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
-	
-	TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
-	
-	TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
-	
-	TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
+    TaskHandle deleteLocalLibraryDatabase(ResponseReceiver<Boolean> responseReceiver);
 
-	TaskHandle getFilteredArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
+    TaskHandle getHideableUriFolders(ResponseReceiver<String[]> responseReceiver);
 
-	TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
+    TaskHandle getAllArtistsFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-	TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver);
+    TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-	TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver);
+    TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-	TaskHandle getPlaylist(ResponseReceiver<PlaylistEntity[]> responseReceiver);
+    TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-	TaskHandle getPlaylistEntity(int position, ResponseReceiver<PlaylistEntity> responseReceiver);
+    TaskHandle getFilteredArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-	TaskHandle getStoredPlaylists(ResponseReceiver<StoredPlaylistEntity[]> responseReceiver);
+    TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-	TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, ResponseReceiver<PlaylistEntity[]> responseReceiver);
+    TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver);
 
-	TaskHandle getOutputs(ResponseReceiver<AudioOutput[]> responseReceiver);
+    TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver);
 
-	TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver);
+    TaskHandle getPlaylist(ResponseReceiver<PlaylistEntity[]> responseReceiver);
 
-	TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver);
+    TaskHandle getPlaylistEntity(int position, ResponseReceiver<PlaylistEntity> responseReceiver);
+
+    TaskHandle getStoredPlaylists(ResponseReceiver<StoredPlaylistEntity[]> responseReceiver);
+
+    TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, ResponseReceiver<PlaylistEntity[]> responseReceiver);
+
+    TaskHandle getOutputs(ResponseReceiver<AudioOutput[]> responseReceiver);
+
+    TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver);
+
+    TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver);
 }

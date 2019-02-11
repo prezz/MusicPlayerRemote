@@ -4,5 +4,5 @@ import android.graphics.Bitmap;
 
 public interface CoverReceiver {
 
-	void receiveCover(Bitmap bitmap);
+    void receiveCover(Bitmap bitmap);
 }

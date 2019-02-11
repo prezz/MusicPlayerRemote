@@ -21,44 +21,44 @@ import java.util.Set;
 
 public class LibraryGenreFragment extends LibraryFragment {
 
-	private static final int FRAGMENT_POSITION = 2;
+    private static final int FRAGMENT_POSITION = 2;
 
-	@Override
-	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-		LibraryAdapterEntity adapterEntity = (LibraryAdapterEntity)getAdapterEntity(position);
-		LibraryEntity entity = adapterEntity.getEntity();
-		
-    	Intent intent = new Intent(getActivity(), FilteredArtistActivity.class);
-		Bundle args = new Bundle();
-		args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, adapterEntity.getText());
-		args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, entity);
-		intent.putExtras(args);
-    	startActivity(intent);
-	}
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        LibraryAdapterEntity adapterEntity = (LibraryAdapterEntity)getAdapterEntity(position);
+        LibraryEntity entity = adapterEntity.getEntity();
 
-	@Override
-	protected int getFragmentPosition() {
-		return FRAGMENT_POSITION;
-	}
+        Intent intent = new Intent(getActivity(), FilteredArtistActivity.class);
+        Bundle args = new Bundle();
+        args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, adapterEntity.getText());
+        args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, entity);
+        intent.putExtras(args);
+        startActivity(intent);
+    }
 
-	@Override
-	protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
-		return MusicPlayerControl.getAllGenresFromLibrary(hiddenUriFolders, responseReceiver);
-	}
+    @Override
+    protected int getFragmentPosition() {
+        return FRAGMENT_POSITION;
+    }
 
-	@Override
-	protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
-		AdapterEntity[] result = new AdapterEntity[entities.length];
-		for (int i = 0; i < entities.length; i++) {
-			result[i] = new GenreAdapterEntity(entities[i]);
-		}
-		
-		return result;
-	}
+    @Override
+    protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
+        return MusicPlayerControl.getAllGenresFromLibrary(hiddenUriFolders, responseReceiver);
+    }
 
-	@Override
-	protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
-		return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, SortedAdapterIndexStrategy.INSTANCE, false);
-	}
+    @Override
+    protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
+        AdapterEntity[] result = new AdapterEntity[entities.length];
+        for (int i = 0; i < entities.length; i++) {
+            result[i] = new GenreAdapterEntity(entities[i]);
+        }
+
+        return result;
+    }
+
+    @Override
+    protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
+        return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, SortedAdapterIndexStrategy.INSTANCE, false);
+    }
 }

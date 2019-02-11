@@ -26,32 +26,32 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
     }
 
     private static final String VARIOUS = "Various";
-	
-	public MpdGetAllAlbumsCommand(boolean sortByArtist, Set<String> uriFilter) {
-		super(new Param(Boolean.valueOf(sortByArtist), uriFilter));
-	}
 
-	@Override
-	protected LibraryEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception {
-		Builder entityBuilder = LibraryEntity.createBuilder();
+    public MpdGetAllAlbumsCommand(boolean sortByArtist, Set<String> uriFilter) {
+        super(new Param(Boolean.valueOf(sortByArtist), uriFilter));
+    }
+
+    @Override
+    protected LibraryEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception {
+        Builder entityBuilder = LibraryEntity.createBuilder();
 
         Boolean sortByArtist = param.sortByArtist;
         Set<String> uriFilter = param.uriFilter;
 
         Cursor c = databaseHelper.selectAllAlbums(uriFilter, sortByArtist.booleanValue());
 
-		try {
-			int compilationIndex = 0;
-			List<LibraryEntity> tracks = new ArrayList<LibraryEntity>();
-			List<LibraryEntity> compilations = new ArrayList<LibraryEntity>();
-			List<LibraryEntity> result = new ArrayList<LibraryEntity>(c.getCount());
-		    if (c.moveToFirst()) {
-		        do {
-		            String album = c.getString(0);
+        try {
+            int compilationIndex = 0;
+            List<LibraryEntity> tracks = new ArrayList<LibraryEntity>();
+            List<LibraryEntity> compilations = new ArrayList<LibraryEntity>();
+            List<LibraryEntity> result = new ArrayList<LibraryEntity>(c.getCount());
+            if (c.moveToFirst()) {
+                do {
+                    String album = c.getString(0);
                     String metaAlbum = c.getString(1);
                     String artist = c.getString(2);
-		            String metaArtist = c.isNull(3) ? "" : c.getString(3);
-		            Boolean metaCompilation = c.getInt(4) > 1 ? Boolean.TRUE : Boolean.FALSE;
+                    String metaArtist = c.isNull(3) ? "" : c.getString(3);
+                    Boolean metaCompilation = c.getInt(4) > 1 ? Boolean.TRUE : Boolean.FALSE;
 
                     if (Utils.nullOrEmpty(album)) {
                         LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
@@ -67,7 +67,7 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
                         }
                     }
                 } while (c.moveToNext());
-		    }
+            }
 
             if (sortByArtist == Boolean.TRUE) {
                 Collections.sort(compilations, new Comparator<LibraryEntity>() {
@@ -82,14 +82,14 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
 
             result.addAll(0, tracks);
 
-		    return result.toArray(new LibraryEntity[result.size()]);
-		} finally {
-			c.close();
-		}
-	}
-	
-	@Override
-	protected LibraryEntity[] onError() {
-		return new LibraryEntity[0];
-	}
+            return result.toArray(new LibraryEntity[result.size()]);
+        } finally {
+            c.close();
+        }
+    }
+
+    @Override
+    protected LibraryEntity[] onError() {
+        return new LibraryEntity[0];
+    }
 }

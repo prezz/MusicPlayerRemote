@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface CoverService {
 
-	List<String> getCoverUrls(String artist, String album);
+    List<String> getCoverUrls(String artist, String album);
 }

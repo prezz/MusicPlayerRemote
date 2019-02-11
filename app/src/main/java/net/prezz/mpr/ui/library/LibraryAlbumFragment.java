@@ -33,20 +33,20 @@ import java.util.Set;
 
 public class LibraryAlbumFragment extends LibraryFragment {
 
-	private static final int FRAGMENT_POSITION = 1;
-	
-	private boolean sortByArtist;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		sortByArtist = sortByArtist();
-	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-		AdapterEntity adapterEntity = getAdapterEntity(position);
+    private static final int FRAGMENT_POSITION = 1;
+
+    private boolean sortByArtist;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        sortByArtist = sortByArtist();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        AdapterEntity adapterEntity = getAdapterEntity(position);
         if (adapterEntity instanceof AlbumAdapterEntity) {
             LibraryEntity entity = ((AlbumAdapterEntity)adapterEntity).getEntity();
 
@@ -57,61 +57,61 @@ public class LibraryAlbumFragment extends LibraryFragment {
             intent.putExtras(args);
             startActivity(intent);
         }
-	}
+    }
 
-	@Override
-	public boolean onMenuItemClick(MenuItem item) {
-		if (super.onMenuItemClick(item)) {
-			return true;
-		} else if (item.getItemId() == 5) {
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-			AdapterEntity adapterEntity = getAdapterEntity(info.position);
-			if (adapterEntity instanceof LibraryAdapterEntity) {
-				LibraryEntity entity = ((LibraryAdapterEntity)adapterEntity).getEntity();
-				LibraryEntity artistEntity = LibraryEntity.createBuilder().setTag(Tag.ARTIST).setArtist(entity.getLookupArtist()).setUriFilter(entity.getUriFilter()).build();
-				
-		    	Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
-				Bundle args = new Bundle();
-				args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, artistEntity.getArtist());
-				args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, artistEntity);
-				intent.putExtras(args);
-		    	startActivity(intent);
-		    	return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	@Override
-	protected String[] getContextMenuItems(LibraryEntity entity) {
-		if (entity.getMetaCompilation() == Boolean.FALSE) {
-			return getResources().getStringArray(R.array.library_album_selected_menu);
-		} else {
-			return getResources().getStringArray(R.array.library_selected_menu);
-		}
-	}
-	
-	@Override
-	protected int getFragmentPosition() {
-		return FRAGMENT_POSITION;
-	}
-	
-	@Override
-	protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
-		Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
-		return MusicPlayerControl.getAllAlbumsFromLibrary(sortByArtist, hiddenUriFolders, responseReceiver);
-	}
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (super.onMenuItemClick(item)) {
+            return true;
+        } else if (item.getItemId() == 5) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            AdapterEntity adapterEntity = getAdapterEntity(info.position);
+            if (adapterEntity instanceof LibraryAdapterEntity) {
+                LibraryEntity entity = ((LibraryAdapterEntity)adapterEntity).getEntity();
+                LibraryEntity artistEntity = LibraryEntity.createBuilder().setTag(Tag.ARTIST).setArtist(entity.getLookupArtist()).setUriFilter(entity.getUriFilter()).build();
 
-	@Override
-	protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
-		boolean sections = entities.length > 0 && Utils.nullOrEmpty(entities[0].getAlbum());
+                Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
+                Bundle args = new Bundle();
+                args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, artistEntity.getArtist());
+                args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, artistEntity);
+                intent.putExtras(args);
+                startActivity(intent);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    protected String[] getContextMenuItems(LibraryEntity entity) {
+        if (entity.getMetaCompilation() == Boolean.FALSE) {
+            return getResources().getStringArray(R.array.library_album_selected_menu);
+        } else {
+            return getResources().getStringArray(R.array.library_selected_menu);
+        }
+    }
+
+    @Override
+    protected int getFragmentPosition() {
+        return FRAGMENT_POSITION;
+    }
+
+    @Override
+    protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
+        return MusicPlayerControl.getAllAlbumsFromLibrary(sortByArtist, hiddenUriFolders, responseReceiver);
+    }
+
+    @Override
+    protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
+        boolean sections = entities.length > 0 && Utils.nullOrEmpty(entities[0].getAlbum());
         boolean tracksSection = sections;
         boolean albumsSection = sections;
 
 
-		ArrayList<AdapterEntity> result = new ArrayList<AdapterEntity>(entities.length + 2);
-		for (int i = 0; i < entities.length; i++) {
+        ArrayList<AdapterEntity> result = new ArrayList<AdapterEntity>(entities.length + 2);
+        for (int i = 0; i < entities.length; i++) {
             if (tracksSection) {
                 result.add(new SectionAdapterEntity(getString(R.string.library_titles_section)));
                 tracksSection = false;
@@ -120,27 +120,27 @@ public class LibraryAlbumFragment extends LibraryFragment {
                 albumsSection = false;
             }
 
-			result.add(new AlbumAdapterEntity(entities[i], sortByArtist));
-		}
-		
-		return result.toArray(new AdapterEntity[result.size()]);
-	}
+            result.add(new AlbumAdapterEntity(entities[i], sortByArtist));
+        }
 
-	@Override
-	protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
+        return result.toArray(new AdapterEntity[result.size()]);
+    }
+
+    @Override
+    protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
         AdapterIndexStrategy indexStrategy = (adapterEntities.length > 0 && adapterEntities[0] instanceof SectionAdapterEntity) ? SectionSortedAdapterIndexStrategy.INSTANCE : SortedAdapterIndexStrategy.INSTANCE;
-		return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, indexStrategy, showCovers());
-	}
-	
-	private boolean sortByArtist() {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		Resources resources = getActivity().getResources();
-		return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_sort_album_by_artist_key), true);
-	}
-	
-	private boolean showCovers() {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		Resources resources = getActivity().getResources();
-		return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_show_covers_for_all_albums_key), true);
-	}
+        return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, indexStrategy, showCovers());
+    }
+
+    private boolean sortByArtist() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Resources resources = getActivity().getResources();
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_sort_album_by_artist_key), true);
+    }
+
+    private boolean showCovers() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Resources resources = getActivity().getResources();
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_show_covers_for_all_albums_key), true);
+    }
 }

@@ -139,8 +139,8 @@ public class GracenoteCoverService implements CoverService {
                                     + "<VALUE>COVER,ARTIST_IMAGE</VALUE>"
                                 + "</OPTION>"
                                 + "<OPTION>"
-                            	    + "<PARAMETER>COVER_SIZE</PARAMETER>"
-                            	    + "<VALUE>MEDIUM</VALUE>"
+                                    + "<PARAMETER>COVER_SIZE</PARAMETER>"
+                                    + "<VALUE>MEDIUM</VALUE>"
                                 + "</OPTION>"
                             + "</QUERY>"
                         + "</QUERIES>";

@@ -19,25 +19,25 @@ import android.telephony.TelephonyManager;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (pauseOnIncommingCall(context) && hasPhoneStatePermission(context)) {
-			Bundle bundle = intent.getExtras();
-			if (bundle != null) {
-				String state = bundle.getString(TelephonyManager.EXTRA_STATE);
-				boolean shouldPause = TelephonyManager.EXTRA_STATE_RINGING.equalsIgnoreCase(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equalsIgnoreCase(state);
-				if (shouldPause) {
-		        	MusicPlayerControl.sendControlCommand(new PauseCommand(false));
-				}
-			}
-        }	
-	}
-	
-	private boolean pauseOnIncommingCall(Context context) {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		Resources resources = context.getResources();
-		return sharedPreferences.getBoolean(resources.getString(R.string.settings_behavior_pause_on_phonecall_key), false);
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (pauseOnIncommingCall(context) && hasPhoneStatePermission(context)) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String state = bundle.getString(TelephonyManager.EXTRA_STATE);
+                boolean shouldPause = TelephonyManager.EXTRA_STATE_RINGING.equalsIgnoreCase(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equalsIgnoreCase(state);
+                if (shouldPause) {
+                    MusicPlayerControl.sendControlCommand(new PauseCommand(false));
+                }
+            }
+        }
+    }
+
+    private boolean pauseOnIncommingCall(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Resources resources = context.getResources();
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_behavior_pause_on_phonecall_key), false);
+    }
 
     @TargetApi(Build.VERSION_CODES.M)
     private boolean hasPhoneStatePermission(Context context) {
