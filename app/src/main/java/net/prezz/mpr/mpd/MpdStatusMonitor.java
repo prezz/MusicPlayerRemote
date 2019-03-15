@@ -1,5 +1,6 @@
 package net.prezz.mpr.mpd;
 
+import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.StatusListener;
@@ -72,12 +73,14 @@ public class MpdStatusMonitor extends Handler {
         private boolean running;
         private boolean connected;
         private int errorCount;
+        private int connectionHash;
 
         public Monitor(MpdSettings settings) {
             this.connection = new MpdConnection(settings, 60000 * 5);
             this.running = true;
             this.connected = false;
             this.errorCount = 0;
+            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort());
         }
 
         public void abort() {
@@ -160,7 +163,7 @@ public class MpdStatusMonitor extends Handler {
                         }
                         if (line.startsWith("playlist: ")) {
                             String s = line.substring(10);
-                            status.setPlaylistVersion(Integer.parseInt(s));
+                            status.setPlaylistVersion(connectionHash + Integer.parseInt(s));
                         }
                         if (line.startsWith("random: ")) {
                             String s = line.substring(8);

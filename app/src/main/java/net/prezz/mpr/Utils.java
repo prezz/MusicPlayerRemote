@@ -20,6 +20,19 @@ public class Utils {
         return obj != null ? obj.hashCode() : 0;
     }
 
+    public static int shortHashCode(Object... values) {
+        int hash = 0;
+        for (Object v : values) {
+            hash ^= v.hashCode();
+        }
+
+        hash &= 0x7FFFFFFF;
+        int l = (hash >> 16);
+        int r = (hash & 0xFFFF);
+
+        return (l ^ r);
+    }
+
     public static String fixDatabaseQuery(String input) {
         if (input.contains("'")) {
             StringBuilder sb = new StringBuilder();
