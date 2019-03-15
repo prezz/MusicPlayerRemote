@@ -22,7 +22,8 @@
     <string name="notification_media_player_channel_name">Media Player Notification</string>
 
     <string name="notification_streaming_service_title">MPD Streaming</string>
-    <string name="notification_streaming_service_waiting">Buffering...</string>
+    <string name="notification_streaming_service_buffering">Buffering...</string>
+    <string name="notification_streaming_service_idle">Idle...</string>
     <string name="notification_streaming_channel_id">streaming_channel</string>
     <string name="notification_streaming_channel_name">Streaming Notification</string>
 

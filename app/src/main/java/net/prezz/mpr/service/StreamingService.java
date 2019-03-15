@@ -354,7 +354,7 @@ public class StreamingService extends Service {
             StreamingService.stop();
         }
 
-        updateNotification(getString(R.string.notification_streaming_service_waiting));
+        updateNotification(getString(R.string.notification_streaming_service_buffering));
     }
 
     private class MediaPlayerListener implements MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener,
@@ -378,7 +378,11 @@ public class StreamingService extends Service {
         public void onCompletion(MediaPlayer mediaPlayer) {
             Log.i(StreamingService.class.getName(), "Stream completed");
 
-            StreamingService.stop();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                updateNotification(getString(R.string.notification_streaming_service_idle));
+            } else {
+                StreamingService.stop();
+            }
         }
 
         @Override
@@ -398,7 +402,16 @@ public class StreamingService extends Service {
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
             Log.i(StreamingService.class.getName(), "Stream error code " + what + ", " + extra);
 
-            StreamingService.stop();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (mpdState == PlayerState.PLAY) {
+                    startMediaPlayer(getApplicationContext());
+                } else {
+                    updateNotification(getString(R.string.notification_streaming_service_idle));
+                }
+            } else {
+                StreamingService.stop();
+            }
+
             return true;
         }
     }
