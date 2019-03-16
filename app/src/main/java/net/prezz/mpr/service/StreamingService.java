@@ -379,7 +379,11 @@ public class StreamingService extends Service {
             Log.i(StreamingService.class.getName(), "Stream completed");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                updateNotification(getString(R.string.notification_streaming_service_idle));
+                if (mpdState == PlayerState.PLAY) {
+                    startMediaPlayer(getApplicationContext());
+                } else {
+                    updateNotification(getString(R.string.notification_streaming_service_idle));
+                }
             } else {
                 StreamingService.stop();
             }
