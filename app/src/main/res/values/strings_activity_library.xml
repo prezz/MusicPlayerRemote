@@ -2,7 +2,7 @@
 <resources>
 
     <string name="library_activity_title">Library</string>
-    <string name="library_action_hide_folders">Hidden root folders</string>
+    <string name="library_action_visible_folders">Visible root folders</string>
     <string name="library_musicians">Musicians</string>
     <string name="library_artists">Artists</string>
     <string name="library_album_artists">Album Artists</string>

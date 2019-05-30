@@ -5,6 +5,8 @@ import java.io.File;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 import net.prezz.mpr.ui.ApplicationActivator;
+import net.prezz.mpr.ui.helpers.UriFilterHelper;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -95,12 +97,14 @@ public class ServerConfigurationService {
     }
 
     public static void deleteServerConfiguration(ServerConfiguration configuration) {
+        Context context = ApplicationActivator.getContext();
+
         String oldHost = getHost(configuration.getId());
         databaseHelper.deleteServer(configuration.getId());
         databaseHelper.close();
         deleteOrphanLibraryDatabase(oldHost);
+        UriFilterHelper.removeUriFilter(context, oldHost);
 
-        Context context = ApplicationActivator.getContext();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         int selectedServerId = sharedPreferences.getInt(SELECTED_SERVER_CONFIGURATION_KEY, 0);
         if (selectedServerId == configuration.getId()) {

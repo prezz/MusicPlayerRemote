@@ -2,6 +2,7 @@ package net.prezz.mpr.ui.helpers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -10,6 +11,7 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.model.servers.ServerConfigurationService;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,22 +43,18 @@ public class UriFilterHelper {
         getAllUriFoldersHandle.cancelTask();
         getAllUriFoldersHandle = MusicPlayerControl.getHideableUriFolders(new ResponseReceiver<String[]>() {
             @Override
-            public void receiveResponse(final String[] response) {
+            public void receiveResponse(final String[] items) {
 
                 Set<String> hidden = getUriFilter();
+                Arrays.sort(items, new SortComparator());
 
-                TreeSet<String> available = new TreeSet<String>(new SortComparator());
-                available.addAll(hidden);
-                available.addAll(Arrays.asList(response));
-
-                final String[] items = available.toArray(new String[available.size()]);
                 final boolean[] checked = new boolean[items.length];
                 for (int i = 0; i < items.length; i++) {
-                    checked[i] = hidden.contains(items[i]);
+                    checked[i] = !hidden.contains(items[i]);
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(R.string.library_hide_folders_header);
+                builder.setTitle(R.string.library_visible_folders_header);
                 builder.setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -68,7 +66,7 @@ public class UriFilterHelper {
                     public void onClick(DialogInterface dialog, int which) {
                         Set<String> values = new HashSet<>();
                         for (int i = 0; i < items.length; i++) {
-                            if (checked[i]) {
+                            if (!checked[i]) {
                                 values.add(items[i]);
                             }
                         }
@@ -83,14 +81,18 @@ public class UriFilterHelper {
     }
 
     public Set<String> getUriFilter() {
+        String host = ServerConfigurationService.getSelectedServerConfiguration().getHost();
+
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sharedPreferences.getStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS, Collections.<String>emptySet());
+        return sharedPreferences.getStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host, Collections.<String>emptySet());
     }
 
     private void saveUriFilter(Set<String> values) {
+        String host = ServerConfigurationService.getSelectedServerConfiguration().getHost();
+
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS, values);
+        editor.putStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host, values);
         editor.commit();
     }
 
@@ -100,5 +102,12 @@ public class UriFilterHelper {
         public int compare(String s1, String s2) {
             return s1.compareToIgnoreCase(s2);
         }
+    }
+
+    public static void removeUriFilter(Context context, String host) {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host);
+        editor.commit();
     }
 }

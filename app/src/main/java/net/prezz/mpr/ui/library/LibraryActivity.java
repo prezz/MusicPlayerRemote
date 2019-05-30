@@ -169,7 +169,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             }
-            case R.id.library_action_hide_folders: {
+            case R.id.library_action_visible_folders: {
                 uriFilterHelper.setUriFilter();
                 return true;
             }
