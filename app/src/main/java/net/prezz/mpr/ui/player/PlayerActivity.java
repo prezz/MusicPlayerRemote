@@ -24,7 +24,6 @@ import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.service.StreamingService;
 import net.prezz.mpr.ui.DatabaseActivity;
 import net.prezz.mpr.ui.helpers.Boast;
-import net.prezz.mpr.ui.helpers.DonationHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
@@ -71,8 +70,6 @@ public class PlayerActivity extends FragmentActivity {
     private PlayerStatus playerStatus;
     private PlaylistEntity[] playlistEntities;
     private boolean darkTheme = false;
-
-    private DonationHelper donationHelper;
 
     private Menu optionsMenu;
 
@@ -132,8 +129,6 @@ public class PlayerActivity extends FragmentActivity {
         if (playlistEntities == null) {
             playlistEntities = new PlaylistEntity[0];
         }
-
-        donationHelper = new DonationHelper(this);
     }
 
     @Override
@@ -155,8 +150,6 @@ public class PlayerActivity extends FragmentActivity {
     public void onDestroy() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.player_view_pager_swipe);
         viewPager.clearOnPageChangeListeners();
-
-        donationHelper.close();
 
         super.onDestroy();
     }
@@ -188,10 +181,6 @@ public class PlayerActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.player_action_donate: {
-                donationHelper.startDonation();
-                return true;
-            }
             case R.id.player_action_settings: {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGS_ACTIVITY_RESULT);
