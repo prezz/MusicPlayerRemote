@@ -1,0 +1,51 @@
+package net.prezz.mpr.ui.library;
+
+import android.view.View;
+import android.widget.AdapterView;
+
+import net.prezz.mpr.model.LibraryEntity;
+import net.prezz.mpr.model.MusicPlayerControl;
+import net.prezz.mpr.model.ResponseReceiver;
+import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.ui.adapter.AdapterEntity;
+import net.prezz.mpr.ui.adapter.GroupedAdapterEntity;
+import net.prezz.mpr.ui.adapter.LibraryArrayAdapter;
+import net.prezz.mpr.ui.adapter.SortedAdapterIndexStrategy;
+
+import java.util.Set;
+
+public class LibraryGroupedFragment extends LibraryFragment {
+
+    private static final int FRAGMENT_POSITION = 3;
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    protected int getFragmentPosition() {
+        return FRAGMENT_POSITION;
+    }
+
+    @Override
+    protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
+        return MusicPlayerControl.getAllUriPathsFromLibrary(hiddenUriFolders, responseReceiver);
+    }
+
+    @Override
+    protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
+        AdapterEntity[] result = new AdapterEntity[entities.length];
+        for (int i = 0; i < entities.length; i++) {
+            result[i] = new GroupedAdapterEntity(entities[i]);
+        }
+
+        return result;
+    }
+
+    @Override
+    protected LibraryArrayAdapter createAdapter(AdapterEntity[] adapterEntities) {
+        return new LibraryArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, adapterEntities, SortedAdapterIndexStrategy.INSTANCE, false);
+    }
+}

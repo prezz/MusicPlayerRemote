@@ -45,6 +45,10 @@ public class MusicPlayerControl {
         return musicPlayer.getAllGenresFromLibrary(uriFilter, responseReceiver);
     }
 
+    public static TaskHandle getAllUriPathsFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getAllUriPathsFromLibrary(uriFilter, responseReceiver);
+    }
+
     public static TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
         return musicPlayer.getFilteredAlbumsAndTitlesFromLibrary(entity, responseReceiver);
     }

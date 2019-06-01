@@ -28,6 +28,8 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
         case 2:
             return context.getString(R.string.library_genres);
         case 3:
+            return context.getString(R.string.library_grouped);
+        case 4:
             return context.getString(R.string.library_files);
         }
 
@@ -44,6 +46,8 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
         case 2:
             return new LibraryGenreFragment();
         case 3:
+            return new LibraryGroupedFragment();
+        case 4:
             return new LibraryUriFragment();
         }
 
@@ -52,7 +56,7 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return (browseUri()) ? 4 : 3;
+        return (browseUri()) ? 5 : 4;
     }
 
     private boolean browseUri() {

@@ -11,7 +11,7 @@ public class LibraryEntity implements Serializable {
     private static final long serialVersionUID = -3383200228964358924L;
 
     //order is important as it impacts the priority used in sorting
-    public enum Tag { ARTIST, ALBUM_ARTIST, COMPOSER, ALBUM, TITLE, GENRE };
+    public enum Tag { ARTIST, ALBUM_ARTIST, COMPOSER, ALBUM, TITLE, GENRE, URI_PATH };
 
     private Tag tag;
     private String artist;
@@ -20,6 +20,7 @@ public class LibraryEntity implements Serializable {
     private String album;
     private String title;
     private String genre;
+    private String uriPath;
     private Integer metaTrack;
     private String metaArtist;
     private String metaAlbumArtist;
@@ -34,8 +35,8 @@ public class LibraryEntity implements Serializable {
     private Set<String> uriFilter;
 
 
-    private LibraryEntity(Tag tag, String artist, String albumArtist, String composer, String album, String title, String genre, Integer metaTrack, String metaArtist, String metaAlbumArtist, String metaAlbum,
-                          String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, Set<String> uriFilter) {
+    private LibraryEntity(Tag tag, String artist, String albumArtist, String composer, String album, String title, String genre, String uriPath, Integer metaTrack, String metaArtist, String metaAlbumArtist,
+                          String metaAlbum, String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, Set<String> uriFilter) {
         this.tag = tag;
         this.artist = artist;
         this.albumArtist = albumArtist;
@@ -43,6 +44,7 @@ public class LibraryEntity implements Serializable {
         this.album = album;
         this.genre = genre;
         this.title = title;
+        this.uriPath = uriPath;
         this.metaTrack = metaTrack;
         this.metaArtist = metaArtist;
         this.metaAlbumArtist = metaAlbumArtist;
@@ -83,6 +85,10 @@ public class LibraryEntity implements Serializable {
 
     public String getGenre() {
         return genre;
+    }
+
+    public String getUriPath() {
+        return uriPath;
     }
 
     public Integer getMetaTrack() {
@@ -163,6 +169,9 @@ public class LibraryEntity implements Serializable {
             if (!Utils.equals(this.genre, other.genre)) {
                 return false;
             }
+            if (!Utils.equals(this.uriPath, other.uriPath)) {
+                return false;
+            }
             if (!Utils.equals(this.metaTrack, other.metaTrack)) {
                 return false;
             }
@@ -217,6 +226,7 @@ public class LibraryEntity implements Serializable {
         hash = 31 * hash + Utils.hashCode(album);
         hash = 31 * hash + Utils.hashCode(title);
         hash = 31 * hash + Utils.hashCode(genre);
+        hash = 31 * hash + Utils.hashCode(uriPath);
         hash = 31 * hash + Utils.hashCode(metaTrack);
         hash = 31 * hash + Utils.hashCode(metaArtist);
         hash = 31 * hash + Utils.hashCode(metaAlbumArtist);
@@ -252,6 +262,7 @@ public class LibraryEntity implements Serializable {
         private String album;
         private String title;
         private String genre;
+        private String uriPath;
         private Integer metaTrack;
         private String metaArtist;
         private String metaAlbumArtist;
@@ -273,6 +284,7 @@ public class LibraryEntity implements Serializable {
             album = null;
             title = null;
             genre = null;
+            uriPath = null;
             metaTrack = null;
             metaArtist = null;
             metaAlbumArtist = null;
@@ -320,6 +332,11 @@ public class LibraryEntity implements Serializable {
 
         public Builder setGenre(String genre) {
             this.genre = genre;
+            return this;
+        }
+
+        public Builder setUriPath(String uriPath) {
+            this.uriPath = uriPath;
             return this;
         }
 
@@ -384,7 +401,9 @@ public class LibraryEntity implements Serializable {
         }
 
         public LibraryEntity build() {
-            return new LibraryEntity(tag, artist, albumArtist, composer, album, title, genre, metaTrack, metaArtist, metaAlbumArtist, metaAlbum, metaGenre, metaCount, metaYear, metaLength, metaCompilation, lookupArtist, lookupAlbum, uriFilter);
+            return new LibraryEntity(tag, artist, albumArtist, composer, album, title, genre, uriPath, metaTrack,
+                    metaArtist, metaAlbumArtist, metaAlbum, metaGenre, metaCount, metaYear, metaLength, metaCompilation,
+                    lookupArtist, lookupAlbum, uriFilter);
         }
     }
 }

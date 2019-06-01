@@ -47,6 +47,11 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
+    public TaskHandle getAllUriPathsFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return createNullHandle();
+    }
+
+    @Override
     public TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
         return createNullHandle();
     }
