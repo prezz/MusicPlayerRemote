@@ -29,7 +29,7 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
                     String uri = c.getString(0);
 
                     if (uri.contains(UriEntity.DIR_SEPERATOR)) {
-                        uri = uri.substring(0, uri.indexOf(UriEntity.DIR_SEPERATOR));
+                        uri = uri.substring(0, uri.indexOf(UriEntity.DIR_SEPERATOR)+1);
                         uriSet.add(uri);
                     }
                 } while (c.moveToNext());
@@ -42,7 +42,7 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
         LibraryEntity[] result = new LibraryEntity[uriSet.size()];
         int i = 0;
         for (String uri : uriSet) {
-            result[i++] = entityBuilder.clear().setTag(Tag.URI_PATH).setUriPath(uri).build();
+            result[i++] = entityBuilder.clear().setTag(Tag.URI_PATH).setUriPath(uri).setUriFilter(uriFilter).build();
         }
 
         return result;

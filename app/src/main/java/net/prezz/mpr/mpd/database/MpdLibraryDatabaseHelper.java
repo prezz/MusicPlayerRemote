@@ -317,6 +317,16 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
             stringBuilder.append("'");
         }
 
+        if (entity.getUriPath() != null) {
+            if (stringBuilder.length() == 0) {
+                stringBuilder.append("WHERE");
+            } else {
+                stringBuilder.append(" AND");
+            }
+
+            stringBuilder.append(String.format(" uri LIKE '%s%%'", Utils.fixDatabaseQuery(entity.getUriPath())));
+        }
+
         return buildUriFilter(stringBuilder.toString(), entity.getUriFilter());
     }
 
