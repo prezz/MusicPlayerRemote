@@ -15,7 +15,7 @@ import net.prezz.mpr.ui.adapter.LibraryAdapterEntity;
 import net.prezz.mpr.ui.adapter.LibraryArrayAdapter;
 import net.prezz.mpr.ui.adapter.SortedAdapterIndexStrategy;
 import net.prezz.mpr.ui.library.filtered.FilteredActivity;
-import net.prezz.mpr.ui.library.filtered.FilteredAlbumAndTitleActivity;
+import net.prezz.mpr.ui.library.filtered.FilteredAlbumActivity;
 
 import java.util.Set;
 
@@ -28,7 +28,7 @@ public class LibraryGroupedFragment extends LibraryFragment {
         LibraryAdapterEntity adapterEntity = (LibraryAdapterEntity)getAdapterEntity(position);
         LibraryEntity entity = adapterEntity.getEntity();
 
-        Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
+        Intent intent = new Intent(getActivity(), FilteredAlbumActivity.class);
         Bundle args = new Bundle();
         args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, adapterEntity.getText());
         args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, entity);
