@@ -136,7 +136,7 @@ public abstract class FilteredActivity extends Activity implements OnItemClickLi
             AdapterEntity entity = adapterEntities[info.position];
             if (entity instanceof LibraryAdapterEntity) {
                 menu.setHeaderTitle(entity.getText());
-                String[] menuItems = getResources().getStringArray(R.array.library_selected_menu);
+                String[] menuItems = getContextMenuItems(((LibraryAdapterEntity) entity).getEntity());
                 for (int i = 0; i < menuItems.length; i++) {
                     MenuItem menuItem = menu.add(Menu.NONE, i, i, menuItems[i]);
                     menuItem.setOnMenuItemClickListener(this);
@@ -240,6 +240,10 @@ public abstract class FilteredActivity extends Activity implements OnItemClickLi
 
     public void onControlMenuClick(View view) {
         controlHelper.toggleVisibility();
+    }
+
+    protected String[] getContextMenuItems(LibraryEntity entity) {
+            return getResources().getStringArray(R.array.library_selected_menu);
     }
 
     protected AdapterEntity getAdapterEntity(int pos) {
