@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 class LibraryPagerAdapter extends FragmentPagerAdapter {
 
+    public static final int FRAGMENT_COUNT = 5;
+
     private Context context;
 
     public LibraryPagerAdapter(FragmentManager fm, Context context) {
@@ -56,12 +58,6 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return (browseUri()) ? 5 : 4;
-    }
-
-    private boolean browseUri() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_browse_uri_key), true);
+        return FRAGMENT_COUNT;
     }
 }

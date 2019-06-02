@@ -34,7 +34,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     private static final String PREFERENCE_FRAGMENT_POSITION_KEY = "fragment_position_key";
     private static final String PREFERENCE_SHOW_SWIPE_HINT_KEY = "library_show_swipe_hint";
 
-    private LibraryCommonsFragment[] attachedFragments = new LibraryCommonsFragment[5];
+    private LibraryCommonsFragment[] attachedFragments = new LibraryCommonsFragment[LibraryPagerAdapter.FRAGMENT_COUNT];
     private boolean[] uriFilterChanged = new boolean[attachedFragments.length];
     private int fragmentPosition;
     private MiniControlHelper controlHelper;
