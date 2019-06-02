@@ -108,16 +108,6 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public Cursor selectAllLibraryUris(Set<String> uriFilter) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(String.format("SELECT DISTINCT uri FROM music_entities %s ORDER BY uri COLLATE NOCASE asc", buildUriFilter(null, uriFilter)), null);
-    }
-
-    public Cursor selectAllPlaylistUris(Set<String> uriFilter) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(String.format("SELECT DISTINCT uri FROM playlist_entities %s ORDER BY uri COLLATE NOCASE asc", buildUriFilter(null, uriFilter)), null);
-    }
-
     public Cursor selectAllAlbums(Set<String> uriFilter, boolean orderByArtist) {
         SQLiteDatabase db = this.getReadableDatabase();
         if (orderByArtist) {

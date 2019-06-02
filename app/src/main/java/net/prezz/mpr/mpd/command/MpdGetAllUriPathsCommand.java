@@ -22,7 +22,7 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
     protected LibraryEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Set<String> uriFilter) throws Exception {
         TreeSet<String> uriSet = new TreeSet<String>(new UriComparator());
 
-        Cursor c = databaseHelper.selectAllLibraryUris(uriFilter);
+        Cursor c = databaseHelper.selectMusicEntitiesRootUri(uriFilter);
         try {
             if (c.moveToFirst()) {
                 do {

@@ -20,14 +20,14 @@ public class MpdGetHideableUriFolders extends MpdDatabaseCommand<Void, String[]>
 
         TreeSet<String> uriSet = new TreeSet<String>(new UriComparator());
 
-        Cursor c = databaseHelper.selectAllLibraryUris(Collections.<String>emptySet());
+        Cursor c = databaseHelper.selectMusicEntitiesRootUri(Collections.<String>emptySet());
         try {
             addToSet(uriSet, c);
         } finally {
             c.close();
         }
 
-        c = databaseHelper.selectAllPlaylistUris(Collections.<String>emptySet());
+        c = databaseHelper.selectPlaylistEntitiesRootUri(Collections.<String>emptySet());
         try {
             addToSet(uriSet, c);
         } finally {
