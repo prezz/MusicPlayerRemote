@@ -45,8 +45,7 @@ public class FilteredAlbumActivity extends FilteredActivity {
     public void onItemClick(AdapterView<?> parent, View view, int position,    long id) {
         AdapterEntity adapterEntity = getAdapterEntity(position);
         if (adapterEntity instanceof AlbumAdapterEntity) {
-            AlbumAdapterEntity libraryAdapterEntity = (AlbumAdapterEntity)adapterEntity;
-            LibraryEntity entity = libraryAdapterEntity.getEntity();
+            LibraryEntity entity = ((AlbumAdapterEntity)adapterEntity).getEntity();
 
             Intent intent = new Intent(this, FilteredTrackAndTitleActivity.class);
             Bundle args = new Bundle();
@@ -59,7 +58,7 @@ public class FilteredAlbumActivity extends FilteredActivity {
 
     @Override
     protected TaskHandle getEntities(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return MusicPlayerControl.getAllAlbumsFromLibrary(sortByArtist, Collections.<String>emptySet(), responseReceiver);
+        return MusicPlayerControl.getFilteredAlbumsFromLibrary(sortByArtist, entity, responseReceiver);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class MpdGetFilteredAlbumsAndTitlesCommand extends MpdDatabaseCommand<Lib
                     Integer metaCount = c.getInt(4);
                     Integer metaLength = c.getInt(5);
                     result.add(entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setArtist(entity.getArtist()).setAlbumArtist(entity.getAlbumArtist()).setComposer(entity.getComposer())
-                            .setAlbum(album).setMetaAlbum(metaAlbum).setMetaArtist(artist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaCount(metaCount)
+                            .setAlbum(album).setUriPath(entity.getUriPath()).setMetaAlbum(metaAlbum).setMetaArtist(artist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaCount(metaCount)
                             .setMetaLength(metaLength).setUriFilter(entity.getUriFilter()).build());
                 } while (c.moveToNext());
             }
