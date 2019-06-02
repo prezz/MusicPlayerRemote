@@ -187,6 +187,11 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(String.format("SELECT SUBSTR(uri, %s) FROM music_entities WHERE uri LIKE '%s%%'", Integer.valueOf(uriPath.length() + 1), Utils.fixDatabaseQuery(uriPath)), null);
     }
 
+    public Cursor selectAlbumCountInUri(String uriPath) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(String.format("SELECT count(DISTINCT album) FROM music_entities WHERE uri LIKE '%s%%'", Utils.fixDatabaseQuery(uriPath)), null);
+    }
+
     public Cursor selectPlaylistEntitiesRootUri(Set<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT uri FROM playlist_entities %s", buildUriFilter(null, uriFilter)), null);

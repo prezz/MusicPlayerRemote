@@ -12,9 +12,9 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, LibraryEntity[]> {
+public class MpdGetAllFoldersCommand extends MpdDatabaseCommand<Set<String>, LibraryEntity[]> {
 
-    public MpdGetAllUriPathsCommand(Set<String> uriFilter) {
+    public MpdGetAllFoldersCommand(Set<String> uriFilter) {
         super(uriFilter);
     }
 
@@ -42,8 +42,9 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
         LibraryEntity[] result = new LibraryEntity[dirSet.size()];
         int i = 0;
         for (String dir : dirSet) {
+            Integer albumCount = getAlbumCount(databaseHelper, dir);
             UriEntity uriEntity = new UriEntity(UriEntity.UriType.DIRECTORY, UriEntity.FileType.NA, "", dir);
-            result[i++] = entityBuilder.clear().setTag(Tag.URI).setUriEntity(uriEntity).setUriFilter(uriFilter).build();
+            result[i++] = entityBuilder.clear().setTag(Tag.URI).setUriEntity(uriEntity).setMetaCount(albumCount).setUriFilter(uriFilter).build();
         }
 
         return result;
@@ -52,6 +53,21 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
     @Override
     protected LibraryEntity[] onError() {
         return new LibraryEntity[0];
+    }
+
+    private Integer getAlbumCount(MpdLibraryDatabaseHelper databaseHelper, String uriPath) {
+        Integer count = 0;
+
+        Cursor c = databaseHelper.selectAlbumCountInUri(uriPath);
+        try {
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+        } finally {
+            c.close();
+        }
+
+        return count;
     }
 
     private static final class UriComparator implements Comparator<String> {
