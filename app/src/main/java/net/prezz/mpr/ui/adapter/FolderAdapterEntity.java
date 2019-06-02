@@ -10,7 +10,7 @@ public class FolderAdapterEntity extends LibraryAdapterEntity {
 
     @Override
     public String getText() {
-        return getEntity().getUriPath();
+        return getEntity().getUriEntity().getFullUriPath(true);
     }
 
     @Override

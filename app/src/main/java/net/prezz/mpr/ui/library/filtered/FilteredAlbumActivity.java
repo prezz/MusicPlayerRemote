@@ -66,7 +66,7 @@ public class FilteredAlbumActivity extends FilteredActivity {
             AdapterEntity adapterEntity = getAdapterEntity(info.position);
             if (adapterEntity instanceof LibraryAdapterEntity) {
                 LibraryEntity entity = ((LibraryAdapterEntity)adapterEntity).getEntity();
-                LibraryEntity artistEntity = LibraryEntity.createBuilder().setTag(LibraryEntity.Tag.ARTIST).setArtist(entity.getLookupArtist()).setUriPath(entity.getUriPath()).setUriFilter(entity.getUriFilter()).build();
+                LibraryEntity artistEntity = LibraryEntity.createBuilder().setTag(LibraryEntity.Tag.ARTIST).setArtist(entity.getLookupArtist()).setUriEntity(entity.getUriEntity()).setUriFilter(entity.getUriFilter()).build();
 
                 Intent intent = new Intent(this, FilteredAlbumAndTitleActivity.class);
                 Bundle args = new Bundle();

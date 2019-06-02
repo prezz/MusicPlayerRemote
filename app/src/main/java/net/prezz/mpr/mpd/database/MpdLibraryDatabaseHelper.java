@@ -2,6 +2,7 @@ package net.prezz.mpr.mpd.database;
 
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.LibraryEntity;
+import net.prezz.mpr.model.UriEntity;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -316,14 +317,15 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
             stringBuilder.append("'");
         }
 
-        if (entity.getUriPath() != null) {
+        if (entity.getUriEntity() != null) {
             if (stringBuilder.length() == 0) {
                 stringBuilder.append("WHERE");
             } else {
                 stringBuilder.append(" AND");
             }
 
-            stringBuilder.append(String.format(" uri LIKE '%s%%'", Utils.fixDatabaseQuery(entity.getUriPath())));
+            UriEntity uriEntity = entity.getUriEntity();
+            stringBuilder.append(String.format(" uri LIKE '%s%%'", Utils.fixDatabaseQuery(uriEntity.getFullUriPath(true))));
         }
 
         return buildUriFilter(stringBuilder.toString(), entity.getUriFilter());

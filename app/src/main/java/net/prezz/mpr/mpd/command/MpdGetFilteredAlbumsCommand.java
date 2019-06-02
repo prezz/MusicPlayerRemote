@@ -54,17 +54,17 @@ public class MpdGetFilteredAlbumsCommand extends MpdDatabaseCommand<MpdGetFilter
                     Boolean metaCompilation = c.getInt(4) > 1 ? Boolean.TRUE : Boolean.FALSE;
 
                     if (Utils.nullOrEmpty(album)) {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriPath(paramEntity.getUriPath())
+                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(paramEntity.getUriEntity())
                                 .setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album)
                                 .setMetaCompilation(metaCompilation).setUriFilter(paramEntity.getUriFilter()).build();
                         tracks.add(entity);
                     } else if (sortByArtist == Boolean.TRUE && metaCompilation == Boolean.TRUE) {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriPath(paramEntity.getUriPath())
+                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(paramEntity.getUriEntity())
                                 .setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS).setLookupArtist(VARIOUS).setLookupAlbum(album)
                                 .setMetaCompilation(metaCompilation).setUriFilter(paramEntity.getUriFilter()).build();
                         compilations.add(entity);
                     } else {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriPath(paramEntity.getUriPath())
+                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(paramEntity.getUriEntity())
                                 .setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album)
                                 .setMetaCompilation(metaCompilation).setUriFilter(paramEntity.getUriFilter()).build();
                         result.add(entity);

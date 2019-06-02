@@ -20,7 +20,7 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
 
     @Override
     protected LibraryEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Set<String> uriFilter) throws Exception {
-        TreeSet<String> uriSet = new TreeSet<String>(new UriComparator());
+        TreeSet<String> dirSet = new TreeSet<String>(new UriComparator());
 
         Cursor c = databaseHelper.selectMusicEntitiesRootUri(uriFilter);
         try {
@@ -29,8 +29,8 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
                     String uri = c.getString(0);
 
                     if (uri.contains(UriEntity.DIR_SEPERATOR)) {
-                        uri = uri.substring(0, uri.indexOf(UriEntity.DIR_SEPERATOR)+1);
-                        uriSet.add(uri);
+                        uri = uri.substring(0, uri.indexOf(UriEntity.DIR_SEPERATOR));
+                        dirSet.add(uri);
                     }
                 } while (c.moveToNext());
             }
@@ -39,10 +39,11 @@ public class MpdGetAllUriPathsCommand extends MpdDatabaseCommand<Set<String>, Li
         }
 
         Builder entityBuilder = LibraryEntity.createBuilder();
-        LibraryEntity[] result = new LibraryEntity[uriSet.size()];
+        LibraryEntity[] result = new LibraryEntity[dirSet.size()];
         int i = 0;
-        for (String uri : uriSet) {
-            result[i++] = entityBuilder.clear().setTag(Tag.URI_PATH).setUriPath(uri).setUriFilter(uriFilter).build();
+        for (String dir : dirSet) {
+            UriEntity uriEntity = new UriEntity(UriEntity.UriType.DIRECTORY, UriEntity.FileType.NA, "", dir);
+            result[i++] = entityBuilder.clear().setTag(Tag.URI).setUriEntity(uriEntity).setUriFilter(uriFilter).build();
         }
 
         return result;

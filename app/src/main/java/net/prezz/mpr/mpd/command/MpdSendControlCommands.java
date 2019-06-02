@@ -1,5 +1,7 @@
 package net.prezz.mpr.mpd.command;
 
+import android.util.Pair;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -289,6 +291,14 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     }
 
     private void addToStoredPlaylist(MpdConnection connection, String playlistName, LibraryEntity[] entities) throws IOException {
+
+        Pair<LibraryEntity[], UriEntity[]> split = splitEntities(entities);
+
+        doAddToStoredPlaylist(connection, playlistName, split.first);
+        addToStoredPlaylist(connection, playlistName, split.second);
+    }
+
+    private void doAddToStoredPlaylist(MpdConnection connection, String playlistName, LibraryEntity[] entities) throws IOException {
         String[] findCommands = new String[entities.length];
         for (int i = 0; i < entities.length; i++) {
             findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
@@ -315,6 +325,13 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     }
 
     private void addToPlaylist(MpdConnection connection, LibraryEntity[] entities) throws IOException {
+        Pair<LibraryEntity[], UriEntity[]> split = splitEntities(entities);
+
+        doAddToPlaylist(connection, split.first);
+        addToPlaylist(connection, split.second);
+    }
+
+    private void doAddToPlaylist(MpdConnection connection, LibraryEntity[] entities) throws IOException {
         if (connection.isMinimumVersion(0, 16, 0)) {
             List<String> commands = new ArrayList<String>();
 
@@ -351,6 +368,13 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     }
 
     private void prioritize(MpdConnection connection, LibraryEntity[] entities) throws IOException {
+        Pair<LibraryEntity[], UriEntity[]> split = splitEntities(entities);
+
+        doPrioritize(connection, split.first);
+        prioritize(connection, split.second);
+    }
+
+    private void doPrioritize(MpdConnection connection, LibraryEntity[] entities) throws IOException {
         SearchResult result = searchPlaylist(connection);
         int addPosition = result.destinationPosition;
 
@@ -529,6 +553,24 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
             priorityCommands.add(String.format("prioid %s %s\n", priority--, id));
         }
         return priority;
+    }
+
+    private Pair<LibraryEntity[], UriEntity[]> splitEntities(LibraryEntity[] entities) {
+        List<LibraryEntity> libraryEntities = new ArrayList<LibraryEntity>();
+        List<UriEntity> uriEntities = new ArrayList<UriEntity>();
+
+        for (LibraryEntity entity : entities) {
+            if (entity.getTag() == LibraryEntity.Tag.URI) {
+                uriEntities.add(entity.getUriEntity());
+            } else {
+                libraryEntities.add(entity);
+            }
+        }
+
+        return Pair.<LibraryEntity[], UriEntity[]>create(
+                libraryEntities.toArray(new LibraryEntity[libraryEntities.size()]),
+                uriEntities.toArray(new UriEntity[uriEntities.size()])
+        );
     }
 
     private static final class SearchResult {

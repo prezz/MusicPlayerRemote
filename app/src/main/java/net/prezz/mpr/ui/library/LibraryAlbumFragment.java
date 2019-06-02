@@ -68,7 +68,7 @@ public class LibraryAlbumFragment extends LibraryFragment {
             AdapterEntity adapterEntity = getAdapterEntity(info.position);
             if (adapterEntity instanceof LibraryAdapterEntity) {
                 LibraryEntity entity = ((LibraryAdapterEntity)adapterEntity).getEntity();
-                LibraryEntity artistEntity = LibraryEntity.createBuilder().setTag(Tag.ARTIST).setArtist(entity.getLookupArtist()).setUriPath(entity.getUriPath()).setUriFilter(entity.getUriFilter()).build();
+                LibraryEntity artistEntity = LibraryEntity.createBuilder().setTag(Tag.ARTIST).setArtist(entity.getLookupArtist()).setUriEntity(entity.getUriEntity()).setUriFilter(entity.getUriFilter()).build();
 
                 Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
                 Bundle args = new Bundle();
