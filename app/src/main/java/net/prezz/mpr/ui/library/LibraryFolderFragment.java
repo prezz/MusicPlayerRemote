@@ -10,7 +10,7 @@ import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.ui.adapter.AdapterEntity;
-import net.prezz.mpr.ui.adapter.GroupedAdapterEntity;
+import net.prezz.mpr.ui.adapter.FolderAdapterEntity;
 import net.prezz.mpr.ui.adapter.LibraryAdapterEntity;
 import net.prezz.mpr.ui.adapter.LibraryArrayAdapter;
 import net.prezz.mpr.ui.adapter.SortedAdapterIndexStrategy;
@@ -19,7 +19,7 @@ import net.prezz.mpr.ui.library.filtered.FilteredAlbumActivity;
 
 import java.util.Set;
 
-public class LibraryGroupedFragment extends LibraryFragment {
+public class LibraryFolderFragment extends LibraryFragment {
 
     private static final int FRAGMENT_POSITION = 3;
 
@@ -51,7 +51,7 @@ public class LibraryGroupedFragment extends LibraryFragment {
     protected AdapterEntity[] createAdapterEntities(LibraryEntity[] entities) {
         AdapterEntity[] result = new AdapterEntity[entities.length];
         for (int i = 0; i < entities.length; i++) {
-            result[i] = new GroupedAdapterEntity(entities[i]);
+            result[i] = new FolderAdapterEntity(entities[i]);
         }
 
         return result;

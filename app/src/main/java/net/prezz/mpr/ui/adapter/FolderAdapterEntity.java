@@ -2,9 +2,9 @@ package net.prezz.mpr.ui.adapter;
 
 import net.prezz.mpr.model.LibraryEntity;
 
-public class GroupedAdapterEntity extends LibraryAdapterEntity {
+public class FolderAdapterEntity extends LibraryAdapterEntity {
 
-    public GroupedAdapterEntity(LibraryEntity entity) {
+    public FolderAdapterEntity(LibraryEntity entity) {
         super(entity);
     }
 

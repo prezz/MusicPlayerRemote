@@ -2,9 +2,6 @@ package net.prezz.mpr.ui.library;
 
 import net.prezz.mpr.R;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,7 +27,7 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
         case 2:
             return context.getString(R.string.library_genres);
         case 3:
-            return context.getString(R.string.library_grouped);
+            return context.getString(R.string.library_folders);
         case 4:
             return context.getString(R.string.library_files);
         }
@@ -48,7 +45,7 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
         case 2:
             return new LibraryGenreFragment();
         case 3:
-            return new LibraryGroupedFragment();
+            return new LibraryFolderFragment();
         case 4:
             return new LibraryUriFragment();
         }
