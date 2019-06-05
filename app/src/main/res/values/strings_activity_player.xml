@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="player_action_donate">Donate</string>
     <string name="player_action_settings">Settings</string>
     <string name="player_action_server">Select server</string>
     <string name="player_action_database">Update library</string>
@@ -72,8 +71,6 @@
     <string name="player_swipe_hint_header">Swipe navigation</string>
     <string name="player_swipe_hint_message">Swipe left and right to navigate between the current playlist and the remote control.</string>
     <string name="player_swipe_hint_button">Got It</string>
-
-    <string name="player_donate_complete_error_toast">Unable to complete in-app purchase</string>
 
     <string name="player_vlc_stream_version_error">VLC Streaming requires Android 4.1 or higher</string>
 

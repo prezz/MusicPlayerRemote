@@ -59,7 +59,6 @@
     </string-array>
 
     <string name="library_add_to_stored_playlist">Add to stored playlist&#8230;</string>
-    <string name="library_no_stored_playlists">No stored playlists to add to</string>
     <string name="library_new_stored_playlist">(New playlist)</string>
     <string name="library_new_stores_playlist_server_error">Server returned an error. Playlist might not have been saved.</string>
     
@@ -67,8 +66,6 @@
 
     <string name="library_musician_count">musician</string>
     <string name="library_musicians_count">musicians</string>
-    <string name="library_album_count">album</string>
-    <string name="library_albums_count">albums</string>
     <string name="library_track_count">track</string>
     <string name="library_tracks_count">tracks</string>
     <string name="library_length">Length: %1$s</string>
