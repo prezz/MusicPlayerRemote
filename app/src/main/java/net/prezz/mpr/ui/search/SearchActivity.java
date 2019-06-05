@@ -348,7 +348,7 @@ public class SearchActivity extends Activity implements OnItemClickListener, OnM
     }
 
     @Override
-    public void uriFilterChanged() {
+    public void entitiesChanged() {
         SearchView searchView = (SearchView) this.findViewById(R.id.search_action_search);
         if (searchView != null) {
             String text = searchView.getQuery().toString();

@@ -222,7 +222,7 @@ public abstract class LibraryFragment extends Fragment implements LibraryCommons
     }
 
     @Override
-    public void uriFilterChanged() {
+    public void entitiesChanged() {
         adapterEntities = null;
         updateEntities();
     }

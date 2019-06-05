@@ -18,12 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class UriFilterHelper {
 
     public interface UriFilterChangedListener {
-        void uriFilterChanged();
+        void entitiesChanged();
     }
 
     private static final String PREFERENCE_LIBRARY_HIDDEN_FOLDERS = "library_hidden_folders";
@@ -71,7 +70,7 @@ public class UriFilterHelper {
                             }
                         }
                         saveUriFilter(values);
-                        uriFilterChangedListener.uriFilterChanged();
+                        uriFilterChangedListener.entitiesChanged();
                     }
                 });
                 AlertDialog alert = builder.create();

@@ -34,13 +34,15 @@ import java.util.Set;
 
 public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
 
-    private static final String URI_FILTER_CHANGED = "uri_filter_changed";
+    private static final String ENTITIES_CHANGED = "entities_changed";
+    private static final String URI_ENTITY_FILTER = "uri_entity_filter";
 
     private static final String PREFERENCE_FRAGMENT_POSITION_KEY = "fragment_position_key";
     private static final String PREFERENCE_SHOW_SWIPE_HINT_KEY = "library_show_swipe_hint";
 
     private LibraryCommonsFragment[] attachedFragments = new LibraryCommonsFragment[LibraryPagerAdapter.FRAGMENT_COUNT];
-    private boolean[] uriFilterChanged = new boolean[attachedFragments.length];
+    private boolean[] entitiesChanged = new boolean[attachedFragments.length];
+    private UriEntity uriEntityFilter = null;
     private int fragmentPosition;
     private MiniControlHelper controlHelper;
     private UriFilterHelper uriFilterHelper;
@@ -48,7 +50,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     private AlertDialog buildDatabaseErrorDialog;
     private AlertDialog swipeHintDialog;
 
-    private TaskHandle getUriFromLibraryHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle getUrientitiesFilterHandle = TaskHandle.NULL_HANDLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,8 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {
-            uriFilterChanged = (boolean[]) dataFragment.getData(URI_FILTER_CHANGED, uriFilterChanged);
+            entitiesChanged = (boolean[]) dataFragment.getData(ENTITIES_CHANGED, entitiesChanged);
+            uriEntityFilter = (UriEntity) dataFragment.getData(URI_ENTITY_FILTER, uriEntityFilter);
         }
     }
 
@@ -152,7 +155,8 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     public void onSaveInstanceState(Bundle outState) {
         DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
         if (dataFragment != null) {
-            dataFragment.setData(URI_FILTER_CHANGED, uriFilterChanged);
+            dataFragment.setData(ENTITIES_CHANGED, entitiesChanged);
+            dataFragment.setData(URI_ENTITY_FILTER, uriEntityFilter);
         }
 
         super.onSaveInstanceState(outState);
@@ -215,14 +219,18 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     }
 
     @Override
-    public void uriFilterChanged() {
+    public void entitiesChanged() {
         for (int i = 0; i < attachedFragments.length; i++) {
-            uriFilterChanged[i] = true;
+            entitiesChanged[i] = true;
             if (attachedFragments[i] != null) {
-                attachedFragments[i].uriFilterChanged();
-                uriFilterChanged[i] = false;
+                attachedFragments[i].entitiesChanged();
+                entitiesChanged[i] = false;
             }
         }
+    }
+
+    public UriEntity getUriEntityFilter() {
+        return uriEntityFilter;
     }
 
     public Set<String> getUriFilter() {
@@ -232,8 +240,8 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     public boolean attachFragment(LibraryCommonsFragment fragment, int pos) {
         attachedFragments[pos] = fragment;
 
-        boolean changed = uriFilterChanged[pos];
-        uriFilterChanged[pos] = false;
+        boolean changed = entitiesChanged[pos];
+        entitiesChanged[pos] = false;
         return changed;
     }
     
@@ -243,14 +251,17 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
 
     public void onFilterMenuClick(View view) {
 
-        getUriFromLibraryHandle.cancelTask();
-        getUriFromLibraryHandle = MusicPlayerControl.getUriFromLibrary(null, Collections.<String>emptySet(), new ResponseReceiver<UriEntity[]>() {
+        getUrientitiesFilterHandle.cancelTask();
+        getUrientitiesFilterHandle = MusicPlayerControl.getUriFromLibrary(null, Collections.<String>emptySet(), new ResponseReceiver<UriEntity[]>() {
             @Override
             public void receiveResponse(final UriEntity[] entities) {
 
-                String[] items = new String[entities.length];
-                for (int i = 0; i < entities.length; i++) {
-                    items[i] = entities[i].getFullUriPath(true);
+                final UriEntity[] selections = new UriEntity[entities.length+1];
+                System.arraycopy(entities, 0, selections, 1, entities.length);
+
+                String[] items = new String[selections.length];
+                for (int i = 0; i < selections.length; i++) {
+                    items[i] = (selections[i] != null) ? selections[i].getFullUriPath(true) : ".";
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(LibraryActivity.this);
@@ -258,7 +269,8 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        uriEntityFilter = selections[which];
+                        entitiesChanged();
                     }
                 });
 
