@@ -44,7 +44,7 @@ public class LibraryGenreFragment extends LibraryFragment {
     @Override
     protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
         Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
-        return MusicPlayerControl.getAllGenresFromLibrary(hiddenUriFolders, responseReceiver);
+        return MusicPlayerControl.getAllGenresFromLibrary(null, hiddenUriFolders, responseReceiver);
     }
 
     @Override

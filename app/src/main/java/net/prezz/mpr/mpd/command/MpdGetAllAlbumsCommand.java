@@ -4,6 +4,7 @@ import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.LibraryEntity.Builder;
 import net.prezz.mpr.model.LibraryEntity.Tag;
+import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 import android.database.Cursor;
 
@@ -17,18 +18,20 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
 
     protected static final class Param {
         public final Boolean sortByArtist;
+        public final UriEntity uriEntity;
         public final Set<String> uriFilter;
 
-        public Param(Boolean sortByArtist, Set<String> uriFilter) {
+        public Param(Boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter) {
             this.sortByArtist = sortByArtist;
+            this.uriEntity = uriEntity;
             this.uriFilter = (uriFilter != null) ? Collections.unmodifiableSet(uriFilter) : null;
         }
     }
 
     private static final String VARIOUS = "Various";
 
-    public MpdGetAllAlbumsCommand(boolean sortByArtist, Set<String> uriFilter) {
-        super(new Param(Boolean.valueOf(sortByArtist), uriFilter));
+    public MpdGetAllAlbumsCommand(boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter) {
+        super(new Param(Boolean.valueOf(sortByArtist), uriEntity, uriFilter));
     }
 
     @Override
@@ -36,9 +39,10 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
         Builder entityBuilder = LibraryEntity.createBuilder();
 
         Boolean sortByArtist = param.sortByArtist;
+        UriEntity uriEntity = param.uriEntity;
         Set<String> uriFilter = param.uriFilter;
 
-        Cursor c = databaseHelper.selectAllAlbums(uriFilter, sortByArtist.booleanValue());
+        Cursor c = databaseHelper.selectAllAlbums(sortByArtist.booleanValue(), uriEntity, uriFilter);
 
         try {
             int compilationIndex = 0;
@@ -54,13 +58,13 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
                     Boolean metaCompilation = c.getInt(4) > 1 ? Boolean.TRUE : Boolean.FALSE;
 
                     if (Utils.nullOrEmpty(album)) {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
+                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(uriEntity).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
                         tracks.add(entity);
                     } else if (sortByArtist == Boolean.TRUE && metaCompilation == Boolean.TRUE) {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS).setLookupArtist(VARIOUS).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
+                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(uriEntity).setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS).setLookupArtist(VARIOUS).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
                         compilations.add(entity);
                     } else {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
+                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(uriEntity).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
                         result.add(entity);
                         if (sortByArtist == Boolean.TRUE && VARIOUS.compareToIgnoreCase(metaArtist) > 0) {
                             compilationIndex++;
