@@ -22,7 +22,6 @@ import net.prezz.mpr.mpd.command.MpdDeleteLocalLibraryDatabaseCommand;
 import net.prezz.mpr.mpd.command.MpdGetAllAlbumsCommand;
 import net.prezz.mpr.mpd.command.MpdGetAllArtistsCommand;
 import net.prezz.mpr.mpd.command.MpdGetAllGenresCommand;
-import net.prezz.mpr.mpd.command.MpdGetAllFoldersCommand;
 import net.prezz.mpr.mpd.command.MpdGetHideableUriFolders;
 import net.prezz.mpr.mpd.command.MpdGetFilteredAlbumsAndTitlesCommand;
 import net.prezz.mpr.mpd.command.MpdGetFilteredArtistsCommand;
@@ -135,22 +134,6 @@ public class MpdPlayer implements MusicPlayer {
     @Override
     public TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
         MpdGetAllGenresCommand command = new MpdGetAllGenresCommand(uriFilter);
-        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
-            @Override
-            public void build() {
-                responseReceiver.buildingDatabase();
-            }
-
-            @Override
-            public void receive(LibraryEntity[] result) {
-                responseReceiver.receiveResponse(result);
-            }
-        });
-    }
-
-    @Override
-    public TaskHandle getAllFoldersFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        MpdGetAllFoldersCommand command = new MpdGetAllFoldersCommand(uriFilter);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
             @Override
             public void build() {

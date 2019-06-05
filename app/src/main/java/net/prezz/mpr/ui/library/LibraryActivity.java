@@ -246,13 +246,13 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     public void onFilterMenuClick(View view) {
 
         getFilterFoldersHandle.cancelTask();
-        getFilterFoldersHandle = MusicPlayerControl.getAllFoldersFromLibrary(getUriFilter(), new ResponseReceiver<LibraryEntity[]>() {
+        getFilterFoldersHandle = MusicPlayerControl.getUriFromLibrary(null, getUriFilter(), new ResponseReceiver<UriEntity[]>() {
             @Override
-            public void receiveResponse(final LibraryEntity[] entities) {
+            public void receiveResponse(final UriEntity[] entities) {
 
                 String[] items = new String[entities.length];
                 for (int i = 0; i < entities.length; i++) {
-                    items[i] = entities[i].getUriEntity().getFullUriPath(true);
+                    items[i] = entities[i].getFullUriPath(true);
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(LibraryActivity.this);

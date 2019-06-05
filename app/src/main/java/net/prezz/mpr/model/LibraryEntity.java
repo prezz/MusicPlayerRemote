@@ -11,7 +11,7 @@ public class LibraryEntity implements Serializable {
     private static final long serialVersionUID = -3383200228964358924L;
 
     //order is important as it impacts the priority used in sorting
-    public enum Tag { ARTIST, ALBUM_ARTIST, COMPOSER, ALBUM, TITLE, GENRE, URI };
+    public enum Tag { ARTIST, ALBUM_ARTIST, COMPOSER, ALBUM, TITLE, GENRE };
 
     private Tag tag;
     private String artist;
