@@ -39,7 +39,7 @@
             android:onClick="onFilterMenuClick"
             android:scaleType="fitStart"
             android:tint="?iconColor"
-            android:src="@drawable/ic_expand" />
+            android:src="@drawable/ic_filter" />
 
         <View
             android:layout_width="0dp"
