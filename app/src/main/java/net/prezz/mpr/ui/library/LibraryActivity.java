@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.Collections;
 import java.util.Set;
 
 public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
@@ -252,7 +251,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     public void onFilterMenuClick(View view) {
 
         getUrientitiesFilterHandle.cancelTask();
-        getUrientitiesFilterHandle = MusicPlayerControl.getUriFromLibrary(null, Collections.<String>emptySet(), new ResponseReceiver<UriEntity[]>() {
+        getUrientitiesFilterHandle = MusicPlayerControl.getUriFromLibrary(null, getUriFilter(), new ResponseReceiver<UriEntity[]>() {
             @Override
             public void receiveResponse(final UriEntity[] entities) {
 
@@ -261,11 +260,11 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
 
                 String[] items = new String[selections.length];
                 for (int i = 0; i < selections.length; i++) {
-                    items[i] = (selections[i] != null) ? selections[i].getFullUriPath(true) : ".";
+                    items[i] = (selections[i] != null) ? selections[i].getFullUriPath(true) : LibraryActivity.this.getResources().getString(R.string.library_selected_folder_none);
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(LibraryActivity.this);
-                builder.setTitle(R.string.library_visible_folders_header);
+                builder.setTitle(R.string.library_selected_folder_header);
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

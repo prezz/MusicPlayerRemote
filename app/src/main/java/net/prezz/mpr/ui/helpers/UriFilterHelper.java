@@ -53,7 +53,7 @@ public class UriFilterHelper {
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(R.string.library_visible_folders_header);
+                builder.setTitle(R.string.library_visibility_folder_header);
                 builder.setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
