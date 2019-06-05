@@ -100,8 +100,8 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getAllArtistsFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        MpdGetAllArtistsCommand command = new MpdGetAllArtistsCommand(uriFilter);
+    public TaskHandle getAllArtistsFromLibrary(UriEntity uriEntity, Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetAllArtistsCommand command = new MpdGetAllArtistsCommand(uriEntity, uriFilter);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
             @Override
             public void build() {
@@ -116,8 +116,8 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        MpdGetAllAlbumsCommand command = new MpdGetAllAlbumsCommand(sortByArtist, uriFilter);
+    public TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetAllAlbumsCommand command = new MpdGetAllAlbumsCommand(sortByArtist, uriEntity, uriFilter);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
             @Override
             public void build() {
@@ -132,8 +132,8 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        MpdGetAllGenresCommand command = new MpdGetAllGenresCommand(uriFilter);
+    public TaskHandle getAllGenresFromLibrary(UriEntity uriEntity, Set<String> uriFilter, final ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        MpdGetAllGenresCommand command = new MpdGetAllGenresCommand(uriEntity, uriFilter);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<LibraryEntity[]>() {
             @Override
             public void build() {

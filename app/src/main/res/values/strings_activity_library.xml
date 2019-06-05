@@ -2,7 +2,7 @@
 <resources>
 
     <string name="library_activity_title">Library</string>
-    <string name="library_action_visible_folders">Visible root folders</string>
+    <string name="library_action_visibility_folders">Visible folders</string>
     <string name="library_musicians">Musicians</string>
     <string name="library_artists">Artists</string>
     <string name="library_album_artists">Album Artists</string>
@@ -15,7 +15,12 @@
     <string name="library_directories_section">Directories</string>
     <string name="library_files_section">Files</string>
     <string name="library_entity_cover_image">Cover image</string>
-    
+
+    <string name="library_visibility_folder_header">Visible folders</string>
+    <string name="library_selected_folder_header">Filter by folder</string>
+    <string name="library_selected_folder_none">(None)</string>
+
+    <string name="library_filter_menu">Library filter menu</string>
     <string name="library_choice_menu">Library choice menu</string>
     <string name="library_control_menu">Library control menu</string>
     
@@ -62,6 +67,8 @@
 
     <string name="library_musician_count">musician</string>
     <string name="library_musicians_count">musicians</string>
+    <string name="library_album_count">album</string>
+    <string name="library_albums_count">albums</string>
     <string name="library_track_count">track</string>
     <string name="library_tracks_count">tracks</string>
     <string name="library_length">Length: %1$s</string>

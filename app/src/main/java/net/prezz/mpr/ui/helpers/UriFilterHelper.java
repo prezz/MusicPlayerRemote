@@ -18,12 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class UriFilterHelper {
 
     public interface UriFilterChangedListener {
-        void uriFilterChanged();
+        void entitiesChanged();
     }
 
     private static final String PREFERENCE_LIBRARY_HIDDEN_FOLDERS = "library_hidden_folders";
@@ -54,7 +53,7 @@ public class UriFilterHelper {
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(R.string.library_visible_folders_header);
+                builder.setTitle(R.string.library_visibility_folder_header);
                 builder.setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -71,7 +70,7 @@ public class UriFilterHelper {
                             }
                         }
                         saveUriFilter(values);
-                        uriFilterChangedListener.uriFilterChanged();
+                        uriFilterChangedListener.entitiesChanged();
                     }
                 });
                 AlertDialog alert = builder.create();

@@ -6,7 +6,6 @@ import java.util.Set;
 
 import net.prezz.mpr.model.command.Command;
 
-
 public class MusicPlayerControl {
 
     private static MusicPlayer musicPlayer = new NullPlayer();
@@ -33,16 +32,16 @@ public class MusicPlayerControl {
         return musicPlayer.getHideableUriFolders(responseReceiver);
     }
 
-    public static TaskHandle getAllArtistsFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getAllArtistsFromLibrary(uriFilter, responseReceiver);
+    public static TaskHandle getAllArtistsFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getAllArtistsFromLibrary(uriEntity, uriFilter, responseReceiver);
     }
 
-    public static TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getAllAlbumsFromLibrary(sortByArtist, uriFilter, responseReceiver);
+    public static TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getAllAlbumsFromLibrary(sortByArtist, uriEntity, uriFilter, responseReceiver);
     }
 
-    public static TaskHandle getAllGenresFromLibrary(Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getAllGenresFromLibrary(uriFilter, responseReceiver);
+    public static TaskHandle getAllGenresFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getAllGenresFromLibrary(uriEntity, uriFilter, responseReceiver);
     }
 
     public static TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {

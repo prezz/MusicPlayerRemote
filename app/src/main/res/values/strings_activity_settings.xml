@@ -99,11 +99,6 @@
     <string name="settings_library_show_covers_for_artist_albums_summary_on">Covers will be shown in a musicians albums list in library</string>
     <string name="settings_library_show_covers_for_artist_albums_summary_off">Covers will not be shown in a musicians albums list in library</string>
 
-    <string name="settings_library_browse_uri_title">File fragment in library</string>
-    <string name="settings_library_browse_uri_key">file_browsing_in_library</string>
-    <string name="settings_library_browse_uri_summary_on">File browsing fragment is displayed in library</string>
-    <string name="settings_library_browse_uri_summary_off">File browsing fragment is not visible in library</string>
-    
     <string name="settings_library_search_uri_title">Search files and directories</string>
     <string name="settings_library_search_uri_key">search_files_and_directories</string>
     <string name="settings_library_search_uri_summary_on">Files and directory names will be included in library search results</string>

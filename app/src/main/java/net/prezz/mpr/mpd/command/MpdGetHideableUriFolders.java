@@ -5,6 +5,7 @@ import android.database.Cursor;
 import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeSet;
 
@@ -19,14 +20,14 @@ public class MpdGetHideableUriFolders extends MpdDatabaseCommand<Void, String[]>
 
         TreeSet<String> uriSet = new TreeSet<String>(new UriComparator());
 
-        Cursor c = databaseHelper.selectAllLibraryUris();
+        Cursor c = databaseHelper.selectMusicEntitiesRootUri(Collections.<String>emptySet());
         try {
             addToSet(uriSet, c);
         } finally {
             c.close();
         }
 
-        c = databaseHelper.selectAllPlaylistUris();
+        c = databaseHelper.selectPlaylistEntitiesRootUri(Collections.<String>emptySet());
         try {
             addToSet(uriSet, c);
         } finally {

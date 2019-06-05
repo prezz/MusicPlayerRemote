@@ -34,7 +34,8 @@ public class MpdGetFilteredTracksAndTitlesCommand extends MpdDatabaseCommand<Lib
                     String metaGenre = c.getString(9);
                     result[i++] = entityBuilder.clear().setTag(Tag.TITLE).setGenre(entity.getGenre()).setAlbum(entity.getAlbum()).setArtist(artist)
                             .setMetaArtist(metaArtist).setAlbumArtist(albumArtist).setMetaAlbumArtist(metaAlbumArtist).setComposer(composer).setTitle(title)
-                            .setMetaTrack(track).setMetaLength(metaLength).setMetaYear(metaYear).setMetaGenre(metaGenre).setUriFilter(entity.getUriFilter()).build();
+                            .setUriEntity(entity.getUriEntity()).setMetaTrack(track).setMetaLength(metaLength).setMetaYear(metaYear).setMetaGenre(metaGenre)
+                            .setUriFilter(entity.getUriFilter()).build();
                 } while (c.moveToNext());
             }
             return result;

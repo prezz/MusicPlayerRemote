@@ -2,6 +2,7 @@ package net.prezz.mpr.ui.library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -244,7 +245,7 @@ public class LibraryUriFragment extends Fragment implements LibraryCommonsFragme
     }
 
     @Override
-    public void uriFilterChanged() {
+    public void entitiesChanged() {
         adapterEntities = null;
         updateEntities();
     }
@@ -270,9 +271,11 @@ public class LibraryUriFragment extends Fragment implements LibraryCommonsFragme
             createEntityAdapter(adapterEntities);
         } else if (!updating) {
             showUpdatingIndicator();
-            Set<String> hiddenUriFolders = ((LibraryActivity) getActivity()).getUriFilter();
+            LibraryActivity libraryActivity = (LibraryActivity) getActivity();
+            UriEntity uriEntityFilter = libraryActivity.getUriEntityFilter();
+            Set<String> hiddenUriFolders = (uriEntityFilter == null) ? libraryActivity.getUriFilter() : Collections.<String>emptySet();
             getFromLibraryHandle.cancelTask();
-            getFromLibraryHandle = MusicPlayerControl.getUriFromLibrary(null, hiddenUriFolders, new ResponseReceiver<UriEntity[]>() {
+            getFromLibraryHandle = MusicPlayerControl.getUriFromLibrary(uriEntityFilter, hiddenUriFolders, new ResponseReceiver<UriEntity[]>() {
                 @Override
                 public void receiveResponse(UriEntity[] response) {
                     adapterEntities = createAdapterEntities(response);

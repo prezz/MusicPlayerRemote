@@ -174,7 +174,7 @@ public abstract class LibraryFragment extends Fragment implements LibraryCommons
            final CharSequence title = getActivity().getTitle();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-         builder.setTitle(title);
+        builder.setTitle(title);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 if (adapterEntities != null) {
@@ -222,7 +222,7 @@ public abstract class LibraryFragment extends Fragment implements LibraryCommons
     }
 
     @Override
-    public void uriFilterChanged() {
+    public void entitiesChanged() {
         adapterEntities = null;
         updateEntities();
     }

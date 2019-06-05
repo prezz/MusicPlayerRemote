@@ -32,7 +32,7 @@ public class MpdGetFilteredAlbumsAndTitlesCommand extends MpdDatabaseCommand<Lib
                     Integer metaCount = c.getInt(4);
                     Integer metaLength = c.getInt(5);
                     result.add(entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setArtist(entity.getArtist()).setAlbumArtist(entity.getAlbumArtist()).setComposer(entity.getComposer())
-                            .setAlbum(album).setMetaAlbum(metaAlbum).setMetaArtist(artist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaCount(metaCount)
+                            .setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(artist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaCount(metaCount)
                             .setMetaLength(metaLength).setUriFilter(entity.getUriFilter()).build());
                 } while (c.moveToNext());
             }
@@ -50,7 +50,7 @@ public class MpdGetFilteredAlbumsAndTitlesCommand extends MpdDatabaseCommand<Lib
                     Integer metaYear = c.isNull(3) ? null : c.getInt(3);
                     String metaGenre = c.getString(4);
                     result.add(entityBuilder.clear().setTag(Tag.TITLE).setGenre(entity.getGenre()).setArtist(entity.getArtist()).setAlbumArtist(entity.getAlbumArtist()).setComposer(entity.getComposer())
-                            .setTitle(title).setAlbum(album).setMetaLength(metaLength).setMetaYear(metaYear).setMetaGenre(metaGenre).setUriFilter(entity.getUriFilter()).build());
+                            .setTitle(title).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaLength(metaLength).setMetaYear(metaYear).setMetaGenre(metaGenre).setUriFilter(entity.getUriFilter()).build());
                 } while (c.moveToNext());
             }
         } finally {

@@ -2,14 +2,13 @@ package net.prezz.mpr.ui.library;
 
 import net.prezz.mpr.R;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 class LibraryPagerAdapter extends FragmentPagerAdapter {
+
+    public static final int FRAGMENT_COUNT = 4;
 
     private Context context;
 
@@ -52,12 +51,6 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return (browseUri()) ? 4 : 3;
-    }
-
-    private boolean browseUri() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_browse_uri_key), true);
+        return FRAGMENT_COUNT;
     }
 }

@@ -27,6 +27,4 @@
     <string name="notification_streaming_channel_id">streaming_channel</string>
     <string name="notification_streaming_channel_name">Streaming Notification</string>
 
-    <string name="library_visible_folders_header">Select visible root folders</string>
-
 </resources>

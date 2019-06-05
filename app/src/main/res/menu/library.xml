@@ -4,6 +4,6 @@
         android:id="@+id/library_action_visible_folders"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/library_action_visible_folders"/>
+        android:title="@string/library_action_visibility_folders"/>
 
 </menu>

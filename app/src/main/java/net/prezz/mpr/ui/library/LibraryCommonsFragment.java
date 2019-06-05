@@ -6,5 +6,5 @@ public interface LibraryCommonsFragment {
 
     void onChoiceMenuClick(View view);
 
-    void uriFilterChanged();
+    void entitiesChanged();
 }

@@ -30,8 +30,8 @@ public class MpdGetFilteredArtistsCommand extends MpdDatabaseCommand<LibraryEnti
                     String artist = c.getString(0);
                     String metaArtist = c.getString(1);
                     Integer metaCount = c.getInt(2);
-                    libraryEntities.add(entityBuilder.clear().setTag(Tag.ARTIST).setGenre(entity.getGenre()).setArtist(artist).setMetaArtist(metaArtist)
-                            .setMetaCount(metaCount).setUriFilter(entity.getUriFilter()).build());
+                    libraryEntities.add(entityBuilder.clear().setTag(Tag.ARTIST).setGenre(entity.getGenre()).setArtist(artist).setUriEntity(entity.getUriEntity())
+                            .setMetaArtist(metaArtist).setMetaCount(metaCount).setUriFilter(entity.getUriFilter()).build());
                 } while (c.moveToNext());
             }
         } finally {
@@ -45,8 +45,8 @@ public class MpdGetFilteredArtistsCommand extends MpdDatabaseCommand<LibraryEnti
                     String albumArtist = c.getString(0);
                     String metaAlbumArtist = c.getString(1);
                     Integer metaCount = c.getInt(2);
-                    libraryEntities.add(entityBuilder.clear().setTag(Tag.ALBUM_ARTIST).setGenre(entity.getGenre()).setAlbumArtist(albumArtist).setMetaAlbumArtist(metaAlbumArtist)
-                            .setMetaCount(metaCount).setUriFilter(entity.getUriFilter()).build());
+                    libraryEntities.add(entityBuilder.clear().setTag(Tag.ALBUM_ARTIST).setGenre(entity.getGenre()).setAlbumArtist(albumArtist).setUriEntity(entity.getUriEntity())
+                            .setMetaAlbumArtist(metaAlbumArtist).setMetaCount(metaCount).setUriFilter(entity.getUriFilter()).build());
                 } while (c.moveToNext());
             }
         } finally {
@@ -59,8 +59,8 @@ public class MpdGetFilteredArtistsCommand extends MpdDatabaseCommand<LibraryEnti
                 do {
                     String composer = c.getString(0);
                     Integer metaCount = c.getInt(1);
-                    libraryEntities.add(entityBuilder.clear().setTag(Tag.COMPOSER).setGenre(entity.getGenre()).setComposer(composer).setMetaCount(metaCount)
-                            .setUriFilter(entity.getUriFilter()).build());
+                    libraryEntities.add(entityBuilder.clear().setTag(Tag.COMPOSER).setGenre(entity.getGenre()).setComposer(composer).setUriEntity(entity.getUriEntity())
+                            .setMetaCount(metaCount).setUriFilter(entity.getUriFilter()).build());
                 } while (c.moveToNext());
             }
         } finally {
