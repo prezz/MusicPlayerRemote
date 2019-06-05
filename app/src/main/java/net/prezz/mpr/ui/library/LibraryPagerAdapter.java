@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 class LibraryPagerAdapter extends FragmentPagerAdapter {
 
-    public static final int FRAGMENT_COUNT = 5;
+    public static final int FRAGMENT_COUNT = 4;
 
     private Context context;
 
@@ -27,8 +27,6 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
         case 2:
             return context.getString(R.string.library_genres);
         case 3:
-            return context.getString(R.string.library_folders);
-        case 4:
             return context.getString(R.string.library_files);
         }
 
@@ -45,8 +43,6 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
         case 2:
             return new LibraryGenreFragment();
         case 3:
-            return new LibraryFolderFragment();
-        case 4:
             return new LibraryUriFragment();
         }
 

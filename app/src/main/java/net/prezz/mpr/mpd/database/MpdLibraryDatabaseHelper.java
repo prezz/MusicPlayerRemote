@@ -143,15 +143,6 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), count(a), sum(t), sum(l) FROM (SELECT DISTINCT album, meta_album, artist a, count(title) t, sum(length) l FROM music_entities %s GROUP BY album, meta_album, artist) GROUP BY meta_album ORDER BY meta_album COLLATE NOCASE asc", buildFilter(entity)), null);
     }
 
-    public Cursor selectFilteredAlbums(LibraryEntity entity, boolean orderByArtist) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        if (orderByArtist) {
-            return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', ') g, count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma FROM music_entities %s ORDER BY track, meta_artist, title) GROUP BY album ORDER BY g COLLATE NOCASE asc, album COLLATE NOCASE asc", buildFilter(entity)), null);
-        } else {
-            return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', '), count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma FROM music_entities %s ORDER BY track, meta_artist, title) GROUP BY meta_album ORDER BY meta_album COLLATE NOCASE asc", buildFilter(entity)), null);
-        }
-    }
-
     public Cursor selectFilteredArtistTitles(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT title, album, length, year, genre FROM music_entities %s ORDER BY title COLLATE NOCASE asc", buildFilter(entity)), null);
@@ -185,11 +176,6 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
     public Cursor selectMusicEntitiesUri(String uriPath) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT SUBSTR(uri, %s) FROM music_entities WHERE uri LIKE '%s%%'", Integer.valueOf(uriPath.length() + 1), Utils.fixDatabaseQuery(uriPath)), null);
-    }
-
-    public Cursor selectAlbumCountInUri(String uriPath) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(String.format("SELECT count(DISTINCT album) FROM music_entities WHERE uri LIKE '%s%%'", Utils.fixDatabaseQuery(uriPath)), null);
     }
 
     public Cursor selectPlaylistEntitiesRootUri(Set<String> uriFilter) {

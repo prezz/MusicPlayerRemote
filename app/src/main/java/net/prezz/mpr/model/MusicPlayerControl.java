@@ -57,10 +57,6 @@ public class MusicPlayerControl {
         return musicPlayer.getFilteredArtistsFromLibrary(entity, responseReceiver);
     }
 
-    public static TaskHandle getFilteredAlbumsFromLibrary(boolean sortByArtist, LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getFilteredAlbumsFromLibrary(sortByArtist, entity, responseReceiver);
-    }
-
     public static TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
         return musicPlayer.getFilteredTracksAndTitlesFromLibrary(entity, responseReceiver);
     }

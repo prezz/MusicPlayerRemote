@@ -27,8 +27,6 @@ public interface MusicPlayer {
 
     TaskHandle getFilteredArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-    TaskHandle getFilteredAlbumsFromLibrary(boolean sortByArtist, LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
-
     TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
     TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver);

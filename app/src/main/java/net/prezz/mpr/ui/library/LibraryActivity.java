@@ -1,5 +1,10 @@
 package net.prezz.mpr.ui.library;
 
+import net.prezz.mpr.model.LibraryEntity;
+import net.prezz.mpr.model.MusicPlayerControl;
+import net.prezz.mpr.model.ResponseReceiver;
+import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.mpd.database.MpdDatabaseBuilder;
 import net.prezz.mpr.mpd.database.MpdDatabaseBuilder.UpdateDatabaseResult;
 import net.prezz.mpr.ui.helpers.MiniControlHelper;
@@ -25,6 +30,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
@@ -43,6 +50,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     private AlertDialog buildDatabaseErrorDialog;
     private AlertDialog swipeHintDialog;
 
+    private TaskHandle getFilterFoldersHandle = TaskHandle.NULL_HANDLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,6 +241,33 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     
     public void detachFragment(int pos) {
         attachedFragments[pos] = null;
+    }
+
+    public void onFilterMenuClick(View view) {
+
+        getFilterFoldersHandle.cancelTask();
+        getFilterFoldersHandle = MusicPlayerControl.getAllFoldersFromLibrary(getUriFilter(), new ResponseReceiver<LibraryEntity[]>() {
+            @Override
+            public void receiveResponse(final LibraryEntity[] entities) {
+
+                String[] items = new String[entities.length];
+                for (int i = 0; i < entities.length; i++) {
+                    items[i] = entities[i].getUriEntity().getFullUriPath(true);
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(LibraryActivity.this);
+                builder.setTitle(R.string.library_visible_folders_header);
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
     }
 
     public void onChoiceMenuClick(View view) {

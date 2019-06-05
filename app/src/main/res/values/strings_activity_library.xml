@@ -9,14 +9,14 @@
     <string name="library_composers">Composers</string>
     <string name="library_albums">Albums</string>
     <string name="library_genres">Genres</string>
-    <string name="library_folders">Root Folders</string>
     <string name="library_files">Files</string>
     <string name="library_albums_section">Albums</string>
     <string name="library_titles_section">Tracks</string>
     <string name="library_directories_section">Directories</string>
     <string name="library_files_section">Files</string>
     <string name="library_entity_cover_image">Cover image</string>
-    
+
+    <string name="library_filter_menu">Library filter menu</string>
     <string name="library_choice_menu">Library choice menu</string>
     <string name="library_control_menu">Library control menu</string>
     

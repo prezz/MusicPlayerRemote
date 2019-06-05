@@ -50,7 +50,7 @@ import android.widget.ProgressBar;
 
 public class LibraryUriFragment extends Fragment implements LibraryCommonsFragment, OnItemClickListener, OnMenuItemClickListener {
 
-    private static final int FRAGMENT_POSITION = 4;
+    private static final int FRAGMENT_POSITION = 3;
     private static final String ENTITIES_SAVED_INSTANCE_STATE = "UriEntities";
 
     private AdapterEntity[] adapterEntities = null;
