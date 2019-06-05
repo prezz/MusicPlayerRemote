@@ -1,6 +1,5 @@
 package net.prezz.mpr.ui.library;
 
-import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
@@ -30,8 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
@@ -50,7 +48,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     private AlertDialog buildDatabaseErrorDialog;
     private AlertDialog swipeHintDialog;
 
-    private TaskHandle getFilterFoldersHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle getUriFromLibraryHandle = TaskHandle.NULL_HANDLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,8 +243,8 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
 
     public void onFilterMenuClick(View view) {
 
-        getFilterFoldersHandle.cancelTask();
-        getFilterFoldersHandle = MusicPlayerControl.getUriFromLibrary(null, getUriFilter(), new ResponseReceiver<UriEntity[]>() {
+        getUriFromLibraryHandle.cancelTask();
+        getUriFromLibraryHandle = MusicPlayerControl.getUriFromLibrary(null, Collections.<String>emptySet(), new ResponseReceiver<UriEntity[]>() {
             @Override
             public void receiveResponse(final UriEntity[] entities) {
 
