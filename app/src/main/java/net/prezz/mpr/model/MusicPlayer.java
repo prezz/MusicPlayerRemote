@@ -15,11 +15,11 @@ public interface MusicPlayer {
 
     TaskHandle getHideableUriFolders(ResponseReceiver<String[]> responseReceiver);
 
-    TaskHandle getAllArtistsFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
+    TaskHandle getAllArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-    TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
+    TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-    TaskHandle getAllGenresFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<LibraryEntity[]> responseReceiver);
+    TaskHandle getAllGenresFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
     TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 

@@ -1,15 +1,12 @@
 package net.prezz.mpr.ui.library;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
 
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.LibraryEntity.Tag;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.ui.adapter.AdapterEntity;
 import net.prezz.mpr.ui.adapter.ArtistAdapterEntity;
 import net.prezz.mpr.ui.adapter.LibraryArrayAdapter;
@@ -22,7 +19,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 public class LibraryArtistFragment extends LibraryFragment {
 
@@ -52,9 +48,7 @@ public class LibraryArtistFragment extends LibraryFragment {
     @Override
     protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
         LibraryActivity libraryActivity = (LibraryActivity) getActivity();
-        UriEntity uriEntityFilter = libraryActivity.getUriEntityFilter();
-        Set<String> hiddenUriFolders = (uriEntityFilter == null) ? libraryActivity.getUriFilter() : Collections.<String>emptySet();
-        return MusicPlayerControl.getAllArtistsFromLibrary(uriEntityFilter, hiddenUriFolders, responseReceiver);
+        return MusicPlayerControl.getAllArtistsFromLibrary(libraryActivity.getLibraryEntityFilter(), responseReceiver);
     }
 
     @Override

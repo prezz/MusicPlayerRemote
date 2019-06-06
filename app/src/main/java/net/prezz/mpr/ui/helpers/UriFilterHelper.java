@@ -22,7 +22,7 @@ import java.util.Set;
 public class UriFilterHelper {
 
     public interface UriFilterChangedListener {
-        void entitiesChanged();
+        void entityFilterChanged();
     }
 
     private static final String PREFERENCE_LIBRARY_HIDDEN_FOLDERS = "library_hidden_folders";
@@ -70,7 +70,7 @@ public class UriFilterHelper {
                             }
                         }
                         saveUriFilter(values);
-                        uriFilterChangedListener.entitiesChanged();
+                        uriFilterChangedListener.entityFilterChanged();
                     }
                 });
                 AlertDialog alert = builder.create();

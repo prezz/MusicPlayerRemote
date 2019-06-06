@@ -1,5 +1,6 @@
 package net.prezz.mpr.ui.library;
 
+import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
@@ -218,7 +219,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
     }
 
     @Override
-    public void entitiesChanged() {
+    public void entityFilterChanged() {
         for (int i = 0; i < attachedFragments.length; i++) {
             entitiesChanged[i] = true;
             if (attachedFragments[i] != null) {
@@ -226,6 +227,13 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
                 entitiesChanged[i] = false;
             }
         }
+    }
+
+    public LibraryEntity getLibraryEntityFilter() {
+        return LibraryEntity.createBuilder()
+                .setUriEntity(getUriEntityFilter())
+                .setUriFilter(getUriFilter())
+                .build();
     }
 
     public UriEntity getUriEntityFilter() {
@@ -269,7 +277,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         uriEntityFilter = selections[which];
-                        entitiesChanged();
+                        entityFilterChanged();
                     }
                 });
 

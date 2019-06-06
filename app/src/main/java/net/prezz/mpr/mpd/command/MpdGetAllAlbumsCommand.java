@@ -4,7 +4,6 @@ import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.LibraryEntity.Builder;
 import net.prezz.mpr.model.LibraryEntity.Tag;
-import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 import android.database.Cursor;
 
@@ -12,26 +11,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCommand.Param, LibraryEntity[]> {
 
     protected static final class Param {
         public final Boolean sortByArtist;
-        public final UriEntity uriEntity;
-        public final Set<String> uriFilter;
+        public final LibraryEntity entity;
 
-        public Param(Boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter) {
+        public Param(Boolean sortByArtist, LibraryEntity entity) {
             this.sortByArtist = sortByArtist;
-            this.uriEntity = uriEntity;
-            this.uriFilter = (uriFilter != null) ? Collections.unmodifiableSet(uriFilter) : null;
+            this.entity = entity;
         }
     }
 
     private static final String VARIOUS = "Various";
 
-    public MpdGetAllAlbumsCommand(boolean sortByArtist, UriEntity uriEntity, Set<String> uriFilter) {
-        super(new Param(Boolean.valueOf(sortByArtist), uriEntity, uriFilter));
+    public MpdGetAllAlbumsCommand(boolean sortByArtist, LibraryEntity entity) {
+        super(new Param(Boolean.valueOf(sortByArtist), entity));
     }
 
     @Override
@@ -39,10 +35,9 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
         Builder entityBuilder = LibraryEntity.createBuilder();
 
         Boolean sortByArtist = param.sortByArtist;
-        UriEntity uriEntity = param.uriEntity;
-        Set<String> uriFilter = param.uriFilter;
+        LibraryEntity entity = param.entity;
 
-        Cursor c = databaseHelper.selectAllAlbums(sortByArtist.booleanValue(), uriEntity, uriFilter);
+        Cursor c = databaseHelper.selectAllAlbums(sortByArtist.booleanValue(), entity);
 
         try {
             int compilationIndex = 0;
@@ -58,14 +53,14 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
                     Boolean metaCompilation = c.getInt(4) > 1 ? Boolean.TRUE : Boolean.FALSE;
 
                     if (Utils.nullOrEmpty(album)) {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(uriEntity).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
-                        tracks.add(entity);
+                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(entity.getUriFilter()).build();
+                        tracks.add(e);
                     } else if (sortByArtist == Boolean.TRUE && metaCompilation == Boolean.TRUE) {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(uriEntity).setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS).setLookupArtist(VARIOUS).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
-                        compilations.add(entity);
+                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS).setLookupArtist(VARIOUS).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(entity.getUriFilter()).build();
+                        compilations.add(e);
                     } else {
-                        LibraryEntity entity = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(uriEntity).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(uriFilter).build();
-                        result.add(entity);
+                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(entity.getUriFilter()).build();
+                        result.add(e);
                         if (sortByArtist == Boolean.TRUE && VARIOUS.compareToIgnoreCase(metaArtist) > 0) {
                             compilationIndex++;
                         }
