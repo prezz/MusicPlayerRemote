@@ -30,7 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.Set;
+import java.util.SortedSet;
 
 public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
 
@@ -240,7 +240,7 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
         return uriEntityFilter;
     }
 
-    public Set<String> getUriFilter() {
+    public SortedSet<String> getUriFilter() {
         return uriFilterHelper.getUriFilter();
     }
 

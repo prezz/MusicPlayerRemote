@@ -2,9 +2,9 @@ package net.prezz.mpr.ui.library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
@@ -273,7 +273,7 @@ public class LibraryUriFragment extends Fragment implements LibraryCommonsFragme
             showUpdatingIndicator();
             LibraryActivity libraryActivity = (LibraryActivity) getActivity();
             UriEntity uriEntityFilter = libraryActivity.getUriEntityFilter();
-            Set<String> hiddenUriFolders = (uriEntityFilter == null) ? libraryActivity.getUriFilter() : Collections.<String>emptySet();
+            SortedSet<String> hiddenUriFolders = (uriEntityFilter == null) ? libraryActivity.getUriFilter() : new TreeSet<String>();
             getFromLibraryHandle.cancelTask();
             getFromLibraryHandle = MusicPlayerControl.getUriFromLibrary(uriEntityFilter, hiddenUriFolders, new ResponseReceiver<UriEntity[]>() {
                 @Override

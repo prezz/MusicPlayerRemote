@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.LibraryEntity;
@@ -39,7 +39,7 @@ public class MpdCommandHelper {
             return Collections.singletonList(createQuery(prefix, fixQuery(uriEntity.getFullUriPath(false)), entity));
         }
 
-        Set<String> uriFilter = entity.getUriFilter();
+        SortedSet<String> uriFilter = entity.getUriFilter();
         if (uriFilter != null && uriFilter.size() > 0) {
 
             List<String> result = new ArrayList<>();

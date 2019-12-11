@@ -1,7 +1,7 @@
 package net.prezz.mpr.mpd;
 
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
@@ -196,7 +196,7 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, final ResponseReceiver<UriEntity[]> responseReceiver) {
+    public TaskHandle getUriFromLibrary(UriEntity uriEntity, SortedSet<String> uriFilter, final ResponseReceiver<UriEntity[]> responseReceiver) {
         MpdGetUriCommand command = new MpdGetUriCommand(uriEntity, uriFilter);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<UriEntity[]>() {
             @Override
@@ -212,7 +212,7 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, final ResponseReceiver<SearchResult> responseReceiver) {
+    public TaskHandle searchLibrary(String query, boolean searchUri, SortedSet<String> uriFilter, final ResponseReceiver<SearchResult> responseReceiver) {
         MpdSearchLibraryCommand command = new MpdSearchLibraryCommand(query.trim(), searchUri, uriFilter);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<SearchResult>() {
             @Override

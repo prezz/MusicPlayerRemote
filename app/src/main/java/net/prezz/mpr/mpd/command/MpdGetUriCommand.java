@@ -1,7 +1,7 @@
 package net.prezz.mpr.mpd.command;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import net.prezz.mpr.model.UriEntity;
@@ -14,22 +14,22 @@ public class MpdGetUriCommand extends MpdDatabaseCommand<MpdGetUriCommand.Param,
 
     protected static final class Param {
         public final UriEntity uriEntity;
-        public final Set<String> uriFilter;
+        public final SortedSet<String> uriFilter;
 
-        public Param(UriEntity uriEntity, Set<String> uriFilter) {
+        public Param(UriEntity uriEntity, SortedSet<String> uriFilter) {
             this.uriEntity = uriEntity;
-            this.uriFilter = (uriFilter != null) ? Collections.unmodifiableSet(uriFilter) : null;
+            this.uriFilter = (uriFilter != null) ? Collections.unmodifiableSortedSet(uriFilter) : null;
         }
     }
 
-    public MpdGetUriCommand(UriEntity uriEntity, Set<String> uriFilter) {
+    public MpdGetUriCommand(UriEntity uriEntity, SortedSet<String> uriFilter) {
         super(new Param(uriEntity, uriFilter));
     }
 
     @Override
     protected UriEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception {
         UriEntity uriEntity = param.uriEntity;
-        Set<String> uriFilter = param.uriFilter;
+        SortedSet<String> uriFilter = param.uriFilter;
 
         TreeSet<UriEntity> uriSet = new TreeSet<UriEntity>(MpdCommandHelper.getUriComparator());
 
