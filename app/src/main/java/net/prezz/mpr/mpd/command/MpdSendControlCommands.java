@@ -291,7 +291,7 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     private void addToStoredPlaylist(MpdConnection connection, String playlistName, LibraryEntity[] entities) throws IOException {
         String[] findCommands = new String[entities.length];
         for (int i = 0; i < entities.length; i++) {
-            findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
+            findCommands[i] = MpdCommandHelper.createQuery("find", null, entities[i]);
         }
 
         connection.writeCommandList(findCommands);
@@ -319,14 +319,14 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
             List<String> commands = new ArrayList<String>();
 
             for (int i = 0; i < entities.length; i++) {
-                commands.add(MpdCommandHelper.createQuery("findadd", entities[i]));
+                commands.add(MpdCommandHelper.createQuery("findadd", null, entities[i]));
             }
 
             connection.writeResponseCommandList(commands.toArray(new String[commands.size()]), RejectAllFilter.INSTANCE);
         } else {
             String[] findCommands = new String[entities.length];
             for (int i = 0; i < entities.length; i++) {
-                findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
+                findCommands[i] = MpdCommandHelper.createQuery("find", null, entities[i]);
             }
 
             connection.writeCommandList(findCommands);
@@ -462,7 +462,7 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     private String[] findFiles(MpdConnection connection, LibraryEntity[] entities) throws IOException {
         String[] findCommands = new String[entities.length];
         for (int i = 0; i < entities.length; i++) {
-            findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
+            findCommands[i] = MpdCommandHelper.createQuery("find", null, entities[i]);
         }
         connection.writeCommandList(findCommands);
         String[] files = connection.readResponse(FILE_FILTER);

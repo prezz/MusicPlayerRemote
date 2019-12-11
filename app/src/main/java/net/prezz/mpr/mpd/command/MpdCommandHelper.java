@@ -27,10 +27,16 @@ public class MpdCommandHelper {
         return null;
     }
 
-    public static String createQuery(String prefix, LibraryEntity entity) {
+    public static String createQuery(String prefix, String directory, LibraryEntity entity) {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(prefix);
+
+        if (directory != null) {
+            stringBuilder.append(" base \"");
+            stringBuilder.append(directory);
+            stringBuilder.append("\"");
+        }
 
         if (entity.getArtist() != null) {
             stringBuilder.append(" Artist \"");
@@ -67,50 +73,6 @@ public class MpdCommandHelper {
             stringBuilder.append(fixQuery(entity.getTitle()));
             stringBuilder.append("\"");
         }
-
-        stringBuilder.append("\n");
-
-        return stringBuilder.toString();
-    }
-
-    public static String createTrackQuery(String prefix, LibraryEntity entity, String title) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(prefix);
-
-        if (entity.getArtist() != null) {
-            stringBuilder.append(" Artist \"");
-            stringBuilder.append(fixQuery(entity.getArtist()));
-            stringBuilder.append("\"");
-        }
-
-        if (entity.getAlbumArtist() != null) {
-            stringBuilder.append(" AlbumArtist \"");
-            stringBuilder.append(fixQuery(entity.getAlbumArtist()));
-            stringBuilder.append("\"");
-        }
-
-        if (entity.getComposer() != null) {
-            stringBuilder.append(" Composer \"");
-            stringBuilder.append(fixQuery(entity.getComposer()));
-            stringBuilder.append("\"");
-        }
-
-        if (entity.getAlbum() != null) {
-            stringBuilder.append(" Album \"");
-            stringBuilder.append(fixQuery(entity.getAlbum()));
-            stringBuilder.append("\"");
-        }
-
-        if (entity.getGenre() != null) {
-            stringBuilder.append(" Genre \"");
-            stringBuilder.append(fixQuery(entity.getGenre()));
-            stringBuilder.append("\"");
-        }
-
-        stringBuilder.append(" Title \"");
-        stringBuilder.append(fixQuery(title));
-        stringBuilder.append("\"");
 
         stringBuilder.append("\n");
 
