@@ -44,12 +44,12 @@ public class UriFilterHelper {
             @Override
             public void receiveResponse(final String[] items) {
 
-                Set<String> hidden = getUriFilter();
+                Set<String> visible = getUriFilter();
                 Arrays.sort(items, new SortComparator());
 
                 final boolean[] checked = new boolean[items.length];
                 for (int i = 0; i < items.length; i++) {
-                    checked[i] = !hidden.contains(items[i]);
+                    checked[i] = visible.contains(items[i]);
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -65,7 +65,7 @@ public class UriFilterHelper {
                     public void onClick(DialogInterface dialog, int which) {
                         Set<String> values = new HashSet<>();
                         for (int i = 0; i < items.length; i++) {
-                            if (!checked[i]) {
+                            if (checked[i]) {
                                 values.add(items[i]);
                             }
                         }

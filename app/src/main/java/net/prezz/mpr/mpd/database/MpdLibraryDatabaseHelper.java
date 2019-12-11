@@ -348,13 +348,13 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
                     stringBuilder.append(" AND (");
                 }
 
-                stringBuilder.append("NOT uri LIKE '");
+                stringBuilder.append("uri LIKE '");
                 stringBuilder.append(Utils.fixDatabaseQuery(it.next()));
                 stringBuilder.append("%'");
             }
 
             while (it.hasNext()) {
-                stringBuilder.append(" AND NOT uri LIKE '");
+                stringBuilder.append(" OR uri LIKE '");
                 stringBuilder.append(Utils.fixDatabaseQuery(it.next()));
                 stringBuilder.append("%'");
             }
