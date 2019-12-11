@@ -25,7 +25,7 @@ public class UriFilterHelper {
         void entityFilterChanged();
     }
 
-    private static final String PREFERENCE_LIBRARY_HIDDEN_FOLDERS = "library_hidden_folders";
+    private static final String PREFERENCE_LIBRARY_VISIBLE_FOLDERS = "library_visible_folders";
 
     private final Activity activity;
     private final UriFilterChangedListener uriFilterChangedListener;
@@ -83,7 +83,7 @@ public class UriFilterHelper {
         String host = ServerConfigurationService.getSelectedServerConfiguration().getHost();
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sharedPreferences.getStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host, Collections.<String>emptySet());
+        return sharedPreferences.getStringSet(PREFERENCE_LIBRARY_VISIBLE_FOLDERS + host, Collections.<String>emptySet());
     }
 
     private void saveUriFilter(Set<String> values) {
@@ -91,7 +91,7 @@ public class UriFilterHelper {
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host, values);
+        editor.putStringSet(PREFERENCE_LIBRARY_VISIBLE_FOLDERS + host, values);
         editor.commit();
     }
 
@@ -106,7 +106,7 @@ public class UriFilterHelper {
     public static void removeUriFilter(Context context, String host) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host);
+        editor.remove(PREFERENCE_LIBRARY_VISIBLE_FOLDERS + host);
         editor.commit();
     }
 }
