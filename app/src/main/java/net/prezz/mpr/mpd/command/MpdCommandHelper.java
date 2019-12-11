@@ -1,9 +1,12 @@
 package net.prezz.mpr.mpd.command;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
+import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.model.UriEntity.UriType;
@@ -31,17 +34,36 @@ public class MpdCommandHelper {
 
     public static List<String> createQuery(String prefix, LibraryEntity entity) {
 
+        if (entity.getUriEntity() != null) {
+            UriEntity uriEntity = entity.getUriEntity();
+            return Collections.singletonList(createQuery(prefix, fixQuery(uriEntity.getFullUriPath(false)), entity));
+        }
+
+        Set<String> uriFilter = entity.getUriFilter();
+        if (uriFilter != null && uriFilter.size() > 0) {
+
+            List<String> result = new ArrayList<>();
+            for (String filter : uriFilter) {
+                String uri = filter;
+                if (!Utils.nullOrEmpty(uri) && uri.endsWith(UriEntity.DIR_SEPERATOR)) {
+                    uri = uri.substring(0, uri.length() - 1);
+                }
+                result.add(createQuery(prefix, uri, entity));
+            }
+            return Collections.unmodifiableList(result);
+        }
+
         return Collections.singletonList(createQuery(prefix, null, entity));
     }
 
-    public static String createQuery(String prefix, String directory, LibraryEntity entity) {
+    public static String createQuery(String prefix, String uriPath, LibraryEntity entity) {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(prefix);
 
-        if (directory != null) {
+        if (uriPath != null) {
             stringBuilder.append(" base \"");
-            stringBuilder.append(directory);
+            stringBuilder.append(uriPath);
             stringBuilder.append("\"");
         }
 
