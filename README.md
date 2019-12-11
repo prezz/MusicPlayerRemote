@@ -8,7 +8,7 @@ The user was root, the group kvm. To check which users are in the kvm group, use
 grep kvm /etc/group
 This returned
 
-kvm:x:some_number:
+kvm\:x\:some_number:
 on my system: as there is nothing rightwards of the final :, there are no users in the kvm group.
 
 To add your user to the kvm group, you could use
