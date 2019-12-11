@@ -1,6 +1,8 @@
 package net.prezz.mpr.mpd.command;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.UriEntity;
@@ -25,6 +27,11 @@ public class MpdCommandHelper {
         }
 
         return null;
+    }
+
+    public static List<String> createQuery(String prefix, LibraryEntity entity) {
+
+        return Collections.singletonList(createQuery(prefix, null, entity));
     }
 
     public static String createQuery(String prefix, String directory, LibraryEntity entity) {
