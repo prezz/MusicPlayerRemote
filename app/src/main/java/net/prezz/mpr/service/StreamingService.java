@@ -318,7 +318,7 @@ public class StreamingService extends Service {
             playbackStateBuilder.setActions(COMMON_ACTION | PlaybackState.ACTION_PLAY);
             playbackStateBuilder.setState(PlaybackState.STATE_PAUSED, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
         } else {
-            playbackStateBuilder.setState(PlaybackStateCompat.STATE_NONE, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+            playbackStateBuilder.setState(PlaybackState.STATE_NONE, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
         }
 
         mediaSession.setPlaybackState(playbackStateBuilder.build());
