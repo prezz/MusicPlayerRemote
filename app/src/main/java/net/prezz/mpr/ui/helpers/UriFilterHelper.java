@@ -16,8 +16,9 @@ import net.prezz.mpr.model.servers.ServerConfigurationService;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class UriFilterHelper {
 
@@ -25,7 +26,7 @@ public class UriFilterHelper {
         void entityFilterChanged();
     }
 
-    private static final String PREFERENCE_LIBRARY_HIDDEN_FOLDERS = "library_hidden_folders";
+    private static final String PREFERENCE_LIBRARY_VISIBLE_FOLDERS = "library_visible_folders";
 
     private final Activity activity;
     private final UriFilterChangedListener uriFilterChangedListener;
@@ -44,12 +45,12 @@ public class UriFilterHelper {
             @Override
             public void receiveResponse(final String[] items) {
 
-                Set<String> hidden = getUriFilter();
+                SortedSet<String> visible = getUriFilter();
                 Arrays.sort(items, new SortComparator());
 
                 final boolean[] checked = new boolean[items.length];
                 for (int i = 0; i < items.length; i++) {
-                    checked[i] = !hidden.contains(items[i]);
+                    checked[i] = visible.contains(items[i]);
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -63,9 +64,9 @@ public class UriFilterHelper {
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Set<String> values = new HashSet<>();
+                        SortedSet<String> values = new TreeSet<String>();
                         for (int i = 0; i < items.length; i++) {
-                            if (!checked[i]) {
+                            if (checked[i]) {
                                 values.add(items[i]);
                             }
                         }
@@ -79,19 +80,19 @@ public class UriFilterHelper {
         });
     }
 
-    public Set<String> getUriFilter() {
+    public SortedSet<String> getUriFilter() {
         String host = ServerConfigurationService.getSelectedServerConfiguration().getHost();
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sharedPreferences.getStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host, Collections.<String>emptySet());
+        return new TreeSet<String>(sharedPreferences.getStringSet(PREFERENCE_LIBRARY_VISIBLE_FOLDERS + host, Collections.<String>emptySet()));
     }
 
-    private void saveUriFilter(Set<String> values) {
+    private void saveUriFilter(SortedSet<String> values) {
         String host = ServerConfigurationService.getSelectedServerConfiguration().getHost();
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host, values);
+        editor.putStringSet(PREFERENCE_LIBRARY_VISIBLE_FOLDERS + host, values);
         editor.commit();
     }
 
@@ -106,7 +107,7 @@ public class UriFilterHelper {
     public static void removeUriFilter(Context context, String host) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(PREFERENCE_LIBRARY_HIDDEN_FOLDERS + host);
+        editor.remove(PREFERENCE_LIBRARY_VISIBLE_FOLDERS + host);
         editor.commit();
     }
 }

@@ -1,7 +1,7 @@
 package net.prezz.mpr.model;
 
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import net.prezz.mpr.model.command.Command;
 
@@ -27,9 +27,9 @@ public interface MusicPlayer {
 
     TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver);
 
-    TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver);
+    TaskHandle getUriFromLibrary(UriEntity uriEntity, SortedSet<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver);
 
-    TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver);
+    TaskHandle searchLibrary(String query, boolean searchUri, SortedSet<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver);
 
     TaskHandle getPlaylist(ResponseReceiver<PlaylistEntity[]> responseReceiver);
 

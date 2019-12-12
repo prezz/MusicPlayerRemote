@@ -2,7 +2,7 @@ package net.prezz.mpr.model;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import net.prezz.mpr.model.command.Command;
 
@@ -56,11 +56,11 @@ public class MusicPlayerControl {
         return musicPlayer.getFilteredTracksAndTitlesFromLibrary(entity, responseReceiver);
     }
 
-    public static TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver) {
+    public static TaskHandle getUriFromLibrary(UriEntity uriEntity, SortedSet<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver) {
         return musicPlayer.getUriFromLibrary(uriEntity, uriFilter, responseReceiver);
     }
 
-    public static TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver) {
+    public static TaskHandle searchLibrary(String query, boolean searchUri, SortedSet<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver) {
         return musicPlayer.searchLibrary(query, searchUri, uriFilter, responseReceiver);
     }
 

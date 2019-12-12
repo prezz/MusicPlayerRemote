@@ -2,7 +2,7 @@ package net.prezz.mpr.model;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Set;
+import java.util.SortedSet;
 
 import net.prezz.mpr.Utils;
 
@@ -32,11 +32,11 @@ public class LibraryEntity implements Serializable {
     private Boolean metaCompilation;
     private String lookupArtist;
     private String lookupAlbum;
-    private Set<String> uriFilter;
+    private SortedSet<String> uriFilter;
 
 
     private LibraryEntity(Tag tag, String artist, String albumArtist, String composer, String album, String title, String genre, UriEntity uriEntity, Integer metaTrack, String metaArtist, String metaAlbumArtist,
-                          String metaAlbum, String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, Set<String> uriFilter) {
+                          String metaAlbum, String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, SortedSet<String> uriFilter) {
         this.tag = tag;
         this.artist = artist;
         this.albumArtist = albumArtist;
@@ -135,8 +135,8 @@ public class LibraryEntity implements Serializable {
         return lookupAlbum;
     }
 
-    public Set<String> getUriFilter() {
-        return (uriFilter != null) ? Collections.unmodifiableSet(uriFilter) : null;
+    public SortedSet<String> getUriFilter() {
+        return (uriFilter != null) ? Collections.unmodifiableSortedSet(uriFilter) : null;
     }
 
     @Override
@@ -274,7 +274,7 @@ public class LibraryEntity implements Serializable {
         private Boolean metaCompilation;
         private String lookupArtist;
         private String lookupAlbum;
-        private Set<String> uriFilter;
+        private SortedSet<String> uriFilter;
 
         public Builder clear() {
             tag = null;
@@ -395,7 +395,7 @@ public class LibraryEntity implements Serializable {
             return this;
         }
 
-        public Builder setUriFilter(Set<String> uriFilter) {
+        public Builder setUriFilter(SortedSet<String> uriFilter) {
             this.uriFilter = uriFilter;
             return this;
         }

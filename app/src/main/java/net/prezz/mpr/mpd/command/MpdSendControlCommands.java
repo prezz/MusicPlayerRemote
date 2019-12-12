@@ -289,12 +289,12 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     }
 
     private void addToStoredPlaylist(MpdConnection connection, String playlistName, LibraryEntity[] entities) throws IOException {
-        String[] findCommands = new String[entities.length];
+        List<String> findCommands = new ArrayList<String>();
         for (int i = 0; i < entities.length; i++) {
-            findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
+            findCommands.addAll(MpdCommandHelper.createQuery("find", entities[i]));
         }
 
-        connection.writeCommandList(findCommands);
+        connection.writeCommandList(findCommands.toArray(new String[findCommands.size()]));
         String[] files = connection.readResponse(FILE_FILTER);
 
         List<String> commands = new ArrayList<String>();
@@ -319,17 +319,17 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
             List<String> commands = new ArrayList<String>();
 
             for (int i = 0; i < entities.length; i++) {
-                commands.add(MpdCommandHelper.createQuery("findadd", entities[i]));
+                commands.addAll(MpdCommandHelper.createQuery("findadd", entities[i]));
             }
 
             connection.writeResponseCommandList(commands.toArray(new String[commands.size()]), RejectAllFilter.INSTANCE);
         } else {
-            String[] findCommands = new String[entities.length];
+            List<String> findCommands = new ArrayList<String>();
             for (int i = 0; i < entities.length; i++) {
-                findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
+                findCommands.addAll(MpdCommandHelper.createQuery("find", entities[i]));
             }
 
-            connection.writeCommandList(findCommands);
+            connection.writeCommandList(findCommands.toArray(new String[findCommands.size()]));
             String[] files = connection.readResponse(FILE_FILTER);
 
             List<String> commands = new ArrayList<String>();
@@ -460,11 +460,11 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
     }
 
     private String[] findFiles(MpdConnection connection, LibraryEntity[] entities) throws IOException {
-        String[] findCommands = new String[entities.length];
+        List<String> findCommands = new ArrayList<String>();
         for (int i = 0; i < entities.length; i++) {
-            findCommands[i] = MpdCommandHelper.createQuery("find", entities[i]);
+            findCommands.addAll(MpdCommandHelper.createQuery("find", entities[i]));
         }
-        connection.writeCommandList(findCommands);
+        connection.writeCommandList(findCommands.toArray(new String[findCommands.size()]));
         String[] files = connection.readResponse(FILE_FILTER);
         for (int i = 0; i < files.length; i++) {
             files[i] = files[i].substring(6);

@@ -1,7 +1,7 @@
 package net.prezz.mpr.model;
 
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import net.prezz.mpr.model.command.Command;
 
@@ -62,12 +62,12 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getUriFromLibrary(UriEntity uriEntity, Set<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver) {
+    public TaskHandle getUriFromLibrary(UriEntity uriEntity, SortedSet<String> uriFilter, ResponseReceiver<UriEntity[]> responseReceiver) {
         return createNullHandle();
     }
 
     @Override
-    public TaskHandle searchLibrary(String query, boolean searchUri, Set<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver) {
+    public TaskHandle searchLibrary(String query, boolean searchUri, SortedSet<String> uriFilter, ResponseReceiver<SearchResult> responseReceiver) {
         return createNullHandle();
     }
 

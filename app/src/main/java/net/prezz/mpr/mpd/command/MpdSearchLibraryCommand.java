@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import net.prezz.mpr.model.LibraryEntity;
@@ -22,22 +22,22 @@ public class MpdSearchLibraryCommand extends MpdDatabaseCommand<MpdSearchLibrary
     protected static final class Param {
         public final String query;
         public final boolean searchUri;
-        public final Set<String> uriFilter;
+        public final SortedSet<String> uriFilter;
 
-        public Param(String query, boolean searchUri, Set<String> uriFilter) {
+        public Param(String query, boolean searchUri, SortedSet<String> uriFilter) {
             this.query = query;
             this.searchUri = searchUri;
-            this.uriFilter = (uriFilter != null) ? Collections.unmodifiableSet(uriFilter) : null;
+            this.uriFilter = (uriFilter != null) ? Collections.unmodifiableSortedSet(uriFilter) : null;
         }
     }
 
-    public MpdSearchLibraryCommand(String queury, boolean searchUri, Set<String> uriFilter) {
+    public MpdSearchLibraryCommand(String queury, boolean searchUri, SortedSet<String> uriFilter) {
         super(new Param(queury, searchUri, uriFilter));
     }
 
     @Override
     protected SearchResult doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param)    throws Exception {
-        Set<String> uriFilter = param.uriFilter;
+        SortedSet<String> uriFilter = param.uriFilter;
 
         Builder entityBuilder = LibraryEntity.createBuilder();
 

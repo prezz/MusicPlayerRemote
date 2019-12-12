@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedSet;
 
 public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
 
@@ -168,7 +168,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(String.format("SELECT track, title, artist, meta_artist, album_artist, meta_album_artist, composer, length, year, genre FROM music_entities %s ORDER BY track, meta_artist COLLATE NOCASE asc, title COLLATE NOCASE asc", buildFilter(null, entity)), null);
     }
 
-    public Cursor selectMusicEntitiesRootUri(Set<String> uriFilter) {
+    public Cursor selectMusicEntitiesRootUri(SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT uri FROM music_entities %s", buildFilter(null, uriFilter)), null);
     }
@@ -178,7 +178,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(String.format("SELECT SUBSTR(uri, %s) FROM music_entities WHERE uri LIKE '%s%%'", Integer.valueOf(uriPath.length() + 1), Utils.fixDatabaseQuery(uriPath)), null);
     }
 
-    public Cursor selectPlaylistEntitiesRootUri(Set<String> uriFilter) {
+    public Cursor selectPlaylistEntitiesRootUri(SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT uri FROM playlist_entities %s", buildFilter(null, uriFilter)), null);
     }
@@ -188,37 +188,37 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(String.format("SELECT SUBSTR(uri, %s) FROM playlist_entities WHERE uri LIKE '%s%%'", Integer.valueOf(uriPath.length() + 1), Utils.fixDatabaseQuery(uriPath)), null);
     }
 
-    public Cursor findArtists(String query, Set<String> uriFilter) {
+    public Cursor findArtists(String query, SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         String filter = buildFilter(String.format("WHERE artist LIKE '%%%s%%'", Utils.fixDatabaseQuery(query)), uriFilter);
         return db.rawQuery(String.format("SELECT artist, meta_artist, count(title) c FROM music_entities %s GROUP BY meta_artist ORDER BY meta_artist COLLATE NOCASE asc", filter), null);
     }
 
-    public Cursor findAlbumArtists(String query, Set<String> uriFilter) {
+    public Cursor findAlbumArtists(String query, SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         String filter = buildFilter(String.format("WHERE album_artist IS NOT NULL AND album_artist LIKE '%%%s%%'", Utils.fixDatabaseQuery(query)), uriFilter);
         return db.rawQuery(String.format("SELECT album_artist, meta_album_artist, count(title) c FROM music_entities %s GROUP BY meta_album_artist ORDER BY meta_album_artist COLLATE NOCASE asc", filter), null);
     }
 
-    public Cursor findComposers(String query, Set<String> uriFilter) {
+    public Cursor findComposers(String query, SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         String filter = buildFilter(String.format("WHERE composer IS NOT NULL AND composer LIKE '%%%s%%'", Utils.fixDatabaseQuery(query)), uriFilter);
         return db.rawQuery(String.format("SELECT composer, count(title) c FROM music_entities %s GROUP BY composer ORDER BY composer COLLATE NOCASE asc", filter), null);
     }
 
-    public Cursor findAlbums(String query, Set<String> uriFilter) {
+    public Cursor findAlbums(String query, SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         String filter = buildFilter(String.format("WHERE album LIKE '%%%s%%'", Utils.fixDatabaseQuery(query)), uriFilter);
         return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', ') FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma FROM music_entities %s) GROUP BY meta_album ORDER BY meta_album COLLATE NOCASE asc", filter), null);
     }
 
-    public Cursor findTitles(String query, Set<String> uriFilter) {
+    public Cursor findTitles(String query, SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         String filter = buildFilter(String.format("WHERE title LIKE '%%%s%%'", Utils.fixDatabaseQuery(query)), uriFilter);
         return db.rawQuery(String.format("SELECT title, artist, album FROM music_entities %s ORDER BY title COLLATE NOCASE asc", filter), null);
     }
 
-    public Cursor findUri(String query, Set<String> uriFilter) {
+    public Cursor findUri(String query, SortedSet<String> uriFilter) {
         SQLiteDatabase db = this.getReadableDatabase();
         String filter = buildFilter(String.format("WHERE uri LIKE '%%%s%%'", Utils.fixDatabaseQuery(query)), uriFilter);
         return db.rawQuery(String.format("SELECT uri FROM music_entities %s ORDER BY uri COLLATE NOCASE asc", filter), null);
@@ -331,7 +331,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return buildFilter(stringBuilder.toString(), entity.getUriFilter());
     }
 
-    private String buildFilter(String prefix, Set<String> uriFilter) {
+    private String buildFilter(String prefix, SortedSet<String> uriFilter) {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (!Utils.nullOrEmpty(prefix)) {
@@ -348,13 +348,13 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
                     stringBuilder.append(" AND (");
                 }
 
-                stringBuilder.append("NOT uri LIKE '");
+                stringBuilder.append("uri LIKE '");
                 stringBuilder.append(Utils.fixDatabaseQuery(it.next()));
                 stringBuilder.append("%'");
             }
 
             while (it.hasNext()) {
-                stringBuilder.append(" AND NOT uri LIKE '");
+                stringBuilder.append(" OR uri LIKE '");
                 stringBuilder.append(Utils.fixDatabaseQuery(it.next()));
                 stringBuilder.append("%'");
             }
