@@ -13,8 +13,8 @@ android {
         applicationId 'net.prezz.mpr'
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 115
-        versionName '1.10.4'
+        versionCode 116
+        versionName '1.10.5'
     }
     buildTypes {
         release {
