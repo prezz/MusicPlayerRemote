@@ -40,7 +40,7 @@ public class ServerConfigurationService {
             return serverConfigurations[0];
         }
 
-        return new ServerConfiguration("", "", "6600", "", "", "");
+        return new ServerConfiguration("", "", "6600", "", "");
     }
 
     public static void setSelectedServerConfiguration(ServerConfiguration configuration) {
@@ -65,9 +65,9 @@ public class ServerConfigurationService {
                     String host = c.getString(2);
                     String port = c.getString(3);
                     String password = c.getString(4);
-                    String output = c.getString(5);
+                    String unused = c.getString(5);
                     String streaming = c.getString(6);
-                    result[i++] = new ServerConfiguration(id, name, host, port, password, output, streaming);
+                    result[i++] = new ServerConfiguration(id, name, host, port, password, streaming);
                 } while (c.moveToNext());
             }
             return result;
@@ -78,7 +78,7 @@ public class ServerConfigurationService {
     }
 
     public static void addServerConfiguration(ServerConfiguration configuration) {
-        databaseHelper.addServer(configuration.getName(), configuration.getHost(), configuration.getPort(), configuration.getPassword(), configuration.getOutput(), configuration.getStreaming());
+        databaseHelper.addServer(configuration.getName(), configuration.getHost(), configuration.getPort(), configuration.getPassword(), "", configuration.getStreaming());
         databaseHelper.close();
 
         ServerConfiguration[] serverConfigurations = getServerConfigurations();
@@ -89,7 +89,7 @@ public class ServerConfigurationService {
 
     public static void updateServerConfiguration(ServerConfiguration configuration) {
         String oldHost = getHost(configuration.getId());
-        databaseHelper.updateServer(configuration.getId(), configuration.getName(), configuration.getHost(), configuration.getPort(), configuration.getPassword(), configuration.getOutput(), configuration.getStreaming());
+        databaseHelper.updateServer(configuration.getId(), configuration.getName(), configuration.getHost(), configuration.getPort(), configuration.getPassword(), "", configuration.getStreaming());
         databaseHelper.close();
         if (!Utils.equals(oldHost, configuration.getHost())) {
             deleteOrphanLibraryDatabase(oldHost);
