@@ -36,7 +36,6 @@ public class AddEditServerActivity extends Activity implements OnEditorActionLis
             setTextViewText(R.id.add_edit_server_host_text, editConfiguration.getHost());
             setTextViewText(R.id.add_edit_server_port_text, editConfiguration.getPort());
             setTextViewText(R.id.add_edit_server_password_text, editConfiguration.getPassword());
-            setTextViewText(R.id.add_edit_server_output_text, editConfiguration.getOutput());
             setStreamingViewUrl(editConfiguration.getStreaming());
         } else {
             setTitle(R.string.add_edit_server_add_title);
@@ -115,7 +114,6 @@ public class AddEditServerActivity extends Activity implements OnEditorActionLis
             String host = getTextViewText(R.id.add_edit_server_host_text);
             String port = getTextViewText(R.id.add_edit_server_port_text);
             String password = getTextViewText(R.id.add_edit_server_password_text);
-            String output = getTextViewText(R.id.add_edit_server_output_text);
             String streaming = getTextViewText(R.id.add_edit_server_streaming_url_text);
 
             if ("".equals(name)) {
@@ -125,9 +123,9 @@ public class AddEditServerActivity extends Activity implements OnEditorActionLis
             if (!host.isEmpty() && !port.isEmpty()) {
                 if (editConfiguration != null) {
                     int id = editConfiguration.getId();
-                    ServerConfigurationService.updateServerConfiguration(new ServerConfiguration(id, name, host, port, password, output, streaming));
+                    ServerConfigurationService.updateServerConfiguration(new ServerConfiguration(id, name, host, port, password, streaming));
                 } else {
-                    ServerConfigurationService.addServerConfiguration(new ServerConfiguration(name, host, port, password, output, streaming));
+                    ServerConfigurationService.addServerConfiguration(new ServerConfiguration(name, host, port, password, streaming));
                 }
                 return true;
             }

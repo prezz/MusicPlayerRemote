@@ -21,8 +21,6 @@
     <string name="add_edit_server_port_hint">Default is 6600</string>
     <string name="add_edit_server_password_label">Password:</string>
     <string name="add_edit_server_password_hint">Optional server password</string>
-    <string name="add_edit_server_output_label">Default output:</string>
-    <string name="add_edit_server_output_hint">Optional name of output</string>
     <string name="add_edit_server_streaming_switch">Enable streaming</string>
     <string name="add_edit_server_streaming_url_hint">Optional streaming url</string>
     <string name="add_edit_server_save_button">OK</string>

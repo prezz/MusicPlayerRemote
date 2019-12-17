@@ -186,17 +186,13 @@ public class PlayerActivity extends FragmentActivity {
                 startActivityForResult(intent, SETTINGS_ACTIVITY_RESULT);
                 return true;
             }
-            case R.id.player_action_server: {
-                selectServer();
-                return true;
-            }
             case R.id.player_action_database: {
                 Intent intent = new Intent(this, DatabaseActivity.class);
                 startActivity(intent);
                 return true;
             }
-            case R.id.player_action_select_outputs: {
-                selectOutputs();
+            case R.id.player_action_player: {
+                selectServer();
                 return true;
             }
             case R.id.player_action_start_streaming: {
@@ -300,9 +296,9 @@ public class PlayerActivity extends FragmentActivity {
                 if (!Utils.equals(selectedConfiguration, selected)) {
                     ServerConfigurationService.setSelectedServerConfiguration(selected);
                     reconnectMusicPlayerOnSettingsChanged(true);
-                    setDefaultOutput(selected);
                 }
-                ((Dialog) dialog).dismiss();;
+                ((Dialog) dialog).dismiss();
+                selectOutputs();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -312,31 +308,6 @@ public class PlayerActivity extends FragmentActivity {
         });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    private void setDefaultOutput(ServerConfiguration selected) {
-        final String output = selected.getOutput();
-        if (!Utils.nullOrEmpty(output)) {
-            selectOutputsHandle.cancelTask();
-            selectOutputsHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
-                @Override
-                public void receiveResponse(final AudioOutput[] response) {
-                    boolean found = false;
-                    List<Command> commands = new ArrayList<Command>();
-                    for (int i = 0; i < response.length; i++) {
-                        if (Utils.equals(response[i].getOutputName(), output)) {
-                            commands.add(new ToggleOutputCommand(response[i].getOutputId(), true));
-                            found = true;
-                        } else {
-                            commands.add(new ToggleOutputCommand(response[i].getOutputId(), false));
-                        }
-                    }
-                    if (found && !commands.isEmpty()) {
-                        MusicPlayerControl.sendControlCommands(commands);
-                    }
-                }
-            });
-        }
     }
 
     private void selectOutputs() {

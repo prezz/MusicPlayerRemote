@@ -13,21 +13,19 @@ public class ServerConfiguration implements Serializable {
     private String host;
     private String port;
     private String password;
-    private String output;
     private String streaming;
 
 
-    public ServerConfiguration(String name, String host, String port, String password, String output, String streaming) {
-        this(0, name, host, port, password, output, streaming);
+    public ServerConfiguration(String name, String host, String port, String password, String streaming) {
+        this(0, name, host, port, password, streaming);
     }
 
-    public ServerConfiguration(int id, String name, String host, String port, String password, String output, String streaming) {
+    public ServerConfiguration(int id, String name, String host, String port, String password, String streaming) {
         this.id = id;
         this.name = name;
         this.host = host;
         this.port = port;
         this.password = password;
-        this.output = output;
         this.streaming = streaming;
     }
 
@@ -49,10 +47,6 @@ public class ServerConfiguration implements Serializable {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getOutput() {
-        return output;
     }
 
     public String getStreaming() {
@@ -93,10 +87,6 @@ public class ServerConfiguration implements Serializable {
                 return false;
             }
 
-            if (!Utils.equals(output, other.output)) {
-                return false;
-            }
-
             if (!Utils.equals(streaming, other.streaming)) {
                 return false;
             }
@@ -116,7 +106,6 @@ public class ServerConfiguration implements Serializable {
         hash = 31 * hash + Utils.hashCode(host);
         hash = 31 * hash + Utils.hashCode(port);
         hash = 31 * hash + Utils.hashCode(password);
-        hash = 31 * hash + Utils.hashCode(output);
         hash = 31 * hash + Utils.hashCode(streaming);
 
         return hash;
