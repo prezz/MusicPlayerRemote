@@ -12,9 +12,9 @@ android {
     defaultConfig {
         applicationId 'net.prezz.mpr'
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 118
-        versionName '1.10.118'
+        targetSdkVersion 29
+        versionCode 119
+        versionName '1.10.119'
     }
     buildTypes {
         release {
