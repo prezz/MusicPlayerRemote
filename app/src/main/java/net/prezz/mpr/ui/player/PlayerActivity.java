@@ -278,32 +278,35 @@ public class PlayerActivity extends FragmentActivity {
         final ServerConfiguration[] serverConfigurations = ServerConfigurationService.getServerConfigurations();
         final ServerConfiguration selectedConfiguration = ServerConfigurationService.getSelectedServerConfiguration();
 
-        int selectedItem = -1;
+        final int[] selectedItem = new int[] { -1 };
         String[] items = new String[serverConfigurations.length];
         for (int i = 0; i < serverConfigurations.length; i++) {
             items[i] = serverConfigurations[i].toString();
             if (Utils.equals(selectedConfiguration, serverConfigurations[i])) {
-                selectedItem = i;
+                selectedItem[0] = i;
             }
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
         builder.setTitle(R.string.player_action_server);
-        builder.setSingleChoiceItems(items, selectedItem, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(items, selectedItem[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ServerConfiguration selected = serverConfigurations[which];
-                if (!Utils.equals(selectedConfiguration, selected)) {
-                    ServerConfigurationService.setSelectedServerConfiguration(selected);
-                    reconnectMusicPlayerOnSettingsChanged(true);
-                }
-                ((Dialog) dialog).dismiss();
-                selectOutputs();
+                selectedItem[0] = which;
             }
         });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (selectedItem[0] != -1) {
+                    ServerConfiguration selected = serverConfigurations[selectedItem[0]];
+                    if (!Utils.equals(selectedConfiguration, selected)) {
+                        ServerConfigurationService.setSelectedServerConfiguration(selected);
+                        reconnectMusicPlayerOnSettingsChanged(true);
+                    }
+                    ((Dialog) dialog).dismiss();
+                    selectOutputs();
+                }
             }
         });
         AlertDialog alert = builder.create();
