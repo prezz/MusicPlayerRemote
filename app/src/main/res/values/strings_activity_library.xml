@@ -25,6 +25,7 @@
     <string name="library_control_menu">Library control menu</string>
     
     <string-array name="library_root_menu">
+        <item>Add random</item>
         <item>Clear and add random</item>
         <item>Clear and add all</item>
         <item>Clear, add all and play</item>

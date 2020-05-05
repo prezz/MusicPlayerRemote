@@ -178,34 +178,25 @@ public abstract class LibraryFragment extends Fragment implements LibraryCommons
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 if (adapterEntities != null) {
-                    List<Command> commandList = new ArrayList<Command>();
                     switch(item) {
-                    case 0:
-                        List<LibraryAdapterEntity> libraryAdapterEntities = new ArrayList<>(adapterEntities.length);
-                        for (AdapterEntity adapterEntity : adapterEntities) {
-                            if (adapterEntity instanceof LibraryAdapterEntity) {
-                                libraryAdapterEntities.add((LibraryAdapterEntity) adapterEntity);
-                            }
-                        }
-
-                        if (libraryAdapterEntities.size() > 0) {
-                            Random rand = new Random();
-                            int idx = rand.nextInt(libraryAdapterEntities.size());
-                            LibraryAdapterEntity libraryEntity = libraryAdapterEntities.get(idx);
-                            String displayText = getString(R.string.library_added_to_playlist_toast, libraryEntity.getText());
-                            commandList.add(new ClearPlaylistCommand());
-                            commandList.add(new AddToPlaylistCommand(libraryEntity.getEntity()));
-                            sendControlCommands(displayText, commandList);
+                    case 0: {
+                            addRandom(false);
                         }
                         break;
                     case 1: {
+                            addRandom(true);
+                        }
+                        break;
+                    case 2: {
+                            List<Command> commandList = new ArrayList<Command>();
                             String displayText = getString(R.string.library_added_to_playlist_toast, title);
                             commandList.add(new ClearPlaylistCommand());
                             commandList = addAll(commandList);
                             sendControlCommands(displayText, commandList);
                         }
                         break;
-                    case 2: {
+                    case 3: {
+                            List<Command> commandList = new ArrayList<Command>();
                             String displayText = getString(R.string.library_added_to_playlist_toast, title);
                             commandList.add(new ClearPlaylistCommand());
                             commandList = addAll(commandList);
@@ -321,5 +312,28 @@ public abstract class LibraryFragment extends Fragment implements LibraryCommons
     private ProgressBar findProgressBar() {
         View view = getView();
         return (view != null) ? (ProgressBar)view.findViewById(R.id.library_progress_bar_load) : null;
+    }
+
+    private void addRandom(boolean clear) {
+        List<Command> commandList = new ArrayList<Command>();
+
+        List<LibraryAdapterEntity> libraryAdapterEntities = new ArrayList<>(adapterEntities.length);
+        for (AdapterEntity adapterEntity : adapterEntities) {
+            if (adapterEntity instanceof LibraryAdapterEntity) {
+                libraryAdapterEntities.add((LibraryAdapterEntity) adapterEntity);
+            }
+        }
+
+        if (libraryAdapterEntities.size() > 0) {
+            Random rand = new Random();
+            int idx = rand.nextInt(libraryAdapterEntities.size());
+            LibraryAdapterEntity libraryEntity = libraryAdapterEntities.get(idx);
+            String displayText = getString(R.string.library_added_to_playlist_toast, libraryEntity.getText());
+            if (clear) {
+                commandList.add(new ClearPlaylistCommand());
+            }
+            commandList.add(new AddToPlaylistCommand(libraryEntity.getEntity()));
+            sendControlCommands(displayText, commandList);
+        }
     }
 }
