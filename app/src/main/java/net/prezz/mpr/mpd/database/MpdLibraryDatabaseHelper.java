@@ -19,7 +19,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
 
 
     public MpdLibraryDatabaseHelper(Context context, String host) {
-        super(context, host + LIBRARY_FILE_DB_POSTFIX, null, 7);
+        super(context, host + LIBRARY_FILE_DB_POSTFIX, null, 8);
     }
 
     @Override
@@ -66,6 +66,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         values.put("album", record.getAlbum());
         values.put("meta_album", record.getMetaAlbum());
         values.put("title", record.getTitle());
+        values.put("disc", record.getDisc());
         values.put("track", record.getTrack());
         values.put("genre", record.getGenre());
         values.put("year", record.getYear());
@@ -165,7 +166,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor selectFilteredAlbumTitles(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(String.format("SELECT track, title, artist, meta_artist, album_artist, meta_album_artist, composer, length, year, genre FROM music_entities %s ORDER BY track, meta_artist COLLATE NOCASE asc, title COLLATE NOCASE asc", buildFilter(null, entity)), null);
+        return db.rawQuery(String.format("SELECT disc, track, title, artist, meta_artist, album_artist, meta_album_artist, composer, length, year, genre FROM music_entities %s ORDER BY disc, track, meta_artist COLLATE NOCASE asc, title COLLATE NOCASE asc", buildFilter(null, entity)), null);
     }
 
     public Cursor selectMusicEntitiesRootUri(SortedSet<String> uriFilter) {
@@ -366,7 +367,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void doCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE music_entities (id INTEGER PRIMARY KEY, artist TEXT, meta_artist TEXT, album_artist TEXT, meta_album_artist TEXT, composer TEXT, album TEXT, meta_album TEXT, title TEXT, track INTEGER, genre TEXT, year INTEGER, length INTEGER, uri TEXT)");
+        db.execSQL("CREATE TABLE music_entities (id INTEGER PRIMARY KEY, artist TEXT, meta_artist TEXT, album_artist TEXT, meta_album_artist TEXT, composer TEXT, album TEXT, meta_album TEXT, title TEXT, disc INTEGER, track INTEGER, genre TEXT, year INTEGER, length INTEGER, uri TEXT)");
         db.execSQL("CREATE INDEX idx_artist ON music_entities (artist);");
         db.execSQL("CREATE INDEX idx_album_artist ON music_entities (album_artist);");
         db.execSQL("CREATE INDEX idx_composer ON music_entities (composer);");

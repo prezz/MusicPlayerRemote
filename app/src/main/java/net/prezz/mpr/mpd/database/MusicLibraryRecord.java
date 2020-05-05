@@ -13,6 +13,7 @@ public class MusicLibraryRecord {
     private String album;
     private String metaAlbum;
     private String title;
+    private Integer disc;
     private Integer track;
     private String genre;
     private Integer year;
@@ -33,6 +34,7 @@ public class MusicLibraryRecord {
         this.album = "";
         this.metaAlbum = "";
         this.title = "";
+        this.disc = null;
         this.track = null;
         this.genre = "";
         this.year = null;
@@ -102,6 +104,14 @@ public class MusicLibraryRecord {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getDisc() {
+        return disc;
+    }
+
+    public void setDisc(Integer disc) {
+        this.disc = disc;
     }
 
     public Integer getTrack() {

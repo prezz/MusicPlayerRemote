@@ -64,8 +64,11 @@ public class MpdGetPlaylistDetailsCommand extends MpdConnectionCommand<StoredPla
             if (line.startsWith("Album: ")) {
                 builder.setAlbum(line.substring(7));
             }
+            if (line.startsWith("Disc: ")) {
+                builder.setDisc(MpdCommandHelper.getDecimalNumber(line.substring(6)));
+            }
             if (line.startsWith("Track: ")) {
-                builder.setTrack(MpdCommandHelper.getTrack(line.substring(7)));
+                builder.setTrack(MpdCommandHelper.getDecimalNumber(line.substring(7)));
             }
             if (line.startsWith("Title: ")) {
                 builder.setTitle(line.substring(7));
