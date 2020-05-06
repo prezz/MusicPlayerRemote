@@ -33,7 +33,17 @@
             android:layout_marginTop="2dp"
             android:contentDescription="@string/about_cover_image"
             android:onClick="onLastfmClick"
-            android:src="@drawable/lastfm_logo" />
+            android:src="@drawable/lastfm_logo"
+            android:layout_marginBottom="40dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_source_code_text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:onClick="onSourceCodeClick"
+            android:textColor="#3366BB"
+            android:layout_marginBottom="40dp" />
 
     </LinearLayout>
 </ScrollView>
