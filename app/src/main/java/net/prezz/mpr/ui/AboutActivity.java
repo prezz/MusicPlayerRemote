@@ -39,4 +39,9 @@ public class AboutActivity extends Activity {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm/"));
         startActivity(browserIntent);
     }
+
+    public void onSourceCodeClick(View view) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/prezz/MusicPlayerRemote"));
+        startActivity(browserIntent);
+    }
 }

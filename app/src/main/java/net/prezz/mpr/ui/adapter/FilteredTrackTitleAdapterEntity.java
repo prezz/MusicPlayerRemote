@@ -16,6 +16,11 @@ public class FilteredTrackTitleAdapterEntity extends LibraryAdapterEntity {
     public String getSectionIndexText() {
         StringBuilder sb = new StringBuilder();
 
+        Integer metaDisc = getEntity().getMetaDisc();
+        if (metaDisc != null) {
+            sb.append(metaDisc);
+        }
+
         Integer metaTrack = getEntity().getMetaTrack();
         if (metaTrack != null) {
             sb.append(metaTrack);
@@ -37,8 +42,20 @@ public class FilteredTrackTitleAdapterEntity extends LibraryAdapterEntity {
     @SuppressLint("DefaultLocale")
     @Override
     public String getText() {
+        StringBuilder sb = new StringBuilder();
+
+//        Integer metaDisc = getEntity().getMetaDisc();
+//        if (metaDisc != null) {
+//            sb.append(String.format("(%d) ", metaDisc));
+//        }
+
         Integer metaTrack = getEntity().getMetaTrack();
-        return (metaTrack != null) ? String.format("%02d - %s", metaTrack, getEntity().getTitle()) : getEntity().getTitle();
+        if (metaTrack != null) {
+            sb.append(String.format("%02d - ", metaTrack));
+        }
+
+        sb.append(getEntity().getTitle());
+        return sb.toString();
     }
 
     @SuppressLint("DefaultLocale")

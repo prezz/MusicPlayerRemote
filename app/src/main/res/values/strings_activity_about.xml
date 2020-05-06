@@ -8,4 +8,6 @@
 
     <string name="about_cover_image">Cover image</string>
 
+    <string name="about_source_code_text"><u>Source code available at GitHub</u></string>
+
 </resources>

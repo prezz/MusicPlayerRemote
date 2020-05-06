@@ -21,6 +21,7 @@ public class LibraryEntity implements Serializable {
     private String title;
     private String genre;
     private UriEntity uriEntity;
+    private Integer metaDisc;
     private Integer metaTrack;
     private String metaArtist;
     private String metaAlbumArtist;
@@ -35,7 +36,7 @@ public class LibraryEntity implements Serializable {
     private SortedSet<String> uriFilter;
 
 
-    private LibraryEntity(Tag tag, String artist, String albumArtist, String composer, String album, String title, String genre, UriEntity uriEntity, Integer metaTrack, String metaArtist, String metaAlbumArtist,
+    private LibraryEntity(Tag tag, String artist, String albumArtist, String composer, String album, String title, String genre, UriEntity uriEntity, Integer metaDisc, Integer metaTrack, String metaArtist, String metaAlbumArtist,
                           String metaAlbum, String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, SortedSet<String> uriFilter) {
         this.tag = tag;
         this.artist = artist;
@@ -45,6 +46,7 @@ public class LibraryEntity implements Serializable {
         this.genre = genre;
         this.title = title;
         this.uriEntity = uriEntity;
+        this.metaDisc = metaDisc;
         this.metaTrack = metaTrack;
         this.metaArtist = metaArtist;
         this.metaAlbumArtist = metaAlbumArtist;
@@ -89,6 +91,10 @@ public class LibraryEntity implements Serializable {
 
     public UriEntity getUriEntity() {
         return uriEntity;
+    }
+
+    public Integer getMetaDisc() {
+        return metaDisc;
     }
 
     public Integer getMetaTrack() {
@@ -172,6 +178,9 @@ public class LibraryEntity implements Serializable {
             if (!Utils.equals(this.uriEntity, other.uriEntity)) {
                 return false;
             }
+            if (!Utils.equals(this.metaDisc, other.metaDisc)) {
+                return false;
+            }
             if (!Utils.equals(this.metaTrack, other.metaTrack)) {
                 return false;
             }
@@ -227,6 +236,7 @@ public class LibraryEntity implements Serializable {
         hash = 31 * hash + Utils.hashCode(title);
         hash = 31 * hash + Utils.hashCode(genre);
         hash = 31 * hash + Utils.hashCode(uriEntity);
+        hash = 31 * hash + Utils.hashCode(metaDisc);
         hash = 31 * hash + Utils.hashCode(metaTrack);
         hash = 31 * hash + Utils.hashCode(metaArtist);
         hash = 31 * hash + Utils.hashCode(metaAlbumArtist);
@@ -245,7 +255,7 @@ public class LibraryEntity implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s %s, %s, %s, %s, %s", tag, artist, album, title, genre, metaTrack);
+        return String.format("%s %s, %s, %s, %s, %s, %s", tag, artist, album, title, genre, metaDisc, metaTrack);
     }
 
     public static Builder createBuilder() {
@@ -263,6 +273,7 @@ public class LibraryEntity implements Serializable {
         private String title;
         private String genre;
         private UriEntity uriEntity;
+        private Integer metaDisc;
         private Integer metaTrack;
         private String metaArtist;
         private String metaAlbumArtist;
@@ -285,6 +296,7 @@ public class LibraryEntity implements Serializable {
             title = null;
             genre = null;
             uriEntity = null;
+            metaDisc = null;
             metaTrack = null;
             metaArtist = null;
             metaAlbumArtist = null;
@@ -337,6 +349,11 @@ public class LibraryEntity implements Serializable {
 
         public Builder setUriEntity(UriEntity uriEntity) {
             this.uriEntity = uriEntity;
+            return this;
+        }
+
+        public Builder setMetaDisc(Integer metaDisc) {
+            this.metaDisc = metaDisc;
             return this;
         }
 
@@ -401,7 +418,7 @@ public class LibraryEntity implements Serializable {
         }
 
         public LibraryEntity build() {
-            return new LibraryEntity(tag, artist, albumArtist, composer, album, title, genre, uriEntity, metaTrack,
+            return new LibraryEntity(tag, artist, albumArtist, composer, album, title, genre, uriEntity, metaDisc, metaTrack,
                     metaArtist, metaAlbumArtist, metaAlbum, metaGenre, metaCount, metaYear, metaLength, metaCompilation,
                     lookupArtist, lookupAlbum, uriFilter);
         }

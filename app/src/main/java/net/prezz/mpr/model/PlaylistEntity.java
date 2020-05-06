@@ -13,6 +13,7 @@ public class PlaylistEntity implements Serializable {
     private Integer priority;
     private String artist;
     private String album;
+    private Integer disc;
     private Integer track;
     private String title;
     private Integer time;
@@ -20,12 +21,13 @@ public class PlaylistEntity implements Serializable {
     private UriEntity uriEntity;
 
 
-    private PlaylistEntity(Integer id, Integer position, Integer priority, String artist, String album, Integer track, String title, Integer time, String name, UriEntity uriEntity) {
+    private PlaylistEntity(Integer id, Integer position, Integer priority, String artist, String album, Integer disc, Integer track, String title, Integer time, String name, UriEntity uriEntity) {
         this.id = id;
         this.position = position;
         this.priority = priority;
         this.artist = artist;
         this.album = album;
+        this.disc = disc;
         this.track = track;
         this.title = title;
         this.time = time;
@@ -53,6 +55,10 @@ public class PlaylistEntity implements Serializable {
         return album;
     }
 
+    public Integer getDisc() {
+        return disc;
+    }
+
     public Integer getTrack() {
         return track;
     }
@@ -75,7 +81,7 @@ public class PlaylistEntity implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s, %s, %s, %s, %s, %s %s %s %s %s", id, position, priority, artist, album, track, title, time, name, uriEntity);
+        return String.format("%s, %s, %s, %s, %s, %s %s %s %s %s %s", id, position, priority, artist, album, disc, track, title, time, name, uriEntity);
     }
 
     public static Builder createBuilder() {
@@ -88,6 +94,7 @@ public class PlaylistEntity implements Serializable {
         private Integer priority;
         private String artist;
         private String album;
+        private Integer disc;
         private Integer track;
         private String title;
         private Integer time;
@@ -100,6 +107,7 @@ public class PlaylistEntity implements Serializable {
             priority = null;
             artist = null;
             album = null;
+            disc = null;
             track = null;
             title = null;
             time = null;
@@ -132,6 +140,11 @@ public class PlaylistEntity implements Serializable {
             return this;
         }
 
+        public Builder setDisc(Integer disc) {
+            this.disc = disc;
+            return this;
+        }
+
         public Builder setTrack(Integer track) {
             this.track = track;
             return this;
@@ -159,7 +172,7 @@ public class PlaylistEntity implements Serializable {
 
         public PlaylistEntity build() {
             UriEntity uriEntity = new UriEntity(UriType.FILE, UriEntity.FileType.PLAYLIST, "", uri);
-            return new PlaylistEntity(id, position, priority, artist, album, track, title, time, name, uriEntity);
+            return new PlaylistEntity(id, position, priority, artist, album, disc, track, title, time, name, uriEntity);
         }
     }
 }

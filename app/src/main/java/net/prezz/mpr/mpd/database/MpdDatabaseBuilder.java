@@ -109,8 +109,11 @@ public class MpdDatabaseBuilder {
                 if (line.startsWith("Title: ")) {
                     record.setTitle(line.substring(7));
                 }
+                if (line.startsWith("Disc: ")) {
+                    record.setDisc(MpdCommandHelper.getDecimalNumber(line.substring(6)));
+                }
                 if (line.startsWith("Track: ")) {
-                    record.setTrack(MpdCommandHelper.getTrack(line.substring(7)));
+                    record.setTrack(MpdCommandHelper.getDecimalNumber(line.substring(7)));
                 }
                 if (line.startsWith("Genre: ")) {
                     record.setGenre(line.substring(7));

@@ -22,19 +22,20 @@ public class MpdGetFilteredTracksAndTitlesCommand extends MpdDatabaseCommand<Lib
             LibraryEntity[] result = new LibraryEntity[c.getCount()];
             if (c.moveToFirst()) {
                 do {
-                    Integer track = c.isNull(0) ? null : c.getInt(0);
-                    String title = c.getString(1);
-                    String artist = c.getString(2);
-                    String metaArtist = (track == null) ? c.getString(3) : artist;
-                    String albumArtist = c.getString(4);
-                    String metaAlbumArtist = (track == null) ? c.getString(5) : albumArtist;
-                    String composer = c.getString(6);
-                    Integer metaLength = c.getInt(7);
-                    Integer metaYear = c.isNull(8) ? null : c.getInt(8);
-                    String metaGenre = c.getString(9);
+                    Integer disc = c.isNull(0) ? null : c.getInt(0);
+                    Integer track = c.isNull(1) ? null : c.getInt(1);
+                    String title = c.getString(2);
+                    String artist = c.getString(3);
+                    String metaArtist = (track == null) ? c.getString(4) : artist;
+                    String albumArtist = c.getString(5);
+                    String metaAlbumArtist = (track == null) ? c.getString(6) : albumArtist;
+                    String composer = c.getString(7);
+                    Integer metaLength = c.getInt(8);
+                    Integer metaYear = c.isNull(9) ? null : c.getInt(9);
+                    String metaGenre = c.getString(10);
                     result[i++] = entityBuilder.clear().setTag(Tag.TITLE).setGenre(entity.getGenre()).setAlbum(entity.getAlbum()).setArtist(artist)
                             .setMetaArtist(metaArtist).setAlbumArtist(albumArtist).setMetaAlbumArtist(metaAlbumArtist).setComposer(composer).setTitle(title)
-                            .setUriEntity(entity.getUriEntity()).setMetaTrack(track).setMetaLength(metaLength).setMetaYear(metaYear).setMetaGenre(metaGenre)
+                            .setUriEntity(entity.getUriEntity()).setMetaDisc(disc).setMetaTrack(track).setMetaLength(metaLength).setMetaYear(metaYear).setMetaGenre(metaGenre)
                             .setUriFilter(entity.getUriFilter()).build();
                 } while (c.moveToNext());
             }
