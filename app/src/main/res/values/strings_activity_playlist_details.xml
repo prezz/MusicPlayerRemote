@@ -11,6 +11,7 @@
         <item>Clear and add</item>
         <item>Clear, add and play</item>
         <item>Remove track</item>
+        <item>Remove album</item>
     </string-array>
     <string name="playlist_details_added_to_playlist_toast">%1$s added</string>
     

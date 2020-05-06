@@ -192,6 +192,9 @@ public class PlaylistDetailsActivity extends Activity implements OnMenuItemClick
         case 4:
             removeTrack(info.position);
             return true;
+        case 5:
+            removeAlbum(info.position);
+            return true;
         }
 
         return false;
@@ -484,6 +487,32 @@ public class PlaylistDetailsActivity extends Activity implements OnMenuItemClick
         MusicPlayerControl.sendControlCommand(new DeleteFromStoredPlaylistCommand(getPlaylistArgument(), which));
         adapterEntities = newEntities;
         refreshEntities(true);
+    }
+
+    private void removeAlbum(int which) {
+        List<Integer> toDelete = new ArrayList<Integer>();
+
+        String album = adapterEntities[which].getEntity().getAlbum();
+
+        for (int i = 0; i < adapterEntities.length; i++) {
+            PlaylistEntity entity = adapterEntities[i].getEntity();
+            if (Utils.equals(album, entity.getAlbum())) {
+                toDelete.add(Integer.valueOf(i));
+            }
+        }
+
+        if (!toDelete.isEmpty()) {
+            List<Command> commands = new ArrayList<Command>(toDelete.size());
+
+            StoredPlaylistEntity playlist = getPlaylistArgument();
+            for (int i = toDelete.size() - 1; i >= 0; i--) {
+                Integer pos = toDelete.get(i);
+                commands.add(new DeleteFromStoredPlaylistCommand(playlist, pos.intValue()));
+            }
+
+            MusicPlayerControl.sendControlCommands(commands);
+            refreshEntities(false);
+        }
     }
 
     private final class EntityDropListener implements DropListener {

@@ -30,10 +30,14 @@ public class PlaylistAdapterEntity implements AdapterEntity {
     public String getText() {
         StringBuilder sb = new StringBuilder();
 
+//        Integer metaDisc = getEntity().getDisc();
+//        if (metaDisc != null) {
+//            sb.append(String.format("(%d) ", metaDisc));
+//        }
+
         Integer track = entity.getTrack();
         if (track != null) {
-            sb.append(track);
-            sb.append(" - ");
+            sb.append(String.format("%02d - ", track));
         }
 
         String title = entity.getTitle();

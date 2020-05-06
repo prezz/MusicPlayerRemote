@@ -20,11 +20,11 @@ public class MpdCommandHelper {
         //prevent instantiation
     }
 
-    public static Integer getTrack(String track) {
-        if (!track.isEmpty()) {
+    public static Integer getDecimalNumber(String value) {
+        if (!value.isEmpty()) {
             try {
-                int idx = track.indexOf('/');
-                return (idx != -1) ? Integer.decode(track.substring(0, idx)) : Integer.decode(track);
+                int idx = value.indexOf('/');
+                return (idx != -1) ? Integer.decode(value.substring(0, idx)) : Integer.decode(value);
             } catch (NumberFormatException ex) {
             }
         }

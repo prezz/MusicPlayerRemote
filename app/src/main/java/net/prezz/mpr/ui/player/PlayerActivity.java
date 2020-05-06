@@ -318,39 +318,41 @@ public class PlayerActivity extends FragmentActivity {
         selectOutputsHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
             @Override
             public void receiveResponse(final AudioOutput[] response) {
-                String[] items = new String[response.length];
-                final boolean[] preChecked = new boolean[response.length];
-                final boolean[] postChecked = new boolean[response.length];
-                for (int i = 0; i < response.length; i++) {
-                    items[i] = response[i].getOutputName();
-                    preChecked[i] = response[i].isEnabled();
-                    postChecked[i] = response[i].isEnabled();
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
-                builder.setTitle(R.string.player_action_select_outputs);
-                builder.setMultiChoiceItems(items, postChecked, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        postChecked[which] = isChecked;
+                if (response.length > 1) {
+                    String[] items = new String[response.length];
+                    final boolean[] preChecked = new boolean[response.length];
+                    final boolean[] postChecked = new boolean[response.length];
+                    for (int i = 0; i < response.length; i++) {
+                        items[i] = response[i].getOutputName();
+                        preChecked[i] = response[i].isEnabled();
+                        postChecked[i] = response[i].isEnabled();
                     }
-                });
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        List<Command> commands = new ArrayList<Command>();
-                        for (int i = 0; i < response.length; i++) {
-                            if (preChecked[i] != postChecked[i]) {
-                                commands.add(new ToggleOutputCommand(response[i].getOutputId(), postChecked[i]));
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
+                    builder.setTitle(R.string.player_action_select_outputs);
+                    builder.setMultiChoiceItems(items, postChecked, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            postChecked[which] = isChecked;
+                        }
+                    });
+                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            List<Command> commands = new ArrayList<Command>();
+                            for (int i = 0; i < response.length; i++) {
+                                if (preChecked[i] != postChecked[i]) {
+                                    commands.add(new ToggleOutputCommand(response[i].getOutputId(), postChecked[i]));
+                                }
+                            }
+                            if (!commands.isEmpty()) {
+                                MusicPlayerControl.sendControlCommands(commands);
                             }
                         }
-                        if (!commands.isEmpty()) {
-                            MusicPlayerControl.sendControlCommands(commands);
-                        }
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
             }
         });
     }
