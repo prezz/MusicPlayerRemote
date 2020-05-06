@@ -496,7 +496,7 @@ public class PlaylistDetailsActivity extends Activity implements OnMenuItemClick
 
         for (int i = 0; i < adapterEntities.length; i++) {
             PlaylistEntity entity = adapterEntities[i].getEntity();
-            if (album.equals(entity.getAlbum())) {
+            if (Utils.equals(album, entity.getAlbum())) {
                 toDelete.add(Integer.valueOf(i));
             }
         }
