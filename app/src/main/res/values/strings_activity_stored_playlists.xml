@@ -6,11 +6,11 @@
     <string name="stored_playlists_control_menu">Playlist control menu</string>
     
     <string-array name="stored_playlists_selected_menu">
-        <item>Load</item>
-        <item>Clear and load</item>
-        <item>Clear, load and play</item>
+        <item>Add</item>
+        <item>Clear and add</item>
+        <item>Clear, add and play</item>
     </string-array>
-    <string name="stored_playlists_loaded_playlist_toast">%1$s loaded</string>
+    <string name="stored_playlists_loaded_playlist_toast">%1$s added</string>
     
     <string-array name="stored_playlists_choice_menu">
         <item>Save current playlist</item>

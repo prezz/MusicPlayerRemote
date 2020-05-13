@@ -9,16 +9,16 @@
         <item>Add</item>
         <item>Enqueue</item>
         <item>Clear and add</item>
-        <item>Clear, add and play</item>
+        <item>Clear and add album</item>
         <item>Remove track</item>
         <item>Remove album</item>
     </string-array>
     <string name="playlist_details_added_to_playlist_toast">%1$s added</string>
     
     <string-array name="playlist_details_choice_menu">
-        <item>Load</item>
-        <item>Clear and load</item>
-        <item>Clear, load and play</item>
+        <item>Add</item>
+        <item>Clear and add</item>
+        <item>Clear, add and play</item>
         <item>Remove duplicate tracks</item>
         <item>Add custom URL (Radio stream)</item>
     </string-array>

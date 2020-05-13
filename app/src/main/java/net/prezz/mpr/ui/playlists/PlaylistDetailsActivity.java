@@ -167,34 +167,48 @@ public class PlaylistDetailsActivity extends Activity implements OnMenuItemClick
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         PlaylistAdapterEntity adapterEntity = adapterEntities[info.position];
         PlaylistEntity playlistEntity = adapterEntity.getEntity();
-        String displayText = getString(R.string.playlist_details_added_to_playlist_toast, adapterEntity.getText());
         switch (item.getItemId()) {
-        case 0:
-            commandList.add(new AddUriToPlaylistCommand(playlistEntity.getUriEntity()));
-            commandList.add(new UpdatePrioritiesCommand());
-            sendControlCommands(displayText, commandList);
-            return true;
-        case 1:
-            commandList.add(new PrioritizeUriCommand(playlistEntity.getUriEntity()));
-            sendControlCommands(displayText, commandList);
-            return true;
-        case 2:
-            commandList.add(new ClearPlaylistCommand());
-            commandList.add(new AddUriToPlaylistCommand(playlistEntity.getUriEntity()));
-            sendControlCommands(displayText, commandList);
-            return true;
-        case 3:
-            commandList.add(new ClearPlaylistCommand());
-            commandList.add(new AddUriToPlaylistCommand(playlistEntity.getUriEntity()));
-            commandList.add(new PlayCommand());
-            sendControlCommands(displayText, commandList);
-            return true;
-        case 4:
-            removeTrack(info.position);
-            return true;
-        case 5:
-            removeAlbum(info.position);
-            return true;
+            case 0: {
+                String displayText = getString(R.string.playlist_details_added_to_playlist_toast, adapterEntity.getText());
+                commandList.add(new AddUriToPlaylistCommand(playlistEntity.getUriEntity()));
+                commandList.add(new UpdatePrioritiesCommand());
+                sendControlCommands(displayText, commandList);
+                return true;
+            }
+            case 1: {
+                String displayText = getString(R.string.playlist_details_added_to_playlist_toast, adapterEntity.getText());
+                commandList.add(new PrioritizeUriCommand(playlistEntity.getUriEntity()));
+                sendControlCommands(displayText, commandList);
+                return true;
+            }
+            case 2: {
+                String displayText = getString(R.string.playlist_details_added_to_playlist_toast, adapterEntity.getText());
+                commandList.add(new ClearPlaylistCommand());
+                commandList.add(new AddUriToPlaylistCommand(playlistEntity.getUriEntity()));
+                sendControlCommands(displayText, commandList);
+                return true;
+            }
+            case 3: {
+                String album = adapterEntities[info.position].getEntity().getAlbum();
+                String displayText = getString(R.string.playlist_details_added_to_playlist_toast, (album != null) ? album : "");
+                commandList.add(new ClearPlaylistCommand());
+                for (int i = 0; i < adapterEntities.length; i++) {
+                    PlaylistEntity entity = adapterEntities[i].getEntity();
+                    if (Utils.equals(album, entity.getAlbum())) {
+                        commandList.add(new AddUriToPlaylistCommand(entity.getUriEntity()));
+                    }
+                }
+                sendControlCommands(displayText, commandList);
+                return true;
+            }
+            case 4: {
+                removeTrack(info.position);
+                return true;
+            }
+            case 5: {
+                removeAlbum(info.position);
+                return true;
+            }
         }
 
         return false;
