@@ -31,7 +31,7 @@ public class AboutActivity extends Activity {
     }
 
     public void onPrivacyPolicyClick(View view) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/a/prezz.net/mpr/"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/prezz.net/privacypolicy"));
         startActivity(browserIntent);
     }
 
