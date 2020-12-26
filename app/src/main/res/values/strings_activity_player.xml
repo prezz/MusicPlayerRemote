@@ -61,6 +61,7 @@
     </string-array>
     
     <string name="player_image_album_cover">Cover image</string>
+    <string name="player_output_text_unknown">Unknown output</string>
     <string name="player_volume_text_unknown">Volume: 0%</string>
     <string name="player_volume_text_format">Volume: %1$d%%</string>
     <string name="player_volume_text_no_mixer">Volume: N/A</string>

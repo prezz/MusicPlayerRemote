@@ -61,9 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp" >
+            android:gravity="center_vertical" >
 
             <TextView
                 android:id="@+id/player_text_seek_elapsed"
@@ -87,7 +85,7 @@
                 android:text="@string/player_seek_time"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -109,8 +107,7 @@
                 android:tint="?iconColor"
                 android:src="@drawable/ic_volume_down" />
 
-            <TextView
-                android:id="@+id/player_text_volume"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -119,8 +116,25 @@
                 android:layout_marginBottom="4dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="@string/player_volume_text_unknown"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player_text_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/player_output_text_unknown"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/player_text_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/player_volume_text_unknown"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/player_button_volume_up"
@@ -141,7 +155,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center_vertical" >
 
             <ImageButton
                 android:id="@+id/player_button_repeat"
@@ -150,7 +165,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" 
+                android:layout_marginBottom="4dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/player_repeat"
@@ -192,7 +207,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center_vertical" >
 
             <ImageButton
                 android:id="@+id/player_button_previous"
