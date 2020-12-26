@@ -3,11 +3,13 @@ package net.prezz.mpr.ui.player;
 import java.lang.ref.WeakReference;
 
 import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
+import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.model.command.ConsumeCommand;
@@ -24,6 +26,7 @@ import net.prezz.mpr.model.command.VolumeUpCommand;
 import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
+import net.prezz.mpr.model.servers.ServerConfigurationService;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
@@ -69,6 +72,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
 
     private TaskHandle getCoverHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle lastFmHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle getOutputHandle = TaskHandle.NULL_HANDLE;
 
 
     @Override
@@ -118,6 +122,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     public void statusUpdated(PlayerStatus status) {
         refreshTime(status.getElapsedTime(), status.getTotalTime());
         updateTimeHandler.running(status.getState() == PlayerState.PLAY);
+
+        refreshOutputText();
 
         if (playerStatus.getVolume() != status.getVolume()) {
             setVolumeText(status.getVolume());
@@ -522,6 +528,30 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void refreshOutputText() {
+
+        getOutputHandle.cancelTask();
+        getOutputHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+            @Override
+            public void receiveResponse(final AudioOutput[] response) {
+                String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
+                StringBuilder outputName = new StringBuilder();
+
+                for (int i = 0; i < response.length; i++) {
+                    if (response[i].isEnabled()) {
+                        if (outputName.length() > 0) {
+                            outputName.append(",");
+                        }
+                        outputName.append(response[i].getOutputName());
+                    }
+                }
+
+                TextView textView = (TextView)getView().findViewById(R.id.player_text_output);
+                textView.setText(serverName + "->" + outputName);
+            }
+        });
     }
 
     private void setVolumeText(int volume) {

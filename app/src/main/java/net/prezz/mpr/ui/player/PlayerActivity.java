@@ -73,9 +73,9 @@ public class PlayerActivity extends FragmentActivity {
 
     private Menu optionsMenu;
 
-    private TaskHandle updatePlaylistHandle;
-    private TaskHandle aMpdLaunchHandle;
-    private TaskHandle selectOutputsHandle;
+    private TaskHandle updatePlaylistHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle aMpdLaunchHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle selectOutputsHandle = TaskHandle.NULL_HANDLE;
 
 
     @Override
