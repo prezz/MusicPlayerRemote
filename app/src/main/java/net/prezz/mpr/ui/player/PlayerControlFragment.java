@@ -542,14 +542,14 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                 for (int i = 0; i < response.length; i++) {
                     if (response[i].isEnabled()) {
                         if (outputName.length() > 0) {
-                            outputName.append(",");
+                            outputName.append(", ");
                         }
                         outputName.append(response[i].getOutputName());
                     }
                 }
 
                 TextView textView = (TextView)getView().findViewById(R.id.player_text_output);
-                textView.setText(serverName + "->" + outputName);
+                textView.setText(serverName + " -> " + outputName);
             }
         });
     }

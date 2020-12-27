@@ -107,7 +107,8 @@
                 android:tint="?iconColor"
                 android:src="@drawable/ic_volume_down" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/player_text_volume"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -116,27 +117,8 @@
                 android:layout_marginBottom="4dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/player_text_output"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:text="@string/player_output_text_unknown"
-                    android:maxLines="1"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/player_text_volume"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/player_volume_text_unknown"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            </LinearLayout>
+                android:text="@string/player_volume_text_unknown"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageButton
                 android:id="@+id/player_button_volume_up"
@@ -272,6 +254,16 @@
                 android:tint="?iconColor"
                 android:src="@drawable/ic_next" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/player_text_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="@string/player_output_text_unknown"
+            android:maxLines="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
