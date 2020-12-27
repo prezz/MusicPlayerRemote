@@ -28,9 +28,9 @@
     <PreferenceCategory android:title="@string/settings_category_covers" >
         <PreferenceScreen android:title="@string/settings_covers_local_screen_title" android:summary="@string/settings_covers_local_screen_summary">
             <CheckBoxPreference android:key="@string/settings_covers_local_enabled_key" android:title="@string/settings_covers_local_enabled_title" android:defaultValue="false" />
-            <EditTextPreference android:key="@string/settings_covers_local_path_key" android:title="@string/settings_covers_local_path_title" android:defaultValue="/" android:singleLine="true" />
-            <EditTextPreference android:key="@string/settings_covers_local_port_key" android:title="@string/settings_covers_local_port_title" android:defaultValue="80" android:singleLine="true" android:inputType="number" />
-            <EditTextPreference android:key="@string/settings_covers_local_file_key" android:title="@string/settings_covers_local_file_title" android:defaultValue="Folder.jpg" android:singleLine="true" />
+            <EditTextPreference android:key="@string/settings_covers_local_path_key" android:title="@string/settings_covers_local_path_title" android:defaultValue="/" android:maxLines="1" />
+            <EditTextPreference android:key="@string/settings_covers_local_port_key" android:title="@string/settings_covers_local_port_title" android:defaultValue="80" android:maxLines="1" android:inputType="number" />
+            <EditTextPreference android:key="@string/settings_covers_local_file_key" android:title="@string/settings_covers_local_file_title" android:defaultValue="Folder.jpg" android:maxLines="1" />
         </PreferenceScreen>
         <EditTextPreference android:key="@string/settings_covers_gracenote_client_id_key" android:summary="@string/settings_covers_gracenote_client_id_summary" android:title="@string/settings_covers_gracenote_client_id_title"/>
         <PreferenceScreen android:title="@string/settings_covers_amazon_access_key_screen_title" android:summary="@string/settings_covers_amazon_access_key_screen_summary">
