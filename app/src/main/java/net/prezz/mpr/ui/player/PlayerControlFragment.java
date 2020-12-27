@@ -159,28 +159,34 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     @Override
     public void outputUpdated() {
 
-        final TextView textView = (TextView)getView().findViewById(R.id.player_text_output);
-        textView.setText(R.string.player_output_text_unknown);
+        final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
 
-        getOutputHandle.cancelTask();
-        getOutputHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
-            @Override
-            public void receiveResponse(final AudioOutput[] response) {
-                String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
-                StringBuilder outputName = new StringBuilder();
+        if (showOutput()) {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(R.string.player_output_text_unknown);
 
-                for (int i = 0; i < response.length; i++) {
-                    if (response[i].isEnabled()) {
-                        if (outputName.length() > 0) {
-                            outputName.append(", ");
+            getOutputHandle.cancelTask();
+            getOutputHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+                @Override
+                public void receiveResponse(final AudioOutput[] response) {
+                    String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
+                    StringBuilder outputName = new StringBuilder();
+
+                    for (int i = 0; i < response.length; i++) {
+                        if (response[i].isEnabled()) {
+                            if (outputName.length() > 0) {
+                                outputName.append(", ");
+                            }
+                            outputName.append(response[i].getOutputName());
                         }
-                        outputName.append(response[i].getOutputName());
                     }
-                }
 
-                textView.setText(serverName + " -> " + outputName);
-            }
-        });
+                    textView.setText(serverName + " -> " + outputName);
+                }
+            });
+        } else {
+            textView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -576,6 +582,12 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     private void toggleButton(int id, boolean toggled) {
         ImageButton button = (ImageButton)getView().findViewById(id);
         toggleButton(button, toggled);
+    }
+
+    private boolean showOutput() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Resources resources = getActivity().getResources();
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_control_show_output_key), false);
     }
 
     private boolean showPlayerOptionToast() {
