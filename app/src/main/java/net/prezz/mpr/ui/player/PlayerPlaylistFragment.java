@@ -183,6 +183,11 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
     }
 
     @Override
+    public void outputUpdated() {
+        // do nothing
+    }
+
+    @Override
     public void onChoiceMenuClick(View view) {
         final String[] items = getResources().getStringArray(R.array.player_playlist_choice_menu);
 

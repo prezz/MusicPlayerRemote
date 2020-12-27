@@ -123,8 +123,6 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         refreshTime(status.getElapsedTime(), status.getTotalTime());
         updateTimeHandler.running(status.getState() == PlayerState.PLAY);
 
-        refreshOutputText();
-
         if (playerStatus.getVolume() != status.getVolume()) {
             setVolumeText(status.getVolume());
         }
@@ -156,6 +154,33 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     public void playlistUpdated(PlaylistEntity[] playlistEntities) {
         this.playlistEntities = playlistEntities;
         refreshPlayingInfo();
+    }
+
+    @Override
+    public void outputUpdated() {
+
+        final TextView textView = (TextView)getView().findViewById(R.id.player_text_output);
+        textView.setText(R.string.player_output_text_unknown);
+
+        getOutputHandle.cancelTask();
+        getOutputHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+            @Override
+            public void receiveResponse(final AudioOutput[] response) {
+                String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
+                StringBuilder outputName = new StringBuilder();
+
+                for (int i = 0; i < response.length; i++) {
+                    if (response[i].isEnabled()) {
+                        if (outputName.length() > 0) {
+                            outputName.append(", ");
+                        }
+                        outputName.append(response[i].getOutputName());
+                    }
+                }
+
+                textView.setText(serverName + " -> " + outputName);
+            }
+        });
     }
 
     @Override
@@ -528,30 +553,6 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    private void refreshOutputText() {
-
-        getOutputHandle.cancelTask();
-        getOutputHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
-            @Override
-            public void receiveResponse(final AudioOutput[] response) {
-                String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
-                StringBuilder outputName = new StringBuilder();
-
-                for (int i = 0; i < response.length; i++) {
-                    if (response[i].isEnabled()) {
-                        if (outputName.length() > 0) {
-                            outputName.append(", ");
-                        }
-                        outputName.append(response[i].getOutputName());
-                    }
-                }
-
-                TextView textView = (TextView)getView().findViewById(R.id.player_text_output);
-                textView.setText(serverName + " -> " + outputName);
-            }
-        });
     }
 
     private void setVolumeText(int volume) {

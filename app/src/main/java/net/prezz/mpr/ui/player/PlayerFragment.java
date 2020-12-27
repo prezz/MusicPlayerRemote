@@ -10,5 +10,7 @@ public interface PlayerFragment {
 
     void playlistUpdated(PlaylistEntity[] playlistEntities);
 
+    void outputUpdated();
+
     void onChoiceMenuClick(View view);
 }
