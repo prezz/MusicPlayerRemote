@@ -123,8 +123,10 @@
                     android:id="@+id/player_text_output"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:gravity="center"
                     android:text="@string/player_output_text_unknown"
+                    android:maxLines="1"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
