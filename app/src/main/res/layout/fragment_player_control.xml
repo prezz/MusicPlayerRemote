@@ -22,7 +22,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:paddingBottom="8dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:text="@string/player_output_text_unknown"
             android:maxLines="1"
             android:textSize="14sp"
