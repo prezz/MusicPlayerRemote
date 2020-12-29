@@ -214,7 +214,6 @@ public class PlayerActivity extends FragmentActivity {
                 } else {
                     attachedFragments[PlayerPlaylistFragment.FRAGMENT_POSITION].playlistUpdated(playlistEntities);
                 }
-                outputUpdated();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -235,7 +234,6 @@ public class PlayerActivity extends FragmentActivity {
 
         fragment.statusUpdated(playerStatus);
         fragment.playlistUpdated(playlistEntities);
-        fragment.outputUpdated();
     }
 
     public void detachFragment(int pos) {
@@ -303,7 +301,6 @@ public class PlayerActivity extends FragmentActivity {
                         reconnectMusicPlayerOnSettingsChanged(true);
                     }
                     ((Dialog) dialog).dismiss();
-                    outputUpdated();
                     selectOutputs();
                 }
             }
@@ -347,7 +344,6 @@ public class PlayerActivity extends FragmentActivity {
                             if (!commands.isEmpty()) {
                                 MusicPlayerControl.sendControlCommands(commands);
                             }
-                            outputUpdated();
                         }
                     });
                     AlertDialog alert = builder.create();
@@ -355,14 +351,6 @@ public class PlayerActivity extends FragmentActivity {
                 }
             }
         });
-    }
-
-    private void outputUpdated() {
-        for (PlayerFragment fragment : attachedFragments) {
-            if (fragment != null) {
-                fragment.outputUpdated();
-            }
-        }
     }
 
     private boolean connectMusicPlayer() {

@@ -21,6 +21,7 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput
 
         String outputId = null;
         String outputName = null;
+        Boolean outputEnabled = null;
         for (String line : lines) {
             if (line.startsWith("outputid: ")) {
                 outputId = line.substring(10);
@@ -32,13 +33,16 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput
 
             if (line.startsWith("outputenabled: ")) {
                 String s = line.substring(15);
-                boolean outputEnabled = Boolean.valueOf("1".equals(s));
+                outputEnabled = Boolean.valueOf("1".equals(s));
+            }
 
+            if (outputId != null && outputName != null && outputEnabled != null) {
                 result.add(new AudioOutput(outputId, outputName, outputEnabled));
-                outputId = outputName = null;
+                outputId = null;
+                outputName = null;
+                outputEnabled = null;
             }
         }
-
 
         return result.toArray(new AudioOutput[result.size()]);
     }

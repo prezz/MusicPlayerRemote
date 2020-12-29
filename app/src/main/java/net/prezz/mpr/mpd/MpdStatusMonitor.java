@@ -1,6 +1,7 @@
 package net.prezz.mpr.mpd;
 
 import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.StatusListener;
@@ -12,6 +13,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -118,7 +121,7 @@ public class MpdStatusMonitor extends Handler {
                         if (!running) {
                             break;
                         }
-                        connection.writeCommand("idle playlist options player mixer\n");
+                        connection.writeCommand("idle playlist options player mixer output\n");
                     }
 
                     connection.readResponse(RejectAllFilter.INSTANCE);
@@ -153,10 +156,10 @@ public class MpdStatusMonitor extends Handler {
             while (running) {
                 try {
                     connection.connect();
-                    String[] lines = connection.writeResponseCommand("status\n");
-
                     PlayerStatus status = new PlayerStatus(true);
-                    for (String line : lines) {
+
+                    String[] statusLines = connection.writeResponseCommand("status\n");
+                    for (String line : statusLines) {
                         if (line.startsWith("consume: ")) {
                             String s = line.substring(9);
                             status.setConsume("1".equals(s));
@@ -204,6 +207,37 @@ public class MpdStatusMonitor extends Handler {
                             status.setVolume(Integer.parseInt(s));
                         }
                     }
+
+                    String[] outputLines = connection.writeResponseCommand("outputs\n");
+                    List<AudioOutput> audioOutputs = new ArrayList<AudioOutput>();
+                    String outputId = null;
+                    String outputName = null;
+                    Boolean outputEnabled = null;
+                    for (String line : outputLines) {
+                        if (line.startsWith("outputid: ")) {
+                            outputId = line.substring(10);
+                        }
+
+                        if (line.startsWith("outputname: ")) {
+                            outputName = line.substring(12);
+                        }
+
+                        if (line.startsWith("outputenabled: ")) {
+                            String s = line.substring(15);
+                            outputEnabled = Boolean.valueOf("1".equals(s));
+                        }
+
+                        if (outputId != null && outputName != null && outputEnabled != null) {
+                            if (outputEnabled) {
+                                audioOutputs.add(new AudioOutput(outputId, outputName, outputEnabled));
+                            }
+                            outputId = null;
+                            outputName = null;
+                            outputEnabled = null;
+                        }
+                    }
+                    status.setAudioOutputs(audioOutputs.toArray(new AudioOutput[audioOutputs.size()]));
+
                     connected = true;
                     errorCount = 0;
                     return status;

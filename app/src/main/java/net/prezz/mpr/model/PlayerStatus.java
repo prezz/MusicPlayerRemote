@@ -18,6 +18,7 @@ public class PlayerStatus implements Serializable {
     private int volume;
     private int elapsedTime;
     private int totalTime;
+    private AudioOutput[] audioOutputs;
 
 
     public PlayerStatus(boolean connected) {
@@ -33,6 +34,7 @@ public class PlayerStatus implements Serializable {
         this.volume = 0;
         this.elapsedTime = 0;
         this.totalTime = 0;
+        this.audioOutputs = new AudioOutput[0];
     }
 
     public boolean isConnected() {
@@ -121,5 +123,13 @@ public class PlayerStatus implements Serializable {
 
     public void setTotalTime(int totalTime) {
         this.totalTime = totalTime;
+    }
+
+    public AudioOutput[] getAudioOutputs() {
+        return audioOutputs;
+    }
+
+    public void setAudioOutputs(AudioOutput[] audioOutputs) {
+        this.audioOutputs = audioOutputs;
     }
 }

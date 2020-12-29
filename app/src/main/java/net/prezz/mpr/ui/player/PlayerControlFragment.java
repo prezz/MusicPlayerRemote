@@ -1,6 +1,7 @@
 package net.prezz.mpr.ui.player;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
@@ -69,10 +70,10 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     private PlayerStatus playerStatus = new PlayerStatus(false);
     private PlaylistEntity[] playlistEntities;
     private boolean seeking = false;
+    private boolean outputVisible = false;
 
     private TaskHandle getCoverHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle lastFmHandle = TaskHandle.NULL_HANDLE;
-    private TaskHandle getOutputHandle = TaskHandle.NULL_HANDLE;
 
 
     @Override
@@ -143,6 +144,12 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
             setPlayButtonState(status.getState());
         }
 
+        boolean showOutput = showOutput();
+        if (showOutput != outputVisible || !Arrays.equals(playerStatus.getAudioOutputs(), status.getAudioOutputs())) {
+            setOutputText(showOutput, status.getAudioOutputs());
+            outputVisible = showOutput;
+        }
+
         boolean refreshPlaying = playerStatus.getPlaylistVersion() == status.getPlaylistVersion() && (playerStatus.getCurrentSong() != status.getCurrentSong());
         playerStatus = status;
         if (refreshPlaying) {
@@ -154,39 +161,6 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     public void playlistUpdated(PlaylistEntity[] playlistEntities) {
         this.playlistEntities = playlistEntities;
         refreshPlayingInfo();
-    }
-
-    @Override
-    public void outputUpdated() {
-
-        final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
-
-        if (showOutput()) {
-            textView.setVisibility(View.VISIBLE);
-            textView.setText(R.string.player_output_text_unknown);
-
-            getOutputHandle.cancelTask();
-            getOutputHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
-                @Override
-                public void receiveResponse(final AudioOutput[] response) {
-                    String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
-                    StringBuilder outputName = new StringBuilder();
-
-                    for (int i = 0; i < response.length; i++) {
-                        if (response[i].isEnabled()) {
-                            if (outputName.length() > 0) {
-                                outputName.append(", ");
-                            }
-                            outputName.append(response[i].getOutputName());
-                        }
-                    }
-
-                    textView.setText(serverName + " - " + outputName);
-                }
-            });
-        } else {
-            textView.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -567,6 +541,31 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
             textView.setText(getString(R.string.player_volume_text_format, volume));
         } else {
             textView.setText(getString(R.string.player_volume_text_no_mixer));
+        }
+    }
+
+    public void setOutputText(boolean visible, AudioOutput[] audioOutputs) {
+
+        final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
+
+        if (visible) {
+            final String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
+
+            StringBuilder outputName = new StringBuilder();
+            for (int i = 0; i < audioOutputs.length; i++) {
+                if (audioOutputs[i].isEnabled()) {
+                    if (outputName.length() > 0) {
+                        outputName.append(", ");
+                    }
+                    outputName.append(audioOutputs[i].getOutputName());
+                }
+            }
+
+            textView.setText(serverName + " - " + outputName);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+            textView.setText("");
         }
     }
 

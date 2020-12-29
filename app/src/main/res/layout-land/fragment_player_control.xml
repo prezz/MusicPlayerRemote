@@ -64,7 +64,6 @@
             android:ellipsize="end"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/player_output_text_unknown"
             android:maxLines="1"
             android:textSize="14sp"
             android:textStyle="bold" />
