@@ -13,8 +13,8 @@ android {
         applicationId 'net.prezz.mpr'
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 123
-        versionName '1.123.0'
+        versionCode 125
+        versionName '1.125.0'
     }
     buildTypes {
         release {
@@ -27,5 +27,6 @@ android {
 }
 
 dependencies {
-    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.preference:preference:1.1.1'
 }

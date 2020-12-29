@@ -11,9 +11,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:gravity="center"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/player_text_output"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="gone"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/player_cover_image"
@@ -53,7 +69,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:gravity="bottom"
         android:orientation="vertical" >
 
@@ -61,9 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp" >
+            android:gravity="center_vertical" >
 
             <TextView
                 android:id="@+id/player_text_seek_elapsed"
@@ -87,6 +101,7 @@
                 android:text="@string/player_seek_time"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -141,7 +156,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center_vertical" >
 
             <ImageButton
                 android:id="@+id/player_button_repeat"
@@ -192,7 +208,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center_vertical" >
 
             <ImageButton
                 android:id="@+id/player_button_previous"

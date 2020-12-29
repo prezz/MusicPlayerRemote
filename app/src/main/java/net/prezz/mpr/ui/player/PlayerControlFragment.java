@@ -1,8 +1,10 @@
 package net.prezz.mpr.ui.player;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
 import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
@@ -24,6 +26,7 @@ import net.prezz.mpr.model.command.VolumeUpCommand;
 import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
+import net.prezz.mpr.model.servers.ServerConfigurationService;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
@@ -66,6 +69,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     private PlayerStatus playerStatus = new PlayerStatus(false);
     private PlaylistEntity[] playlistEntities;
     private boolean seeking = false;
+    private boolean outputVisible = false;
 
     private TaskHandle getCoverHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle lastFmHandle = TaskHandle.NULL_HANDLE;
@@ -89,6 +93,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
 
         ((PlayerActivity)getActivity()).attachFragment(this, FRAGMENT_POSITION);
 
+        setupButtonClickListener(view, R.id.player_text_output);
         setupButtonClickListener(view, R.id.player_button_volume_down);
         setupButtonClickListener(view, R.id.player_button_volume_up);
         setupButtonClickListener(view, R.id.player_button_repeat);
@@ -139,6 +144,12 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
             setPlayButtonState(status.getState());
         }
 
+        boolean showOutput = showOutput();
+        if (showOutput != outputVisible || !Arrays.equals(playerStatus.getAudioOutputs(), status.getAudioOutputs())) {
+            setOutputText(showOutput, status.getAudioOutputs());
+            outputVisible = showOutput;
+        }
+
         boolean refreshPlaying = playerStatus.getPlaylistVersion() == status.getPlaylistVersion() && (playerStatus.getCurrentSong() != status.getCurrentSong());
         playerStatus = status;
         if (refreshPlaying) {
@@ -185,6 +196,9 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.player_text_output:
+                ((PlayerActivity)getActivity()).onSelectServer();
+                break;
             case R.id.player_button_volume_down:
                 MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
                 break;
@@ -533,6 +547,31 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         }
     }
 
+    public void setOutputText(boolean visible, AudioOutput[] audioOutputs) {
+
+        final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
+
+        if (visible) {
+            final String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
+
+            StringBuilder outputName = new StringBuilder();
+            for (int i = 0; i < audioOutputs.length; i++) {
+                if (audioOutputs[i].isEnabled()) {
+                    if (outputName.length() > 0) {
+                        outputName.append(", ");
+                    }
+                    outputName.append(audioOutputs[i].getOutputName());
+                }
+            }
+
+            textView.setText(serverName + " - " + outputName);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+            textView.setText("");
+        }
+    }
+
     private void updateElapsedTimeText(long elapsed) {
         TextView timeTotal = findTextView(R.id.player_text_seek_total);
         CharSequence totalText = timeTotal.getText();
@@ -545,6 +584,12 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     private void toggleButton(int id, boolean toggled) {
         ImageButton button = (ImageButton)getView().findViewById(id);
         toggleButton(button, toggled);
+    }
+
+    private boolean showOutput() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Resources resources = getActivity().getResources();
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_control_show_output_key), false);
     }
 
     private boolean showPlayerOptionToast() {

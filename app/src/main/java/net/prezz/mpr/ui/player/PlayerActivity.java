@@ -73,9 +73,9 @@ public class PlayerActivity extends FragmentActivity {
 
     private Menu optionsMenu;
 
-    private TaskHandle updatePlaylistHandle;
-    private TaskHandle aMpdLaunchHandle;
-    private TaskHandle selectOutputsHandle;
+    private TaskHandle updatePlaylistHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle aMpdLaunchHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle selectOutputsHandle = TaskHandle.NULL_HANDLE;
 
 
     @Override
@@ -85,10 +85,6 @@ public class PlayerActivity extends FragmentActivity {
         darkTheme = ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_player);
         setupLollipop();
-
-        updatePlaylistHandle = TaskHandle.NULL_HANDLE;
-        aMpdLaunchHandle = TaskHandle.NULL_HANDLE;
-        selectOutputsHandle = TaskHandle.NULL_HANDLE;
 
         final PlayerPagerAdapter pageAdapter = new PlayerPagerAdapter(getSupportFragmentManager(), this);
         ViewPager viewPager = (ViewPager) findViewById(R.id.player_view_pager_swipe);
@@ -261,6 +257,10 @@ public class PlayerActivity extends FragmentActivity {
     public void onSearchClick(View v) {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
+    }
+
+    public void onSelectServer() {
+        selectServer();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

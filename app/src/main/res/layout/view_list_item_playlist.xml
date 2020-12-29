@@ -39,7 +39,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="1dp"
                     android:paddingRight="1dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textSize="16sp" />
 
                 <TextView
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="1dp"
                     android:paddingRight="1dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="1dp"
                     android:paddingRight="1dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="1dp"
                     android:paddingRight="1dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textSize="14sp" />
 
             </LinearLayout>

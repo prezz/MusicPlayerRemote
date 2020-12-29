@@ -28,7 +28,7 @@
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textSize="14sp" />
             
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textSize="14sp" />
 
             <TextView
@@ -48,7 +48,7 @@
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textSize="14sp" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="1dp"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textSize="14sp" />
         </LinearLayout>
 

@@ -13,6 +13,7 @@
         <CheckBoxPreference android:key="@string/settings_playlist_track_click_behaviour_key" android:title="@string/settings_playlist_track_click_behaviour_title" android:defaultValue="true" android:summaryOff="@string/settings_playlist_track_click_behaviour_summary_off" android:summaryOn="@string/settings_playlist_track_click_behaviour_summary_on" />
         <ListPreference android:entries="@array/settings_volume_control_amount_entries" android:title="@string/settings_volume_control_amount_title" android:entryValues="@array/settings_volume_control_amount_values" android:key="@string/settings_volume_control_amount_key" android:defaultValue="1" />
         <ListPreference android:entries="@array/settings_streaming_player_entries" android:title="@string/settings_streaming_player_title" android:entryValues="@array/settings_streaming_player_values" android:key="@string/settings_streaming_player_key" android:defaultValue="0" />
+        <CheckBoxPreference android:key="@string/settings_control_show_output_key" android:title="@string/settings_control_show_output_title" android:defaultValue="false" android:summaryOff="@string/settings_control_show_output_summary_off" android:summaryOn="@string/settings_control_show_output_summary_on" />
         <CheckBoxPreference android:key="@string/settings_control_options_show_toast_key" android:title="@string/settings_control_options_show_toast_title" android:defaultValue="true" android:summaryOff="@string/settings_control_options_show_toast_summary_off" android:summaryOn="@string/settings_control_options_show_toast_summary_on" />
         <CheckBoxPreference android:key="@string/settings_playlist_show_priority_in_playlist_key" android:title="@string/settings_playlist_show_priority_in_playlist_title" android:defaultValue="false" android:summaryOff="@string/settings_playlist_show_priority_in_playlist_summary_off" android:summaryOn="@string/settings_playlist_show_priority_in_playlist_summary_on" />
     </PreferenceCategory>
@@ -28,9 +29,9 @@
     <PreferenceCategory android:title="@string/settings_category_covers" >
         <PreferenceScreen android:title="@string/settings_covers_local_screen_title" android:summary="@string/settings_covers_local_screen_summary">
             <CheckBoxPreference android:key="@string/settings_covers_local_enabled_key" android:title="@string/settings_covers_local_enabled_title" android:defaultValue="false" />
-            <EditTextPreference android:key="@string/settings_covers_local_path_key" android:title="@string/settings_covers_local_path_title" android:defaultValue="/" android:singleLine="true" />
-            <EditTextPreference android:key="@string/settings_covers_local_port_key" android:title="@string/settings_covers_local_port_title" android:defaultValue="80" android:singleLine="true" android:inputType="number" />
-            <EditTextPreference android:key="@string/settings_covers_local_file_key" android:title="@string/settings_covers_local_file_title" android:defaultValue="Folder.jpg" android:singleLine="true" />
+            <EditTextPreference android:key="@string/settings_covers_local_path_key" android:title="@string/settings_covers_local_path_title" android:defaultValue="/" android:maxLines="1" />
+            <EditTextPreference android:key="@string/settings_covers_local_port_key" android:title="@string/settings_covers_local_port_title" android:defaultValue="80" android:maxLines="1" android:inputType="number" />
+            <EditTextPreference android:key="@string/settings_covers_local_file_key" android:title="@string/settings_covers_local_file_title" android:defaultValue="Folder.jpg" android:maxLines="1" />
         </PreferenceScreen>
         <EditTextPreference android:key="@string/settings_covers_gracenote_client_id_key" android:summary="@string/settings_covers_gracenote_client_id_summary" android:title="@string/settings_covers_gracenote_client_id_title"/>
         <PreferenceScreen android:title="@string/settings_covers_amazon_access_key_screen_title" android:summary="@string/settings_covers_amazon_access_key_screen_summary">
