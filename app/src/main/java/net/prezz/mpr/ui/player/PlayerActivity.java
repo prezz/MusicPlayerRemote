@@ -259,6 +259,10 @@ public class PlayerActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+    public void onSelectServer() {
+        selectServer();
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupLollipop() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

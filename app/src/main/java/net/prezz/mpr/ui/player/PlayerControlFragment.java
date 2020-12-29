@@ -94,6 +94,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
 
         ((PlayerActivity)getActivity()).attachFragment(this, FRAGMENT_POSITION);
 
+        setupButtonClickListener(view, R.id.player_text_output);
         setupButtonClickListener(view, R.id.player_button_volume_down);
         setupButtonClickListener(view, R.id.player_button_volume_up);
         setupButtonClickListener(view, R.id.player_button_repeat);
@@ -196,6 +197,9 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.player_text_output:
+                ((PlayerActivity)getActivity()).onSelectServer();
+                break;
             case R.id.player_button_volume_down:
                 MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
                 break;

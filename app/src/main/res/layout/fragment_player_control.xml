@@ -17,11 +17,15 @@
 
         <TextView
             android:id="@+id/player_text_output"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center"
-            android:paddingBottom="8dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="?android:attr/selectableItemBackground"
             android:visibility="gone"
             android:maxLines="1"
             android:textSize="14sp"
