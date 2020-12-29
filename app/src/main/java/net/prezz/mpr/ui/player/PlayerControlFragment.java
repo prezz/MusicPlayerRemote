@@ -10,7 +10,6 @@ import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
-import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.model.command.ConsumeCommand;
