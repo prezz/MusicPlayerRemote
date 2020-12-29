@@ -57,6 +57,18 @@
         android:gravity="bottom"
         android:orientation="vertical" >
 
+        <TextView
+            android:id="@+id/player_text_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/player_output_text_unknown"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -254,16 +266,6 @@
                 android:tint="?iconColor"
                 android:src="@drawable/ic_next" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/player_text_output"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:text="@string/player_output_text_unknown"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 

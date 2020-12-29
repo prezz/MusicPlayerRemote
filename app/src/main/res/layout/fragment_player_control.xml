@@ -11,9 +11,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:gravity="center"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/player_text_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:visibility="visible"
+            android:text="@string/player_output_text_unknown"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/player_cover_image"
@@ -53,7 +66,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:gravity="bottom"
         android:orientation="vertical" >
 
@@ -255,16 +268,6 @@
                 android:tint="?iconColor"
                 android:src="@drawable/ic_next" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/player_text_output"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:text="@string/player_output_text_unknown"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 

@@ -181,11 +181,11 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                         }
                     }
 
-                    textView.setText(serverName + " -> " + outputName);
+                    textView.setText(serverName + " - " + outputName);
                 }
             });
         } else {
-            textView.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.GONE);
         }
     }
 
