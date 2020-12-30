@@ -121,10 +121,12 @@ public class MpdDatabaseBuilder {
                 if (line.startsWith("Date: ")) {
                     record.setYear(parseInteger(line.substring(6)));
                 }
-                if (line.startsWith("Time: ")) {
+                if (line.startsWith("duration: ") && connection.isMinimumVersion(0, 22, 0)) {
+                    record.setLength(parseFloatToInteger(line.substring(10)));
+                }
+                if (line.startsWith("Time: ") && !connection.isMinimumVersion(0, 22, 0)) { // deprecated
                     record.setLength(parseInteger(line.substring(6)));
                 }
-
                 if (line.startsWith("playlist: ")) {
                     String uri = line.substring(10);
                     libraryDatabaseHelper.addPlaylistEntity(uri);
@@ -146,9 +148,17 @@ public class MpdDatabaseBuilder {
         }
     }
 
+    private static Integer parseFloatToInteger(String floating) {
+        try {
+            return Math.round(Float.parseFloat(floating));
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
     private static Integer parseInteger(String integer) {
         try {
-            return Integer.parseInt(integer);
+            return Integer.decode(integer);
         } catch (Exception ex) {
         }
         return null;

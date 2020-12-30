@@ -196,7 +196,15 @@ public class MpdStatusMonitor extends Handler {
                                 status.setState(PlayerState.PAUSE);
                             }
                         }
-                        if (line.startsWith("time: ")) {
+                        if (line.startsWith("elapsed: ") && connection.isMinimumVersion(0, 22, 0)) {
+                            String s = line.substring(9);
+                            status.setElapsedTime(Math.round(Float.parseFloat(s)));
+                        }
+                        if (line.startsWith("duration: ") && connection.isMinimumVersion(0, 22, 0)) {
+                            String s = line.substring(10);
+                            status.setTotalTime(Math.round(Float.parseFloat(s)));
+                        }
+                        if (line.startsWith("time: ") && !connection.isMinimumVersion(0, 22, 0)) { // deprecated
                             String s = line.substring(6);
                             String[] split = s.split(":");
                             status.setElapsedTime(Integer.parseInt(split[0]));

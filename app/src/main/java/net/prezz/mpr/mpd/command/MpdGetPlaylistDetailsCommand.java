@@ -73,7 +73,10 @@ public class MpdGetPlaylistDetailsCommand extends MpdConnectionCommand<StoredPla
             if (line.startsWith("Title: ")) {
                 builder.setTitle(line.substring(7));
             }
-            if (line.startsWith("Time: ")) {
+            if (line.startsWith("duration: ") && connection.isMinimumVersion(0, 22, 0)) {
+                builder.setTime(Math.round(Float.parseFloat(line.substring(10))));
+            }
+            if (line.startsWith("Time: ") && !connection.isMinimumVersion(0, 22, 0)) { // deprecated
                 builder.setTime(Integer.decode(line.substring(6)));
             }
             if (line.startsWith("Name: ")) {

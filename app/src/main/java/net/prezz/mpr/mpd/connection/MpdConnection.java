@@ -26,7 +26,7 @@ public class MpdConnection {
     private Socket socket;
     private BufferedWriter writer;
     private BufferedInputStream inputStream;
-    private String version;
+    private int[] version;
 
     
     public MpdConnection(MpdSettings settings) {
@@ -69,7 +69,7 @@ public class MpdConnection {
                     throw new IOException("Invalid MPD server response");
                 }
                 
-                version = split[2];
+                version = parseVersion(split[2]);
                 
                 String password = settings.getMpdPassword();
                 if (password != null && !password.isEmpty()) {
@@ -115,23 +115,19 @@ public class MpdConnection {
     
     public boolean isMinimumVersion(int major, int minor, int point) {
         try {
-            if (version == null) {
+            if (version == null || version.length != 3) {
                 return false;
             }
             
-            String[] split = version.split("\\.");
-            int serverMajor = Integer.parseInt(split[0]);
-            if (serverMajor < major) {
+            if (version[0] < major) {
                 return false;
             }
             
-            int serverMinor = Integer.parseInt(split[1]);
-            if ((serverMajor == major) && (serverMinor < minor)) {
+            if ((version[0] == major) && (version[1] < minor)) {
                 return false;
             }
             
-            int serverPoint = Integer.parseInt(split[2]);
-            if ((serverMajor == major) && (serverMinor == minor) && (serverPoint < point)) {
+            if ((version[0] == major) && (version[1] == minor) && (version[2] < point)) {
                 return false;
             }
         } catch (Exception ex) {
@@ -246,5 +242,23 @@ public class MpdConnection {
         }
         
         return null;
+    }
+
+    private int[] parseVersion(String version) {
+        try {
+            if (version == null) {
+                return null;
+            }
+
+            String[] split = version.split("\\.");
+            int serverMajor = Integer.parseInt(split[0]);
+            int serverMinor = Integer.parseInt(split[1]);
+            int serverPoint = Integer.parseInt(split[2]);
+
+            return new int[] {serverMajor, serverMinor, serverPoint};
+        } catch (Exception ex) {
+            Log.e(MpdConnection.class.getName(), "unable to parse Mpd version number");
+            return null;
+        }
     }
 }
