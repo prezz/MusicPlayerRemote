@@ -31,12 +31,12 @@ public class AboutActivity extends Activity {
     }
 
     public void onPrivacyPolicyClick(View view) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/prezz.net/privacypolicy"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://mpr-privacy-policy.prezz.net"));
         startActivity(browserIntent);
     }
 
     public void onLastfmClick(View view) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm/"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm"));
         startActivity(browserIntent);
     }
 
