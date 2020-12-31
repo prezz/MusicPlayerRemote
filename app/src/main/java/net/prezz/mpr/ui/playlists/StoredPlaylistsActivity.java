@@ -59,7 +59,7 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
 
     private StoredPlaylistAdapterEntity[] adapterEntities = null;
     private boolean updating = false;
-    private TaskHandle updatingPlaylistsHandle;
+    private TaskHandle updatingPlaylistsHandle = TaskHandle.NULL_HANDLE;
     private MiniControlHelper controlHelper;
 
 
@@ -72,8 +72,6 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
         // Show the Up button in the action bar.
         setupActionBar();
         setupLollipop();
-
-        updatingPlaylistsHandle = TaskHandle.NULL_HANDLE;
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {

@@ -14,12 +14,25 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import net.prezz.mpr.R;
+import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.ui.adapter.StoredPlaylistAdapterEntity;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
+import net.prezz.mpr.ui.view.DataFragment;
+
+import java.util.Arrays;
 
 public class PartitionsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
+
+    private static final String PARTITIONS_SAVED_INSTANCE_STATE = "partitions";
+
+    private String[] partitions = null;
+    private boolean updating = false;
+    private TaskHandle updatingPartitionsHandle = TaskHandle.NULL_HANDLE;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +41,17 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_partitions);
 
+        setupActionBar();
         setupLollipop();
+
+        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
+        if (dataFragment != null) {
+            //restore entities if loaded into memory again (or after rotation)
+            Object[] objectEntities = (Object[]) dataFragment.getData(PARTITIONS_SAVED_INSTANCE_STATE, null);
+            if (objectEntities != null) {
+                partitions = Arrays.copyOf(objectEntities, objectEntities.length, String[].class);
+            }
+        }
     }
 
     @Override
@@ -69,6 +92,10 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         return super.onKeyDown(keyCode, event);
     }
 
+    private void setupActionBar() {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupLollipop() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -82,5 +109,23 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     private ListView findListView() {
         return (ListView)this.findViewById(R.id.partitions_list_view_browse);
+    }
+
+    private void showUpdatingIndicator() {
+        updating = true;
+        ProgressBar progressBar = findProgressBar();
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideUpdatingIndicator() {
+        updating = false;
+        ProgressBar progressBar = findProgressBar();
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private ProgressBar findProgressBar() {
+        return (ProgressBar)this.findViewById(R.id.partitions_progress_bar_load);
     }
 }
