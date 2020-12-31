@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.ResponseResult;
@@ -29,6 +30,7 @@ import net.prezz.mpr.model.command.DeleteStoredPlaylistCommand;
 import net.prezz.mpr.model.command.LoadStoredPlaylistCommand;
 import net.prezz.mpr.model.command.MoveInPlaylistCommand;
 import net.prezz.mpr.model.command.MoveInStoredPlaylistCommand;
+import net.prezz.mpr.model.command.MoveOutputToCurrentPartitionCommand;
 import net.prezz.mpr.model.command.NextCommand;
 import net.prezz.mpr.model.command.PauseCommand;
 import net.prezz.mpr.model.command.PlayCommand;
@@ -162,6 +164,12 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                 int from = ((MoveInStoredPlaylistCommand) command).getFrom();
                 int to = ((MoveInStoredPlaylistCommand) command).getTo();
                 connection.writeResponseCommand(String.format("playlistmove \"%s\" %s %s\n", name, from, to), RejectAllFilter.INSTANCE);
+            }
+            if (command instanceof MoveOutputToCurrentPartitionCommand) {
+                if (connection.isMinimumVersion(0, 22, 0)) {
+                    AudioOutput output = ((MoveOutputToCurrentPartitionCommand) command).getAudioOutput();
+                    connection.writeResponseCommand(String.format("moveoutput %s\n", output.getOutputName()), RejectAllFilter.INSTANCE);
+                }
             }
             if (command instanceof NextCommand) {
                 connection.writeResponseCommand("next\n", RejectAllFilter.INSTANCE);
