@@ -20,9 +20,11 @@ import net.prezz.mpr.model.command.AddUriToStoredPlaylistCommand;
 import net.prezz.mpr.model.command.ClearPlaylistCommand;
 import net.prezz.mpr.model.command.Command;
 import net.prezz.mpr.model.command.ConsumeCommand;
+import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeleteFromPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteFromStoredPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteMultipleFromPlaylistCommand;
+import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.model.command.DeleteStoredPlaylistCommand;
 import net.prezz.mpr.model.command.LoadStoredPlaylistCommand;
 import net.prezz.mpr.model.command.MoveInPlaylistCommand;
@@ -114,6 +116,12 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                 boolean consume = ((ConsumeCommand) command).getConsume();
                 connection.writeResponseCommand(String.format("consume %s\n", consume ? "1" : "0"), RejectAllFilter.INSTANCE);
             }
+            if (command instanceof CreatePartitionCommand) {
+                if (connection.isMinimumVersion(0, 22, 0)) {
+                    String name = ((CreatePartitionCommand) command).getName();
+                    connection.writeResponseCommand(String.format("newpartition %s\n", name), RejectAllFilter.INSTANCE);
+                }
+            }
             if (command instanceof DeleteFromPlaylistCommand) {
                 int pos = ((DeleteFromPlaylistCommand) command).getPos();
                 connection.writeResponseCommand(String.format("delete %s\n", pos), RejectAllFilter.INSTANCE);
@@ -129,6 +137,12 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                     commandList.add(String.format("deleteid %s\n", id));
                 }
                 connection.writeResponseCommandList(commandList.toArray(new String[commandList.size()]), RejectAllFilter.INSTANCE);
+            }
+            if (command instanceof DeletePartitionCommand) {
+                if (connection.isMinimumVersion(0, 22, 0)) {
+                    String name = ((DeletePartitionCommand) command).getName();
+                    connection.writeResponseCommand(String.format("delpartition %s\n", name), RejectAllFilter.INSTANCE);
+                }
             }
             if (command instanceof DeleteStoredPlaylistCommand) {
                 StoredPlaylistEntity entity = ((DeleteStoredPlaylistCommand) command).getEntity();

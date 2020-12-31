@@ -43,5 +43,7 @@ public interface MusicPlayer {
 
     TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver);
 
+    TaskHandle getPartitions(final ResponseReceiver<String[]> responseReceiver);
+
     TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver);
 }

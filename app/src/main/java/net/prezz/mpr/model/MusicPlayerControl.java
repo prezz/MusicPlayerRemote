@@ -88,6 +88,10 @@ public class MusicPlayerControl {
         return musicPlayer.getStatistics(responseReceiver);
     }
 
+    public static TaskHandle getPartitions(ResponseReceiver<String[]> responseReceiver) {
+        return musicPlayer.getPartitions(responseReceiver);
+    }
+
     public static void sendControlCommand(Command command) {
         sendControlCommands(Arrays.asList(command), new ResponseReceiver<ResponseResult>() {
             @Override

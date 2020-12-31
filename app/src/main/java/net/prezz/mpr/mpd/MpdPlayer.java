@@ -27,6 +27,7 @@ import net.prezz.mpr.mpd.command.MpdGetFilteredAlbumsAndTitlesCommand;
 import net.prezz.mpr.mpd.command.MpdGetFilteredArtistsCommand;
 import net.prezz.mpr.mpd.command.MpdGetFilteredTracksAndTitlesCommand;
 import net.prezz.mpr.mpd.command.MpdGetOutputsCommand;
+import net.prezz.mpr.mpd.command.MpdGetPartitionsCommand;
 import net.prezz.mpr.mpd.command.MpdGetPlaylistCommand;
 import net.prezz.mpr.mpd.command.MpdGetPlaylistDetailsCommand;
 import net.prezz.mpr.mpd.command.MpdGetPlaylistEntityCommand;
@@ -288,6 +289,17 @@ public class MpdPlayer implements MusicPlayer {
         return command.execute(connection, new MpdConnectionCommandReceiver<Statistics>() {
             @Override
             public void receive(Statistics result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle getPartitions(final ResponseReceiver<String[]> responseReceiver) {
+        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand();
+        return command.execute(connection, new MpdConnectionCommandReceiver<String[]>() {
+            @Override
+            public void receive(String[] result) {
                 responseReceiver.receiveResponse(result);
             }
         });
