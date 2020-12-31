@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".FilteredTrackAndTitleActivity" >
+    tools:context=".ui.library.filtered.FilteredTrackAndTitleActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"

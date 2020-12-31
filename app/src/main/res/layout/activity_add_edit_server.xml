@@ -6,7 +6,7 @@
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    tools:context=".AddEditServerActivity" >
+    tools:context=".ui.settings.servers.AddEditServerActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"

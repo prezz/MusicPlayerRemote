@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".SearchActivity" >
+    tools:context=".ui.search.SearchActivity" >
 
     <net.prezz.mpr.ui.view.KitKatFixedListView
         android:id="@+id/search_list_view_browse"

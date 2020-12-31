@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".PlaylistDetailsActivity" >
+    tools:context=".ui.playlists.PlaylistDetailsActivity" >
 
     <net.prezz.mpr.ui.view.DragListView
         android:id="@+id/playlist_details_list_view_browse"

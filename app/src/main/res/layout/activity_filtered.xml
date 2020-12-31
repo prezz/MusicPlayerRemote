@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".FilteredActivity" >
+    tools:context=".ui.library.filtered.FilteredActivity" >
 
     <net.prezz.mpr.ui.view.KitKatFixedListView
         android:id="@+id/filtered_list_view_browse"
