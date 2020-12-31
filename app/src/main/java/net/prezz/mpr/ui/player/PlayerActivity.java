@@ -183,6 +183,10 @@ public class PlayerActivity extends FragmentActivity {
                 startActivityForResult(intent, SETTINGS_ACTIVITY_RESULT);
                 return true;
             }
+            case R.id.player_action_server: {
+                selectServer();
+                return true;
+            }
             case R.id.player_action_database: {
                 Intent intent = new Intent(this, DatabaseActivity.class);
                 startActivity(intent);
@@ -193,8 +197,8 @@ public class PlayerActivity extends FragmentActivity {
                 startActivity(intent);
                 return true;
             }
-            case R.id.player_action_player: {
-                selectServer();
+            case R.id.player_action_outputs: {
+                selectOutputs();
                 return true;
             }
             case R.id.player_action_start_streaming: {
@@ -202,6 +206,7 @@ public class PlayerActivity extends FragmentActivity {
                 if (!Utils.nullOrEmpty(streamingUrl)) {
                     startStreaming(streamingUrl);
                 }
+                return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -266,7 +271,7 @@ public class PlayerActivity extends FragmentActivity {
     }
 
     public void onSelectServer() {
-        selectServer();
+        // selectServer();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -310,8 +315,6 @@ public class PlayerActivity extends FragmentActivity {
                         ServerConfigurationService.setSelectedServerConfiguration(selected);
                         reconnectMusicPlayerOnSettingsChanged(true);
                     }
-                    ((Dialog) dialog).dismiss();
-                    selectOutputs();
                 }
             }
         });
@@ -335,7 +338,7 @@ public class PlayerActivity extends FragmentActivity {
                     }
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
-                    builder.setTitle(R.string.player_action_select_outputs);
+                    builder.setTitle(R.string.player_action_outputs);
                     builder.setMultiChoiceItems(items, postChecked, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
