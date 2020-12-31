@@ -28,6 +28,7 @@ import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
+import net.prezz.mpr.ui.partitions.PartitionsActivity;
 import net.prezz.mpr.ui.playlists.StoredPlaylistsActivity;
 import net.prezz.mpr.ui.search.SearchActivity;
 import net.prezz.mpr.ui.settings.SettingsActivity;
@@ -184,6 +185,11 @@ public class PlayerActivity extends FragmentActivity {
             }
             case R.id.player_action_database: {
                 Intent intent = new Intent(this, DatabaseActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            case R.id.player_action_partitions: {
+                Intent intent = new Intent(this, PartitionsActivity.class);
                 startActivity(intent);
                 return true;
             }

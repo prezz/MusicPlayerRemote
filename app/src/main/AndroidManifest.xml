@@ -82,7 +82,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.prezz.mpr.ui.player.PlayerActivity" />
         </activity>
-        
+
+        <activity
+            android:launchMode="singleTop"
+            android:name="net.prezz.mpr.ui.partitions.PartitionsActivity"
+            android:label="@string/partitions_activity_title"
+            android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.prezz.mpr.ui.player.PlayerActivity" />
+        </activity>
+
         <activity
             android:launchMode="singleTop"
             android:name="net.prezz.mpr.ui.settings.servers.ServersActivity"

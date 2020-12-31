@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="partitions_activity_title">Manage partitions</string>
+
+    <string name="partitions_add_button">Add partition</string>
+
+    <string-array name="partitions_context_menu">
+        <item>Delete</item>
+    </string-array>
+
+</resources>

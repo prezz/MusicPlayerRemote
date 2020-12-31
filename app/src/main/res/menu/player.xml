@@ -13,14 +13,20 @@
         android:title="@string/player_action_database"/>
 
     <item
-        android:id="@+id/player_action_player"
+        android:id="@+id/player_action_partitions"
         android:orderInCategory="300"
+        android:showAsAction="never"
+        android:title="@string/player_action_partitions"/>
+
+    <item
+        android:id="@+id/player_action_player"
+        android:orderInCategory="400"
         android:showAsAction="never"
         android:title="@string/player_action_player"/>
 
     <item
         android:id="@+id/player_action_start_streaming"
-        android:orderInCategory="400"
+        android:orderInCategory="500"
         android:showAsAction="never"
         android:title="@string/player_action_start_streaming"/>
 
