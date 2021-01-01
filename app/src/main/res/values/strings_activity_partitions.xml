@@ -9,5 +9,6 @@
     </string-array>
 
     <string name="partitions_invalid_name_toast">Invalid partition name</string>
+    <string name="partitions_deleted_toast">%1$s deleted</string>
 
 </resources>

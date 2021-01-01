@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
@@ -27,7 +28,9 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.model.command.Command;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
+import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
@@ -35,6 +38,7 @@ import net.prezz.mpr.ui.view.DataFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PartitionsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
 
@@ -98,11 +102,32 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.partitions_list_view_browse) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            String partition = partitions[info.position];
+            menu.setHeaderTitle(partition);
+            String[] menuItems = getResources().getStringArray(R.array.partitions_context_menu);
+            for (int i = 0; i < menuItems.length; i++) {
+                MenuItem menuItem = menu.add(Menu.NONE, i, i, menuItems[i]);
+                menuItem.setOnMenuItemClickListener(this);
+            }
+        }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        return true;
+        List<Command> commandList = new ArrayList<Command>();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        String partition = partitions[info.position];
+        String displayText = getString(R.string.partitions_deleted_toast, partition);
+        switch (item.getItemId()) {
+            case 0:
+                commandList.add(new DeletePartitionCommand(partition));
+                sendControlCommands(displayText, commandList);
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -137,6 +162,11 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             View choiceBar = findViewById(R.id.partitions_choice_bar);
             choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
         }
+    }
+
+    private void sendControlCommands(CharSequence displayText, List<Command> commands) {
+        MusicPlayerControl.sendControlCommands(commands);
+        Boast.makeText(this, displayText).show();
     }
 
     private void updateEntities() {
