@@ -38,7 +38,6 @@ import net.prezz.mpr.ui.view.DataFragment;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -132,13 +131,13 @@ public class PlayerActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
-        MusicPlayerControl.setStatusListener(musicPlayerRefreshListener, PartitionHelper.getClientPartition(this));
+        MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MusicPlayerControl.setStatusListener(null, null);
+        MusicPlayerControl.setStatusListener(null);
         updatePlaylistHandle.cancelTask();
         aMpdLaunchHandle.cancelTask();
         selectOutputsHandle.cancelTask();
@@ -390,7 +389,8 @@ public class PlayerActivity extends FragmentActivity {
             alert.show();
             return false;
         } else {
-            MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings));
+            String partition = PartitionHelper.getClientPartition(getApplicationContext());
+            MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings, partition));
             ensureLocalServer();
             return true;
         }
@@ -398,14 +398,16 @@ public class PlayerActivity extends FragmentActivity {
 
     private boolean reconnectMusicPlayerOnSettingsChanged(boolean connectStatusListener) {
         MpdPlayerSettings mpdSettings = MpdPlayerSettings.create(getApplicationContext());
+        //TODO: also check for partition changed
         if (!mpdSettings.equals(currentMpdSettings)) {
             PlaybackService.stop();
             updateOptionsMenu(mpdSettings);
             currentMpdSettings = mpdSettings;
             if (!currentMpdSettings.getMpdHost().isEmpty()) {
-                MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings));
+                String partition = PartitionHelper.getClientPartition(getApplicationContext());
+                MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings, partition));
                 if (connectStatusListener) {
-                    MusicPlayerControl.setStatusListener(musicPlayerRefreshListener, PartitionHelper.getClientPartition(this));
+                    MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
                 }
 //                PlaybackService.start();
                 ensureLocalServer();

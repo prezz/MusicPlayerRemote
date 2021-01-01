@@ -22,7 +22,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import net.prezz.mpr.R;
@@ -290,8 +289,9 @@ public class StreamingService extends Service {
         mpdState = null;
 
         MpdPlayerSettings settings = MpdPlayerSettings.create(this);
-        mpdPlayer = new MpdPlayer(settings);
-        mpdPlayer.setStatusListener(new PlayerInfoRefreshListener(), PartitionHelper.getClientPartition(this));
+        String partition = PartitionHelper.getClientPartition(this);
+        mpdPlayer = new MpdPlayer(settings, partition);
+        mpdPlayer.setStatusListener(new PlayerInfoRefreshListener());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

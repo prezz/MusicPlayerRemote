@@ -70,8 +70,8 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
         }
     };
 
-    public MpdSendControlCommands(List<Command> commands) {
-        super(commands);
+    public MpdSendControlCommands(String partition, List<Command> commands) {
+        super(partition, commands);
     }
 
     @Override

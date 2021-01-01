@@ -7,8 +7,8 @@ import net.prezz.mpr.mpd.connection.MpdConnection;
 
 public class MpdGetPlaylistEntityCommand extends MpdConnectionCommand<Integer, PlaylistEntity>{
 
-    public MpdGetPlaylistEntityCommand(int position) {
-        super(Integer.valueOf(position));
+    public MpdGetPlaylistEntityCommand(String partition, int position) {
+        super(partition, Integer.valueOf(position));
     }
 
     @Override

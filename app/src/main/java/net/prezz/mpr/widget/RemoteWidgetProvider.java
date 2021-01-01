@@ -12,7 +12,9 @@ import net.prezz.mpr.model.command.VolumeDownCommand;
 import net.prezz.mpr.model.command.VolumeUpCommand;
 import net.prezz.mpr.mpd.MpdPlayer;
 import net.prezz.mpr.service.PlaybackService;
+import net.prezz.mpr.ui.ApplicationActivator;
 import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import net.prezz.mpr.ui.player.PlayerActivity;
@@ -78,7 +80,8 @@ public class RemoteWidgetProvider extends AppWidgetProvider {
     }
     
     private void sendControlCommand(final Context context, final Command command, final boolean startService) {
-        final MpdPlayer mpdPlayer = new MpdPlayer(MpdPlayerSettings.create(context));
+        String partition = PartitionHelper.getClientPartition(context);
+        final MpdPlayer mpdPlayer = new MpdPlayer(MpdPlayerSettings.create(context), partition);
         mpdPlayer.sendControlCommands(Arrays.asList(command), new ResponseReceiver<ResponseResult>() {
             @Override
             public void receiveResponse(ResponseResult response) {

@@ -17,8 +17,8 @@ import net.prezz.mpr.mpd.connection.MpdConnection;
 
 public class MpdGetStoredPlaylistsCommand extends MpdConnectionCommand<Void, StoredPlaylistEntity[]>{
 
-    public MpdGetStoredPlaylistsCommand() {
-        super(null);
+    public MpdGetStoredPlaylistsCommand(String partition) {
+        super(partition, null);
     }
 
     @Override

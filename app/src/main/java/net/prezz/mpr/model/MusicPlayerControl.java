@@ -20,8 +20,8 @@ public class MusicPlayerControl {
         MusicPlayerControl.musicPlayer = (musicPlayer == null) ? new NullPlayer() : musicPlayer;
     }
 
-    public static void setStatusListener(StatusListener listener, String partition) {
-        musicPlayer.setStatusListener(listener, partition);
+    public static void setStatusListener(StatusListener listener) {
+        musicPlayer.setStatusListener(listener);
     }
 
     public static TaskHandle deleteLocalLibraryDatabase(ResponseReceiver<Boolean> responseReceiver) {

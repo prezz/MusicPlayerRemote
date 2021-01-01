@@ -43,6 +43,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+
 import androidx.core.app.NotificationCompat;
 
 public class PlaybackService extends Service {
@@ -142,11 +143,12 @@ public class PlaybackService extends Service {
 
         updateNotification(isForegroundService);
 
-        player = new MpdPlayer(settings);
+        String partition = PartitionHelper.getClientPartition(this);
+        player = new MpdPlayer(settings, partition);
         playerStatus = new PlayerStatus(false);
 
         playerInfoRefreshListener = new PlayerInfoRefreshListener();
-        player.setStatusListener(playerInfoRefreshListener, PartitionHelper.getClientPartition(this));
+        player.setStatusListener(playerInfoRefreshListener);
 
         return START_STICKY;
     }
@@ -417,15 +419,15 @@ public class PlaybackService extends Service {
             } else if (CMD_VOL_UP.equals(action)) {
                 sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(context)));
             } else if (CMD_PREV.equals(action)) {
-                sendControlCommand(new PreviousCommand());
+                sendControlCommand( new PreviousCommand());
             } else if (CMD_PLAY_PAUSE.equals(action)) {
-                sendControlCommand(new PlayPauseCommand());
+                sendControlCommand( new PlayPauseCommand());
             } else if (CMD_NEXT.equals(action)) {
-                sendControlCommand(new NextCommand());
+                sendControlCommand( new NextCommand());
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                player.setStatusListener(playerInfoRefreshListener, PartitionHelper.getClientPartition(context));
+                player.setStatusListener(playerInfoRefreshListener);
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                player.setStatusListener(null, null);
+                player.setStatusListener(null);
             }
         }
 

@@ -139,6 +139,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         String partition = partitions[position];
         PartitionHelper.setClientPartition(this, partition);
         // TODO: restart notification and streaming service etc. or consider stopping the player on the old partition
+        // TODO: consider deleting RemoteWidgetProvider
     }
 
     public void onCreatePartitionClick(View view) {

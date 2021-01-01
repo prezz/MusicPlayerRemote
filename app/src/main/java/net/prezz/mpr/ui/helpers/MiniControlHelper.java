@@ -16,9 +16,6 @@ import net.prezz.mpr.model.command.VolumeDownCommand;
 import net.prezz.mpr.model.command.VolumeUpCommand;
 import net.prezz.mpr.R;
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -42,7 +39,7 @@ public class MiniControlHelper implements StatusListener {
             switch (view.getVisibility()) {
                 case View.GONE:
                     view.setVisibility(View.VISIBLE);
-                    MusicPlayerControl.setStatusListener(this, PartitionHelper.getClientPartition(activity));
+                    MusicPlayerControl.setStatusListener(this);
                     break;
                 case View.VISIBLE:
                     doHideVisability(view);
@@ -76,7 +73,7 @@ public class MiniControlHelper implements StatusListener {
     private void doHideVisability(View view) {
         if (view != null) {
             taskHandler.cancelTask();
-            MusicPlayerControl.setStatusListener(null, null);
+            MusicPlayerControl.setStatusListener(null);
             view.setVisibility(View.GONE);
         }
     }
