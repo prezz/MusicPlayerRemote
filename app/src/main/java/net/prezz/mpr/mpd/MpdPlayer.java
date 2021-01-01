@@ -75,8 +75,13 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle deleteLocalLibraryDatabase(final ResponseReceiver<Boolean> responseReceiver) {
-        MpdDeleteLocalLibraryDatabaseCommand command = new MpdDeleteLocalLibraryDatabaseCommand(databaseHelper);
-        return command.execute(connection, new MpdConnectionCommandReceiver<Boolean>() {
+        MpdDeleteLocalLibraryDatabaseCommand command = new MpdDeleteLocalLibraryDatabaseCommand();
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<Boolean>() {
+            @Override
+            public void build() {
+                // the delete local library command should not rebuild the database
+            }
+
             @Override
             public void receive(Boolean result) {
                 responseReceiver.receiveResponse(result);
