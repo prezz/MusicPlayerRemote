@@ -18,6 +18,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import androidx.core.app.NavUtils;
+
 import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
@@ -67,6 +69,26 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         ListView listView = findListView();
         listView.setOnItemClickListener(this);
         registerForContextMenu(listView);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
+        if (dataFragment != null) {
+            dataFragment.setData(PARTITIONS_SAVED_INSTANCE_STATE, partitions);
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
