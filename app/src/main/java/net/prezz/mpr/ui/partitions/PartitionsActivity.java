@@ -13,16 +13,20 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import net.prezz.mpr.R;
+import net.prezz.mpr.model.MusicPlayerControl;
+import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.ui.adapter.StoredPlaylistAdapterEntity;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PartitionsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
@@ -52,6 +56,8 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                 partitions = Arrays.copyOf(objectEntities, objectEntities.length, String[].class);
             }
         }
+
+        updateEntities();
     }
 
     @Override
@@ -105,6 +111,35 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             View choiceBar = findViewById(R.id.partitions_choice_bar);
             choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
         }
+    }
+
+    private void updateEntities() {
+        if (partitions != null) {
+            createEntityAdapter(partitions);
+        } else if (!updating) {
+            showUpdatingIndicator();
+            updatingPartitionsHandle.cancelTask();
+            updatingPartitionsHandle = MusicPlayerControl.getPartitions(new ResponseReceiver<String[]>() {
+                @Override
+                public void receiveResponse(String[] response) {
+                    partitions = response;
+                    createEntityAdapter(partitions);
+                    hideUpdatingIndicator();
+                }
+            });
+        }
+    }
+
+    private void createEntityAdapter(String[] entities) {
+        ListView listView = findListView();
+        if (listView != null) {
+            ListAdapter adapter = createAdapter(entities);
+            listView.setAdapter(adapter);
+        }
+    }
+
+    private ListAdapter createAdapter(String[] entities) {
+        return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(entities)));
     }
 
     private ListView findListView() {

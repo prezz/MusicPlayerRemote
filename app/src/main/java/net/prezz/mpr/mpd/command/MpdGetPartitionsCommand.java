@@ -17,7 +17,7 @@ public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, String[]
 
         if (connection.isMinimumVersion(0, 22, 0)) {
 
-            String[] lines = connection.writeResponseCommand("partitions\n");
+            String[] lines = connection.writeResponseCommand("listpartitions\n");
 
             List<String> result = new ArrayList<String>();
 
