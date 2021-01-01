@@ -25,10 +25,11 @@ import android.widget.ProgressBar;
 import androidx.core.app.NavUtils;
 
 import net.prezz.mpr.R;
+import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
+import net.prezz.mpr.model.ResponseResult;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.command.Command;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.ui.helpers.Boast;
@@ -38,11 +39,12 @@ import net.prezz.mpr.ui.view.DataFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class PartitionsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
 
     private static final String PARTITIONS_SAVED_INSTANCE_STATE = "partitions";
+
+    private final RefreshEntitiesResponseReceiver refreshResponseReceiver = new RefreshEntitiesResponseReceiver();
 
     private String[] partitions = null;
     private boolean updating = false;
@@ -116,14 +118,15 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        List<Command> commandList = new ArrayList<Command>();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         String partition = partitions[info.position];
-        String displayText = getString(R.string.partitions_deleted_toast, partition);
         switch (item.getItemId()) {
             case 0:
-                commandList.add(new DeletePartitionCommand(partition));
-                sendControlCommands(displayText, commandList);
+                if (Utils.equals("default", partition)) {
+                    Boast.makeText(PartitionsActivity.this, R.string.partitions_delete_default_toast).show();
+                } else {
+                    MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partition), refreshResponseReceiver);
+                }
                 return true;
         }
 
@@ -162,11 +165,6 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             View choiceBar = findViewById(R.id.partitions_choice_bar);
             choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
         }
-    }
-
-    private void sendControlCommands(CharSequence displayText, List<Command> commands) {
-        MusicPlayerControl.sendControlCommands(commands);
-        Boast.makeText(this, displayText).show();
     }
 
     private void updateEntities() {
@@ -233,7 +231,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                 if (partitionName.isEmpty() || Arrays.asList(partitions).contains(partitionName)) {
                     Boast.makeText(PartitionsActivity.this, R.string.partitions_invalid_name_toast).show();
                 } else {
-                    MusicPlayerControl.sendControlCommand(new CreatePartitionCommand(partitionName));
+                    MusicPlayerControl.sendControlCommand(new CreatePartitionCommand(partitionName), refreshResponseReceiver);
                 }
             }
         });
@@ -252,5 +250,31 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             }
         });
         dialog.show();
+    }
+
+    private final class RefreshEntitiesResponseReceiver extends ResponseReceiver<ResponseResult> {
+
+        @Override
+        public void receiveResponse(ResponseResult response) {
+            if (!response.isSuccess()) {
+                Boast.makeText(PartitionsActivity.this, R.string.partitions_server_error_toast).show();
+            }
+
+            updatingPartitionsHandle.cancelTask();
+            updatingPartitionsHandle = MusicPlayerControl.getPartitions(new ResponseReceiver<String[]>() {
+                @Override
+                public void receiveResponse(String[] response) {
+                    partitions = response;
+                    ListView listView = findListView();
+                    if (listView != null) {
+                        ArrayAdapter<String> arrayAdapter = Utils.cast(listView.getAdapter());
+                        arrayAdapter.setNotifyOnChange(false);
+                        arrayAdapter.clear();
+                        arrayAdapter.addAll(partitions);
+                        arrayAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
     }
 }
