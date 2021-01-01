@@ -17,11 +17,6 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
     private String partition;
     private Param param;
 
-    public MpdConnectionCommand(Param param) {
-        this.partition = null;
-        this.param = param;
-    }
-
     public MpdConnectionCommand(String partition, Param param) {
         this.partition = partition;
         this.param = param;

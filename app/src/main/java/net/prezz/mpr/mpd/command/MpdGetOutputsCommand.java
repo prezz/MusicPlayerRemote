@@ -9,8 +9,8 @@ import net.prezz.mpr.mpd.connection.MpdConnection;
 
 public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput[]>{
 
-    public MpdGetOutputsCommand() {
-        super(null);
+    public MpdGetOutputsCommand(String partition) {
+        super(partition, null);
     }
 
     @Override

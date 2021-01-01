@@ -8,8 +8,8 @@ import java.util.List;
 
 public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, String[]>{
 
-    public MpdGetPartitionsCommand() {
-        super(null);
+    public MpdGetPartitionsCommand(String partition) {
+        super(partition, null);
     }
 
     @Override

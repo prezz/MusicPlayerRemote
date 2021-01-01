@@ -271,7 +271,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
-        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(storedPlaylist);
+        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(partition, storedPlaylist);
         return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
             @Override
             public void receive(PlaylistEntity[] result) {
@@ -282,7 +282,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getOutputs(final ResponseReceiver<AudioOutput[]> responseReceiver) {
-        MpdGetOutputsCommand command = new MpdGetOutputsCommand();
+        MpdGetOutputsCommand command = new MpdGetOutputsCommand(partition);
         return command.execute(connection, new MpdConnectionCommandReceiver<AudioOutput[]>() {
             @Override
             public void receive(AudioOutput[] result) {
@@ -293,7 +293,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getStatistics(final ResponseReceiver<Statistics> responseReceiver) {
-        MpdGetStatisticsCommand command = new MpdGetStatisticsCommand();
+        MpdGetStatisticsCommand command = new MpdGetStatisticsCommand(partition);
         return command.execute(connection, new MpdConnectionCommandReceiver<Statistics>() {
             @Override
             public void receive(Statistics result) {
@@ -304,7 +304,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPartitions(final ResponseReceiver<String[]> responseReceiver) {
-        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand();
+        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(partition);
         return command.execute(connection, new MpdConnectionCommandReceiver<String[]>() {
             @Override
             public void receive(String[] result) {

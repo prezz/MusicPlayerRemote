@@ -6,8 +6,8 @@ import net.prezz.mpr.mpd.connection.MpdConnection;
 
 public class MpdGetStatisticsCommand extends MpdConnectionCommand<Void, Statistics>{
 
-    public MpdGetStatisticsCommand() {
-        super(null);
+    public MpdGetStatisticsCommand(String partition) {
+        super(partition, null);
     }
 
     @Override
