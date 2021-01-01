@@ -2,10 +2,12 @@
 
     <string name="partitions_activity_title">Manage partitions</string>
 
-    <string name="partitions_add_button">Add partition</string>
+    <string name="partitions_create_button">Create partition</string>
 
     <string-array name="partitions_context_menu">
         <item>Delete</item>
     </string-array>
+
+    <string name="partitions_invalid_name_toast">Invalid partition name</string>
 
 </resources>

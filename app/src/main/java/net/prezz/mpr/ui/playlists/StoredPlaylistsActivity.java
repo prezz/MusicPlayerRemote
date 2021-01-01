@@ -194,10 +194,10 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
 
     public void onChoiceMenuClick(View view) {
         if (adapterEntities != null) {
-               final String[] items = getResources().getStringArray(R.array.stored_playlists_choice_menu);
+            final String[] items = getResources().getStringArray(R.array.stored_playlists_choice_menu);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-             builder.setTitle(getTitle());
+            builder.setTitle(getTitle());
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                     switch(item) {

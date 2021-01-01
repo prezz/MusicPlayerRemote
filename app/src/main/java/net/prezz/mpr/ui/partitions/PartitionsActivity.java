@@ -2,7 +2,8 @@ package net.prezz.mpr.ui.partitions;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -11,9 +12,11 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -24,6 +27,8 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.model.command.CreatePartitionCommand;
+import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
@@ -104,11 +109,10 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     public void onItemClick(AdapterView<?> parent, View view, int position,    long id) {
     }
 
-    public void onAddPartitionClick(View view) {
-    }
-
-    @Override 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onCreatePartitionClick(View view) {
+        if (partitions != null) {
+            createPartition();
+        }
     }
 
     @Override
@@ -184,5 +188,39 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     private ProgressBar findProgressBar() {
         return (ProgressBar)this.findViewById(R.id.partitions_progress_bar_load);
+    }
+
+    private void createPartition() {
+        final EditText editTextView = new EditText(PartitionsActivity.this);
+        editTextView.setSingleLine();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(PartitionsActivity.this);
+        builder.setTitle(R.string.partitions_create_button);
+        builder.setView(editTextView);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                final String partitionName = editTextView.getText().toString();
+                if (partitionName.isEmpty() || Arrays.asList(partitions).contains(partitionName)) {
+                    Boast.makeText(PartitionsActivity.this, R.string.partitions_invalid_name_toast).show();
+                } else {
+                    MusicPlayerControl.sendControlCommand(new CreatePartitionCommand(partitionName));
+                }
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        editTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }
+        });
+        dialog.show();
     }
 }

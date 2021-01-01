@@ -47,8 +47,8 @@
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:padding="8dp"
-            android:contentDescription="@string/partitions_add_button"
-            android:onClick="onAddPartitionClick"
+            android:contentDescription="@string/partitions_create_button"
+            android:onClick="onCreatePartitionClick"
             android:scaleType="fitCenter"
             android:tint="?iconColor"
             android:src="@drawable/ic_add" />
