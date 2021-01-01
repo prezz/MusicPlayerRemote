@@ -24,6 +24,7 @@ import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.service.StreamingService;
 import net.prezz.mpr.ui.DatabaseActivity;
 import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
@@ -131,13 +132,13 @@ public class PlayerActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
-        MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
+        MusicPlayerControl.setStatusListener(musicPlayerRefreshListener, PartitionHelper.getClientPartition(this));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MusicPlayerControl.setStatusListener(null);
+        MusicPlayerControl.setStatusListener(null, null);
         updatePlaylistHandle.cancelTask();
         aMpdLaunchHandle.cancelTask();
         selectOutputsHandle.cancelTask();
@@ -404,7 +405,7 @@ public class PlayerActivity extends FragmentActivity {
             if (!currentMpdSettings.getMpdHost().isEmpty()) {
                 MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings));
                 if (connectStatusListener) {
-                    MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
+                    MusicPlayerControl.setStatusListener(musicPlayerRefreshListener, PartitionHelper.getClientPartition(this));
                 }
 //                PlaybackService.start();
                 ensureLocalServer();

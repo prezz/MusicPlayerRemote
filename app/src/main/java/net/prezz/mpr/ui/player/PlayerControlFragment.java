@@ -145,8 +145,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         }
 
         boolean showOutput = showOutput();
-        if (showOutput != outputVisible || !Arrays.equals(playerStatus.getAudioOutputs(), status.getAudioOutputs())) {
-            setOutputText(showOutput, status.getAudioOutputs());
+        if (showOutput != outputVisible || !Utils.equals(playerStatus.getPartition(), status.getPartition()) || !Arrays.equals(playerStatus.getAudioOutputs(), status.getAudioOutputs())) {
+            setOutputText(showOutput, status.getPartition(), status.getAudioOutputs());
             outputVisible = showOutput;
         }
 
@@ -547,13 +547,11 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         }
     }
 
-    public void setOutputText(boolean visible, AudioOutput[] audioOutputs) {
+    public void setOutputText(boolean visible, String partition, AudioOutput[] audioOutputs) {
 
         final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
 
         if (visible) {
-            final String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
-
             StringBuilder outputName = new StringBuilder();
             for (int i = 0; i < audioOutputs.length; i++) {
                 if (audioOutputs[i].isEnabled()) {
@@ -564,7 +562,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                 }
             }
 
-            textView.setText(serverName + " - " + outputName);
+            textView.setText(partition + " - " + outputName);
             textView.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.GONE);

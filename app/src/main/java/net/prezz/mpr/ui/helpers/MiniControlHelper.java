@@ -42,7 +42,7 @@ public class MiniControlHelper implements StatusListener {
             switch (view.getVisibility()) {
                 case View.GONE:
                     view.setVisibility(View.VISIBLE);
-                    MusicPlayerControl.setStatusListener(this);
+                    MusicPlayerControl.setStatusListener(this, PartitionHelper.getClientPartition(activity));
                     break;
                 case View.VISIBLE:
                     doHideVisability(view);
@@ -76,7 +76,7 @@ public class MiniControlHelper implements StatusListener {
     private void doHideVisability(View view) {
         if (view != null) {
             taskHandler.cancelTask();
-            MusicPlayerControl.setStatusListener(null);
+            MusicPlayerControl.setStatusListener(null, null);
             view.setVisibility(View.GONE);
         }
     }

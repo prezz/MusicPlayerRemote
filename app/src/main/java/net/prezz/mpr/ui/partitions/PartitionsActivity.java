@@ -33,6 +33,7 @@ import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
@@ -134,7 +135,10 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,    long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String partition = partitions[position];
+        PartitionHelper.setClientPartition(this, partition);
+        // TODO: restart notification and streaming service etc. or consider stopping the player on the old partition
     }
 
     public void onCreatePartitionClick(View view) {

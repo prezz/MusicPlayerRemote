@@ -36,7 +36,7 @@ public class MpdStatusMonitor extends Handler {
         this.statusListener = null;
     }
 
-    public void setStatusListener(StatusListener listener) {
+    public void setStatusListener(StatusListener listener, String partition) {
         if (monitor != null) {
             monitor.abort();
             monitor = null;
@@ -45,7 +45,7 @@ public class MpdStatusMonitor extends Handler {
         statusListener = listener;
 
         if (statusListener != null) {
-            monitor = new Monitor(settings);
+            monitor = new Monitor(settings, partition);
             executor.execute(monitor);
         }
     }
@@ -73,13 +73,15 @@ public class MpdStatusMonitor extends Handler {
         private final Object lock = new Object();
 
         private MpdConnection connection;
+        private String partition;
         private boolean running;
         private boolean connected;
         private int errorCount;
         private int connectionHash;
 
-        public Monitor(MpdSettings settings) {
+        public Monitor(MpdSettings settings, String partition) {
             this.connection = new MpdConnection(settings, 60000 * 5);
+            this.partition = partition;
             this.running = true;
             this.connected = false;
             this.errorCount = 0;
@@ -90,7 +92,7 @@ public class MpdStatusMonitor extends Handler {
             synchronized (lock) {
                 running = false;
                 try {
-                    executor.execute(new Abort(connection));
+                    executor.execute(new Abort(connection, partition));
                 } catch (Exception ex) {
                     Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);
                 }
@@ -117,6 +119,7 @@ public class MpdStatusMonitor extends Handler {
                     }
 
                     connection.connect();
+                    connection.setPartition(partition);
                     synchronized (lock) {
                         if (!running) {
                             break;
@@ -156,6 +159,7 @@ public class MpdStatusMonitor extends Handler {
             while (running) {
                 try {
                     connection.connect();
+                    connection.setPartition(partition);
                     PlayerStatus status = new PlayerStatus(true);
 
                     String[] statusLines = connection.writeResponseCommand("status\n");
@@ -213,6 +217,10 @@ public class MpdStatusMonitor extends Handler {
                         if (line.startsWith("volume: ")) {
                             String s = line.substring(8);
                             status.setVolume(Integer.parseInt(s));
+                        }
+                        if (line.startsWith("partition: ")) {
+                            String s = line.substring(11);
+                            status.setPartition(s);
                         }
                     }
 
@@ -291,14 +299,18 @@ public class MpdStatusMonitor extends Handler {
     private static final class Abort implements Runnable {
 
         private MpdConnection connection;
+        private String partition;
 
-        public Abort(MpdConnection connection) {
+        public Abort(MpdConnection connection, String partition) {
             this.connection = connection;
+            this.partition = partition;
         }
 
         @Override
         public void run() {
             try {
+                connection.connect();
+                connection.setPartition(partition);
                 connection.writeCommand("noidle\n");
             } catch (Exception ex) {
                 Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);

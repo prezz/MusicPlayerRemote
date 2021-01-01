@@ -58,7 +58,7 @@ public class MpdPlayer implements MusicPlayer {
         connection = null;
 
         if (monitor != null) {
-            monitor.setStatusListener(null);
+            monitor.setStatusListener(null, null);
             monitor = null;
         }
 
@@ -69,8 +69,8 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public void setStatusListener(StatusListener listener) {
-        monitor.setStatusListener(listener);
+    public void setStatusListener(StatusListener listener, String partition) {
+        monitor.setStatusListener(listener, partition);
     }
 
     @Override

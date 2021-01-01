@@ -18,6 +18,7 @@ public class PlayerStatus implements Serializable {
     private int volume;
     private int elapsedTime;
     private int totalTime;
+    private String partition;
     private AudioOutput[] audioOutputs;
 
 
@@ -34,6 +35,7 @@ public class PlayerStatus implements Serializable {
         this.volume = 0;
         this.elapsedTime = 0;
         this.totalTime = 0;
+        this.partition = "";
         this.audioOutputs = new AudioOutput[0];
     }
 
@@ -123,6 +125,14 @@ public class PlayerStatus implements Serializable {
 
     public void setTotalTime(int totalTime) {
         this.totalTime = totalTime;
+    }
+
+    public String getPartition() {
+        return partition;
+    }
+
+    public void setPartition(String partition) {
+        this.partition = partition;
     }
 
     public AudioOutput[] getAudioOutputs() {

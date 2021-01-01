@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.prezz.mpr.Utils;
 import net.prezz.mpr.mpd.MpdSettings;
 import android.util.Log;
 
@@ -27,6 +28,7 @@ public class MpdConnection {
     private BufferedWriter writer;
     private BufferedInputStream inputStream;
     private int[] version;
+    private String partition;
 
     
     public MpdConnection(MpdSettings settings) {
@@ -70,6 +72,7 @@ public class MpdConnection {
                 }
                 
                 version = parseVersion(split[2]);
+                partition = null;
                 
                 String password = settings.getMpdPassword();
                 if (password != null && !password.isEmpty()) {
@@ -84,6 +87,13 @@ public class MpdConnection {
                 disconnect();
                 throw ex;
             }
+        }
+    }
+
+    public void setPartition(String partition) throws IOException {
+        if (isConnected() && partition != null && !Utils.equals(partition, this.partition) && isMinimumVersion(0, 22, 0)) {
+            writeResponseCommand(String.format("partition %s\n", partition), RejectAllFilter.INSTANCE);
+            this.partition = partition;
         }
     }
     
@@ -111,6 +121,8 @@ public class MpdConnection {
         writer = null;
         inputStream = null;
         socket = null;
+        version = null;
+        partition = null;
     }
     
     public boolean isMinimumVersion(int major, int minor, int point) {

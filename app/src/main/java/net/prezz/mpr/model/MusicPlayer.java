@@ -9,7 +9,7 @@ public interface MusicPlayer {
 
     void dispose();
 
-    void setStatusListener(StatusListener listener);
+    void setStatusListener(StatusListener listener, String partition);
 
     TaskHandle deleteLocalLibraryDatabase(ResponseReceiver<Boolean> responseReceiver);
 

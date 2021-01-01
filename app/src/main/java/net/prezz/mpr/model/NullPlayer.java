@@ -18,7 +18,7 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
-    public void setStatusListener(StatusListener listener) {
+    public void setStatusListener(StatusListener listener, String partition) {
     }
 
     @Override

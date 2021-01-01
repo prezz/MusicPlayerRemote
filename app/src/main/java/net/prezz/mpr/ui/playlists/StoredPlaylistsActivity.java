@@ -174,7 +174,7 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,    long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         StoredPlaylistAdapterEntity storedPlaylist = adapterEntities[position];
         Intent intent = new Intent(this, PlaylistDetailsActivity.class);
         Bundle args = new Bundle();

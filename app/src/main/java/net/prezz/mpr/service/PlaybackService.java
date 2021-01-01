@@ -21,6 +21,7 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.mpd.MpdPlayer;
 import net.prezz.mpr.ui.ApplicationActivator;
+import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import net.prezz.mpr.ui.player.PlayerActivity;
@@ -145,7 +146,7 @@ public class PlaybackService extends Service {
         playerStatus = new PlayerStatus(false);
 
         playerInfoRefreshListener = new PlayerInfoRefreshListener();
-        player.setStatusListener(playerInfoRefreshListener);
+        player.setStatusListener(playerInfoRefreshListener, PartitionHelper.getClientPartition(this));
 
         return START_STICKY;
     }
@@ -422,9 +423,9 @@ public class PlaybackService extends Service {
             } else if (CMD_NEXT.equals(action)) {
                 sendControlCommand(new NextCommand());
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                player.setStatusListener(playerInfoRefreshListener);
+                player.setStatusListener(playerInfoRefreshListener, PartitionHelper.getClientPartition(context));
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                player.setStatusListener(null);
+                player.setStatusListener(null, null);
             }
         }
 

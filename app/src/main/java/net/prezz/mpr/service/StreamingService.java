@@ -38,6 +38,7 @@ import net.prezz.mpr.model.command.PreviousCommand;
 import net.prezz.mpr.mpd.MpdPlayer;
 import net.prezz.mpr.ui.ApplicationActivator;
 import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import net.prezz.mpr.ui.player.PlayerActivity;
 
@@ -290,7 +291,7 @@ public class StreamingService extends Service {
 
         MpdPlayerSettings settings = MpdPlayerSettings.create(this);
         mpdPlayer = new MpdPlayer(settings);
-        mpdPlayer.setStatusListener(new PlayerInfoRefreshListener());
+        mpdPlayer.setStatusListener(new PlayerInfoRefreshListener(), PartitionHelper.getClientPartition(this));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
