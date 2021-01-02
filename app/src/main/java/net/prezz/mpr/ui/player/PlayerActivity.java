@@ -11,7 +11,6 @@ import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
 import net.prezz.mpr.model.ResponseReceiver;
-import net.prezz.mpr.model.Statistics;
 import net.prezz.mpr.model.StatusListener;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.Command;
@@ -24,7 +23,6 @@ import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.service.StreamingService;
 import net.prezz.mpr.ui.DatabaseActivity;
 import net.prezz.mpr.ui.helpers.Boast;
-import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
@@ -387,8 +385,7 @@ public class PlayerActivity extends FragmentActivity {
             alert.show();
             return false;
         } else {
-            String partition = PartitionHelper.getClientPartition(getApplicationContext());
-            MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings, partition));
+            MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings));
             return true;
         }
     }
@@ -400,8 +397,7 @@ public class PlayerActivity extends FragmentActivity {
             updateOptionsMenu(mpdSettings);
             currentMpdSettings = mpdSettings;
             if (!currentMpdSettings.getMpdHost().isEmpty()) {
-                String partition = PartitionHelper.getClientPartition(getApplicationContext());
-                MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings, partition));
+                MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings));
                 if (connectStatusListener) {
                     MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
                 }

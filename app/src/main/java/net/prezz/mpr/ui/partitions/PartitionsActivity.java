@@ -37,7 +37,6 @@ import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
 import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
-import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
@@ -144,7 +143,6 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         PartitionAdapterEntity entity = adapterEntities[position];
         PartitionEntity partitionEntity = entity.getEntity();
-        PartitionHelper.setClientPartition(this, partitionEntity.getPartitionName());
 
         if (!partitionEntity.isClientPartition()) {
             PlaybackService.stop();

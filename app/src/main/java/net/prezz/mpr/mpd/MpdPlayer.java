@@ -45,21 +45,21 @@ public class MpdPlayer implements MusicPlayer {
 
     private MpdConnection connection;
     private MpdStatusMonitor monitor;
+    private MpdPartitionStore partitionStore;
     private MpdLibraryDatabaseHelper databaseHelper;
-    private String partition;
 
 
-    public MpdPlayer(MpdSettings settings, String partition) {
+    public MpdPlayer(MpdSettings settings) {
         this.connection = new MpdConnection(settings);
         this.monitor = new MpdStatusMonitor(settings);
+        this.partitionStore = new MpdPartitionStore(ApplicationActivator.getContext(), settings);
         this.databaseHelper = new MpdLibraryDatabaseHelper(ApplicationActivator.getContext(), settings.getMpdHost());
-        this.partition = partition;
     }
 
     @Override
     public void dispose() {
-        partition = null;
         connection = null;
+        partitionStore = null;
 
         if (monitor != null) {
             monitor.setStatusListener(null, null);
@@ -74,7 +74,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public void setStatusListener(StatusListener listener) {
-        monitor.setStatusListener(listener, partition);
+        monitor.setStatusListener(listener, partitionStore.getPartition());
     }
 
     @Override
@@ -239,7 +239,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPlaylist(final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
-        MpdGetPlaylistCommand command = new MpdGetPlaylistCommand(partition);
+        MpdGetPlaylistCommand command = new MpdGetPlaylistCommand(partitionStore.getPartition());
         return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
             @Override
             public void receive(PlaylistEntity[] result) {
@@ -250,7 +250,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPlaylistEntity(int position, final ResponseReceiver<PlaylistEntity> responseReceiver) {
-        MpdGetPlaylistEntityCommand command = new MpdGetPlaylistEntityCommand(partition, position);
+        MpdGetPlaylistEntityCommand command = new MpdGetPlaylistEntityCommand(partitionStore.getPartition(), position);
         return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity>() {
             @Override
             public void receive(PlaylistEntity result) {
@@ -261,7 +261,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getStoredPlaylists(final ResponseReceiver<StoredPlaylistEntity[]> responseReceiver) {
-        MpdGetStoredPlaylistsCommand command = new MpdGetStoredPlaylistsCommand(partition);
+        MpdGetStoredPlaylistsCommand command = new MpdGetStoredPlaylistsCommand(partitionStore.getPartition());
         return command.execute(connection, new MpdConnectionCommandReceiver<StoredPlaylistEntity[]>() {
             @Override
             public void receive(StoredPlaylistEntity[] result) {
@@ -272,7 +272,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
-        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(partition, storedPlaylist);
+        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(partitionStore.getPartition(), storedPlaylist);
         return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
             @Override
             public void receive(PlaylistEntity[] result) {
@@ -283,7 +283,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getOutputs(final ResponseReceiver<AudioOutput[]> responseReceiver) {
-        MpdGetOutputsCommand command = new MpdGetOutputsCommand(partition);
+        MpdGetOutputsCommand command = new MpdGetOutputsCommand(partitionStore.getPartition());
         return command.execute(connection, new MpdConnectionCommandReceiver<AudioOutput[]>() {
             @Override
             public void receive(AudioOutput[] result) {
@@ -294,7 +294,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getStatistics(final ResponseReceiver<Statistics> responseReceiver) {
-        MpdGetStatisticsCommand command = new MpdGetStatisticsCommand(partition);
+        MpdGetStatisticsCommand command = new MpdGetStatisticsCommand(partitionStore.getPartition());
         return command.execute(connection, new MpdConnectionCommandReceiver<Statistics>() {
             @Override
             public void receive(Statistics result) {
@@ -305,7 +305,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPartitions(final ResponseReceiver<PartitionEntity[]> responseReceiver) {
-        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(partition);
+        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(partitionStore.getPartition());
         return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
             @Override
             public void receive(PartitionEntity[] result) {
@@ -320,7 +320,7 @@ public class MpdPlayer implements MusicPlayer {
         return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
             @Override
             public void receive(PartitionEntity[] result) {
-                MpdPlayer.this.partition = partition;
+                partitionStore.savePartition(partition);
                 monitor.switchPartition(partition);
 
                 responseReceiver.receiveResponse(result);
@@ -330,7 +330,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle sendControlCommands(List<Command> commands, final ResponseReceiver<ResponseResult> responseReceiver) {
-        MpdSendControlCommands command = new MpdSendControlCommands(partition, commands);
+        MpdSendControlCommands command = new MpdSendControlCommands(partitionStore.getPartition(), commands);
         return command.execute(connection, new MpdConnectionCommandReceiver<ResponseResult>() {
             @Override
             public void receive(ResponseResult result) {

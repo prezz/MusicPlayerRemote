@@ -21,7 +21,6 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.mpd.MpdPlayer;
 import net.prezz.mpr.ui.ApplicationActivator;
-import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import net.prezz.mpr.ui.player.PlayerActivity;
@@ -143,8 +142,7 @@ public class PlaybackService extends Service {
 
         updateNotification(isForegroundService);
 
-        String partition = PartitionHelper.getClientPartition(this);
-        player = new MpdPlayer(settings, partition);
+        player = new MpdPlayer(settings);
         playerStatus = new PlayerStatus(false);
 
         playerInfoRefreshListener = new PlayerInfoRefreshListener();
