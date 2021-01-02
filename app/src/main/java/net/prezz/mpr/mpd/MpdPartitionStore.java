@@ -18,12 +18,16 @@ public class MpdPartitionStore {
         this.partition = null;
     }
 
-    public void savePartition(String partition) {
-        this.partition = null;
+    public void putPartition(String partition) {
+        this.partition = null; // force load in get method
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(preferenceKey, partition);
+        if (partition == null) {
+            editor.remove(preferenceKey);
+        } else {
+            editor.putString(preferenceKey, partition);
+        }
         editor.commit();
     }
 

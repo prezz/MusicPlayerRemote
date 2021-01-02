@@ -320,7 +320,7 @@ public class MpdPlayer implements MusicPlayer {
         return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
             @Override
             public void receive(PartitionEntity[] result) {
-                partitionStore.savePartition(partition);
+                partitionStore.putPartition(partition);
                 monitor.switchPartition(partition);
 
                 responseReceiver.receiveResponse(result);
