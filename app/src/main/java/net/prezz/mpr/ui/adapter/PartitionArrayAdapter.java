@@ -1,6 +1,7 @@
 package net.prezz.mpr.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,15 +49,19 @@ public class PartitionArrayAdapter extends ArrayAdapter<PartitionAdapterEntity> 
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout view = (LinearLayout)convertView;
 
+        PartitionAdapterEntity entity = getItem(position);
+
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = (LinearLayout)inflater.inflate(R.layout.view_list_item_partition, parent, false);
+            if (entity.getEntity().isClientPartition()) {
+                view = (LinearLayout) inflater.inflate(R.layout.view_list_item_partition_selected, parent, false);
+            } else {
+                view = (LinearLayout) inflater.inflate(R.layout.view_list_item_partition, parent, false);
+            }
         }
 
         TextView textView1 = (TextView)view.findViewById(R.id.partition_list_item_text1);
         TextView textView2 = (TextView)view.findViewById(R.id.partition_list_item_text2);
-
-        PartitionAdapterEntity entity = getItem(position);
 
         textView1.setText(entity.getText());
         textView2.setText(entity.getSubText());

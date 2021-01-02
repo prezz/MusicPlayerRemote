@@ -127,6 +127,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionEntity partitionEntity = entity.getEntity();
         switch (item.getItemId()) {
             case 0:
+                // unable to delete if it is current client partition and f it has outputs
                 if (Utils.equals("default", entity.getText())) {
                     Boast.makeText(PartitionsActivity.this, R.string.partitions_delete_default_toast).show();
                 } else {
