@@ -33,6 +33,8 @@ import net.prezz.mpr.model.ResponseResult;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
+import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
+import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.PartitionHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
@@ -48,7 +50,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     private final RefreshEntitiesResponseReceiver refreshResponseReceiver = new RefreshEntitiesResponseReceiver();
 
-    private PartitionEntity[] partitionEntities = null;
+    private PartitionAdapterEntity[] adapterEntities = null;
     private boolean updating = false;
     private TaskHandle updatingPartitionsHandle = TaskHandle.NULL_HANDLE;
 
@@ -68,7 +70,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             //restore entities if loaded into memory again (or after rotation)
             Object[] objectEntities = (Object[]) dataFragment.getData(PARTITIONS_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
-                partitionEntities = Arrays.copyOf(objectEntities, objectEntities.length, PartitionEntity[].class);
+                adapterEntities = Arrays.copyOf(objectEntities, objectEntities.length, PartitionAdapterEntity[].class);
             }
         }
 
@@ -88,7 +90,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     public void onSaveInstanceState(Bundle outState) {
         DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
         if (dataFragment != null) {
-            dataFragment.setData(PARTITIONS_SAVED_INSTANCE_STATE, partitionEntities);
+            dataFragment.setData(PARTITIONS_SAVED_INSTANCE_STATE, adapterEntities);
         }
 
         super.onSaveInstanceState(outState);
@@ -108,8 +110,8 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.partitions_list_view_browse) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            PartitionEntity partition = partitionEntities[info.position];
-            menu.setHeaderTitle(partition.getPartitionName());
+            PartitionAdapterEntity entity = adapterEntities[info.position];
+            menu.setHeaderTitle(entity.getText());
             String[] menuItems = getResources().getStringArray(R.array.partitions_context_menu);
             for (int i = 0; i < menuItems.length; i++) {
                 MenuItem menuItem = menu.add(Menu.NONE, i, i, menuItems[i]);
@@ -121,13 +123,14 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        PartitionEntity partition = partitionEntities[info.position];
+        PartitionAdapterEntity entity = adapterEntities[info.position];
+        PartitionEntity partitionEntity = entity.getEntity();
         switch (item.getItemId()) {
             case 0:
-                if (Utils.equals("default", partition.getPartitionName())) {
+                if (Utils.equals("default", entity.getText())) {
                     Boast.makeText(PartitionsActivity.this, R.string.partitions_delete_default_toast).show();
                 } else {
-                    MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partition.getPartitionName()), refreshResponseReceiver);
+                    MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partitionEntity.getPartitionName()), refreshResponseReceiver);
                 }
                 return true;
         }
@@ -137,14 +140,15 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        PartitionEntity partition = partitionEntities[position];
-        PartitionHelper.setClientPartition(this, partition.getPartitionName());
+        PartitionAdapterEntity entity = adapterEntities[position];
+        PartitionEntity partitionEntity = entity.getEntity();
+        PartitionHelper.setClientPartition(this, partitionEntity.getPartitionName());
         // TODO: restart notification and streaming service etc. or consider stopping the player on the old partition
         // TODO: consider deleting RemoteWidgetProvider
     }
 
     public void onCreatePartitionClick(View view) {
-        if (partitionEntities != null) {
+        if (adapterEntities != null) {
             createPartition();
         }
     }
@@ -174,32 +178,40 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     }
 
     private void updateEntities() {
-        if (partitionEntities != null) {
-            createEntityAdapter(partitionEntities);
+        if (adapterEntities != null) {
+            createEntityAdapter(adapterEntities);
         } else if (!updating) {
             showUpdatingIndicator();
             updatingPartitionsHandle.cancelTask();
             updatingPartitionsHandle = MusicPlayerControl.getPartitions(new ResponseReceiver<PartitionEntity[]>() {
                 @Override
                 public void receiveResponse(PartitionEntity[] response) {
-                    partitionEntities = response;
-                    createEntityAdapter(partitionEntities);
+                    adapterEntities = createAdapterEntities(response);
+                    createEntityAdapter(adapterEntities);
                     hideUpdatingIndicator();
                 }
             });
         }
     }
 
-    private void createEntityAdapter(PartitionEntity[] entities) {
+    private PartitionAdapterEntity[] createAdapterEntities(PartitionEntity[] entities) {
+        ArrayList<PartitionAdapterEntity> result = new ArrayList<PartitionAdapterEntity>(entities.length);
+        for (int i = 0; i < entities.length; i++) {
+            result.add(new PartitionAdapterEntity(entities[i]));
+        }
+        return result.toArray(new PartitionAdapterEntity[result.size()]);
+    }
+
+    private void createEntityAdapter(PartitionAdapterEntity[] adapterEntities) {
         ListView listView = findListView();
         if (listView != null) {
-            ListAdapter adapter = createAdapter(entities);
+            ListAdapter adapter = createAdapter(adapterEntities);
             listView.setAdapter(adapter);
         }
     }
 
-    private ListAdapter createAdapter(PartitionEntity[] entities) {
-        return new ArrayAdapter<PartitionEntity>(this, android.R.layout.simple_list_item_1, new ArrayList<PartitionEntity>(Arrays.asList(entities)));
+    private ListAdapter createAdapter(PartitionAdapterEntity[] adapterEntities) {
+        return new PartitionArrayAdapter(this, android.R.layout.simple_list_item_2, new ArrayList<PartitionAdapterEntity>(Arrays.asList(adapterEntities)));
     }
 
     private ListView findListView() {
@@ -235,7 +247,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 final String partitionName = editTextView.getText().toString();
-                if (partitionName.isEmpty() || Arrays.asList(getPartitionNames(partitionEntities)).contains(partitionName)) {
+                if (partitionName.isEmpty() || Arrays.asList(getPartitionNames(adapterEntities)).contains(partitionName)) {
                     Boast.makeText(PartitionsActivity.this, R.string.partitions_invalid_name_toast).show();
                 } else {
                     MusicPlayerControl.sendControlCommand(new CreatePartitionCommand(partitionName), refreshResponseReceiver);
@@ -259,10 +271,10 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         dialog.show();
     }
 
-    private String[] getPartitionNames(PartitionEntity[] entities) {
-        String[] result = new String[entities.length];
-        for (int i = 0; i < entities.length; i++) {
-            result[i] = entities[i].getPartitionName();
+    private String[] getPartitionNames(PartitionAdapterEntity[] adapterEntities) {
+        String[] result = new String[adapterEntities.length];
+        for (int i = 0; i < adapterEntities.length; i++) {
+            result[i] = adapterEntities[i].getEntity().getPartitionName();
         }
         return result;
     }
@@ -279,13 +291,13 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             updatingPartitionsHandle = MusicPlayerControl.getPartitions(new ResponseReceiver<PartitionEntity[]>() {
                 @Override
                 public void receiveResponse(PartitionEntity[] response) {
-                    partitionEntities = response;
+                    adapterEntities = createAdapterEntities(response);
                     ListView listView = findListView();
                     if (listView != null) {
-                        ArrayAdapter<PartitionEntity> arrayAdapter = Utils.cast(listView.getAdapter());
+                        ArrayAdapter<PartitionAdapterEntity> arrayAdapter = Utils.cast(listView.getAdapter());
                         arrayAdapter.setNotifyOnChange(false);
                         arrayAdapter.clear();
-                        arrayAdapter.addAll(partitionEntities);
+                        arrayAdapter.addAll(adapterEntities);
                         arrayAdapter.notifyDataSetChanged();
                     }
                 }
