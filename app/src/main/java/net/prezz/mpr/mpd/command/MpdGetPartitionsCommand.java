@@ -1,40 +1,51 @@
 package net.prezz.mpr.mpd.command;
 
+import net.prezz.mpr.model.AudioOutput;
+import net.prezz.mpr.model.PartitionEntity;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, String[]>{
+public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, PartitionEntity[]>{
 
     public MpdGetPartitionsCommand(String partition) {
         super(partition, null);
     }
 
     @Override
-    protected String[] doExecute(MpdConnection connection, Void param) throws Exception {
+    protected PartitionEntity[] doExecute(MpdConnection connection, Void param) throws Exception {
 
         if (connection.isMinimumVersion(0, 22, 0)) {
 
             String[] lines = connection.writeResponseCommand("listpartitions\n");
 
-            List<String> result = new ArrayList<String>();
+            List<String> partitions = new ArrayList<String>();
 
             for (String line : lines) {
                 if (line.startsWith("partition: ")) {
-                    result.add(line.substring(11));
+                    partitions.add(line.substring(11));
                 }
             }
 
-            return result.toArray(new String[result.size()]);
+            List<PartitionEntity> result = new ArrayList<PartitionEntity>();
+
+            MpdGetOutputsCommand getOutputsCommand = new MpdGetOutputsCommand(null);
+            for (String partition : partitions) {
+                connection.setPartition(partition);
+                AudioOutput[] audioOutputs = getOutputsCommand.doExecute(connection, null);
+                result.add(new PartitionEntity(partition, audioOutputs));
+            }
+
+            return result.toArray(new PartitionEntity[result.size()]);
         } else {
-            return new String[0];
+            return new PartitionEntity[0];
         }
     }
 
     @Override
-    protected String[] onError() {
-        return new String[0];
+    protected PartitionEntity[] onError() {
+        return new PartitionEntity[0];
     }
 }

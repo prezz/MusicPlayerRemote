@@ -88,7 +88,7 @@ public class MusicPlayerControl {
         return musicPlayer.getStatistics(responseReceiver);
     }
 
-    public static TaskHandle getPartitions(ResponseReceiver<String[]> responseReceiver) {
+    public static TaskHandle getPartitions(ResponseReceiver<PartitionEntity[]> responseReceiver) {
         return musicPlayer.getPartitions(responseReceiver);
     }
 

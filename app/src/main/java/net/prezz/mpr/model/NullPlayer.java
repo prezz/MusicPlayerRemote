@@ -102,7 +102,7 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getPartitions(final ResponseReceiver<String[]> responseReceiver) {
+    public TaskHandle getPartitions(final ResponseReceiver<PartitionEntity[]> responseReceiver) {
         return createNullHandle();
     }
 

@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayer;
+import net.prezz.mpr.model.PartitionEntity;
 import net.prezz.mpr.model.PlaylistEntity;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.ResponseResult;
@@ -303,11 +304,11 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getPartitions(final ResponseReceiver<String[]> responseReceiver) {
+    public TaskHandle getPartitions(final ResponseReceiver<PartitionEntity[]> responseReceiver) {
         MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(partition);
-        return command.execute(connection, new MpdConnectionCommandReceiver<String[]>() {
+        return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
             @Override
-            public void receive(String[] result) {
+            public void receive(PartitionEntity[] result) {
                 responseReceiver.receiveResponse(result);
             }
         });
