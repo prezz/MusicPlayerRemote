@@ -33,6 +33,7 @@ import net.prezz.mpr.model.ResponseResult;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
+import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
 import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
@@ -144,8 +145,16 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionAdapterEntity entity = adapterEntities[position];
         PartitionEntity partitionEntity = entity.getEntity();
         PartitionHelper.setClientPartition(this, partitionEntity.getPartitionName());
-        // TODO: restart notification and streaming service etc. or consider stopping the player on the old partition
-        // TODO: consider deleting RemoteWidgetProvider
+
+        if (!partitionEntity.isClientPartition()) {
+            PlaybackService.stop();
+            MusicPlayerControl.switchPartition(partitionEntity.getPartitionName(), new ResponseReceiver<PartitionEntity[]>() {
+                @Override
+                public void receiveResponse(PartitionEntity[] partitionEntities) {
+                    refreshEntities(partitionEntities);
+                }
+            });
+        }
     }
 
     public void onCreatePartitionClick(View view) {
@@ -280,6 +289,18 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         return result;
     }
 
+    private void refreshEntities(PartitionEntity[] entities) {
+        adapterEntities = createAdapterEntities(entities);
+        ListView listView = findListView();
+        if (listView != null) {
+            ArrayAdapter<PartitionAdapterEntity> arrayAdapter = Utils.cast(listView.getAdapter());
+            arrayAdapter.setNotifyOnChange(false);
+            arrayAdapter.clear();
+            arrayAdapter.addAll(adapterEntities);
+            arrayAdapter.notifyDataSetChanged();
+        }
+    }
+
     private final class RefreshEntitiesResponseReceiver extends ResponseReceiver<ResponseResult> {
 
         @Override
@@ -292,15 +313,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             updatingPartitionsHandle = MusicPlayerControl.getPartitions(new ResponseReceiver<PartitionEntity[]>() {
                 @Override
                 public void receiveResponse(PartitionEntity[] response) {
-                    adapterEntities = createAdapterEntities(response);
-                    ListView listView = findListView();
-                    if (listView != null) {
-                        ArrayAdapter<PartitionAdapterEntity> arrayAdapter = Utils.cast(listView.getAdapter());
-                        arrayAdapter.setNotifyOnChange(false);
-                        arrayAdapter.clear();
-                        arrayAdapter.addAll(adapterEntities);
-                        arrayAdapter.notifyDataSetChanged();
-                    }
+                    refreshEntities(response);
                 }
             });
         }

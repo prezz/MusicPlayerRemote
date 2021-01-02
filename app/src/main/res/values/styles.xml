@@ -9,7 +9,6 @@
         <item name="iconColor">#ff323232</item>
         <item name="playlistDragColor">#c0e3e3e3</item>
         <item name="redFocusColor">#ffd32a2a</item>
-        <item name="listItemSelectionColor">#c0e3e3e3</item>
 
     </style>
 
@@ -22,7 +21,6 @@
         <item name="iconColor">#ffbebebe</item>
         <item name="playlistDragColor">#c0333333</item>
         <item name="redFocusColor">#ffd32a2a</item>
-        <item name="listItemSelectionColor">#c0333333</item>
 
     </style>
 

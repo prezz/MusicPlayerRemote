@@ -389,14 +389,12 @@ public class PlayerActivity extends FragmentActivity {
         } else {
             String partition = PartitionHelper.getClientPartition(getApplicationContext());
             MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings, partition));
-            ensureLocalServer();
             return true;
         }
     }
 
     private boolean reconnectMusicPlayerOnSettingsChanged(boolean connectStatusListener) {
         MpdPlayerSettings mpdSettings = MpdPlayerSettings.create(getApplicationContext());
-        //TODO: also check for partition changed
         if (!mpdSettings.equals(currentMpdSettings)) {
             PlaybackService.stop();
             updateOptionsMenu(mpdSettings);
@@ -407,8 +405,6 @@ public class PlayerActivity extends FragmentActivity {
                 if (connectStatusListener) {
                     MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
                 }
-//                PlaybackService.start();
-                ensureLocalServer();
                 return true;
             } else {
                 MusicPlayerControl.setMusicPlayer(null);
@@ -419,34 +415,6 @@ public class PlayerActivity extends FragmentActivity {
         }
 
         return false;
-    }
-
-    private void ensureLocalServer() {
-        //try to launch aMPD if it isn't running
-        if (Utils.isLocalHost(currentMpdSettings.getMpdHost())) {
-            aMpdLaunchHandle.cancelTask();
-            aMpdLaunchHandle = MusicPlayerControl.getStatistics(new ResponseReceiver<Statistics>() {
-                @Override
-                public void receiveResponse(Statistics response) {
-                    if (response == null) {
-                        String aMpdName = "be.deadba.ampd";
-                        try {
-                            Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(aMpdName);
-                            if (LaunchIntent != null) {
-                                startActivity(LaunchIntent);
-                            } else {
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + aMpdName)));
-                                } catch (ActivityNotFoundException ex) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + aMpdName)));
-                                }
-                            }
-                        } catch (Exception ex) {
-                        }
-                    }
-                }
-            });
-        }
     }
 
     private void startStreaming(String url) {

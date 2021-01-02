@@ -92,6 +92,10 @@ public class MusicPlayerControl {
         return musicPlayer.getPartitions(responseReceiver);
     }
 
+    public static void switchPartition(String partition, ResponseReceiver<PartitionEntity[]> responseReceiver) {
+        musicPlayer.switchPartition(partition, responseReceiver);
+    }
+
     public static void sendControlCommand(Command command) {
         sendControlCommands(Arrays.asList(command), new ResponseReceiver<ResponseResult>() {
             @Override

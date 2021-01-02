@@ -18,7 +18,7 @@
             android:paddingRight="1dp"
             android:maxLines="1"
             android:textSize="20sp"
-            android:textStyle="normal"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/partition_list_item_text2"

@@ -43,7 +43,9 @@ public interface MusicPlayer {
 
     TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver);
 
-    TaskHandle getPartitions(final ResponseReceiver<PartitionEntity[]> responseReceiver);
+    TaskHandle getPartitions(ResponseReceiver<PartitionEntity[]> responseReceiver);
+
+    TaskHandle switchPartition(String partition, ResponseReceiver<PartitionEntity[]> responseReceiver);
 
     TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver);
 }

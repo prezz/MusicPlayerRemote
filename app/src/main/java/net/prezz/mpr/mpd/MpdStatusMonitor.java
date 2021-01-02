@@ -36,6 +36,10 @@ public class MpdStatusMonitor extends Handler {
         this.statusListener = null;
     }
 
+    public void switchPartition(String newPartition) {
+        setStatusListener(statusListener, newPartition);
+    }
+
     public void setStatusListener(StatusListener listener, String partition) {
         if (monitor != null) {
             monitor.abort();
@@ -48,6 +52,10 @@ public class MpdStatusMonitor extends Handler {
             monitor = new Monitor(settings, partition);
             executor.execute(monitor);
         }
+    }
+
+    public StatusListener getStatusListener() {
+        return statusListener;
     }
 
     @Override
@@ -85,7 +93,7 @@ public class MpdStatusMonitor extends Handler {
             this.running = true;
             this.connected = false;
             this.errorCount = 0;
-            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort());
+            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort(), partition);
         }
 
         public void abort() {

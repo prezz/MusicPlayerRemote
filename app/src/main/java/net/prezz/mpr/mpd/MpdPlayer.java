@@ -315,6 +315,20 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
+    public TaskHandle switchPartition(final String partition, final ResponseReceiver<PartitionEntity[]> responseReceiver) {
+        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(partition);
+        return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
+            @Override
+            public void receive(PartitionEntity[] result) {
+                MpdPlayer.this.partition = partition;
+                monitor.switchPartition(partition);
+
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
     public TaskHandle sendControlCommands(List<Command> commands, final ResponseReceiver<ResponseResult> responseReceiver) {
         MpdSendControlCommands command = new MpdSendControlCommands(partition, commands);
         return command.execute(connection, new MpdConnectionCommandReceiver<ResponseResult>() {
