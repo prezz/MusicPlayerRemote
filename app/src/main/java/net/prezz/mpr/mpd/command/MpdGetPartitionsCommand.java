@@ -3,6 +3,7 @@ package net.prezz.mpr.mpd.command;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.PartitionEntity;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 import java.util.ArrayList;
@@ -11,11 +12,11 @@ import java.util.List;
 
 public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, PartitionEntity[]>{
 
-    private String clientPartition;
+    private MpdPartitionProvider partitionProvider;
 
-    public MpdGetPartitionsCommand(String partition) {
-        super(partition, null);
-        this.clientPartition = partition;
+    public MpdGetPartitionsCommand(MpdPartitionProvider partitionProvider) {
+        super(partitionProvider, null);
+        this.partitionProvider = partitionProvider;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, Partitio
             for (String partition : partitions) {
                 connection.setPartition(partition);
                 AudioOutput[] audioOutputs = getOutputsCommand.doExecute(connection, null);
-                result.add(new PartitionEntity(Utils.equals(clientPartition, partition), partition, audioOutputs));
+                result.add(new PartitionEntity(Utils.equals(partitionProvider.getPartition(), partition), partition, audioOutputs));
             }
 
             return result.toArray(new PartitionEntity[result.size()]);

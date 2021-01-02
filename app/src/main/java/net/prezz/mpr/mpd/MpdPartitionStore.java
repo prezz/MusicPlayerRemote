@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class MpdPartitionStore {
+public class MpdPartitionStore implements MpdPartitionProvider {
 
     private static final String PREFERENCE_PARTITION_POSTFIX = "_client_partition";
 
@@ -31,6 +31,7 @@ public class MpdPartitionStore {
         editor.commit();
     }
 
+    @Override
     public String getPartition() {
         if (partition == null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -38,5 +39,14 @@ public class MpdPartitionStore {
         }
 
         return partition;
+    }
+
+    @Override
+    public void onValidPartition() {
+    }
+
+    @Override
+    public void onInvalidPartition() {
+        putPartition(null);
     }
 }

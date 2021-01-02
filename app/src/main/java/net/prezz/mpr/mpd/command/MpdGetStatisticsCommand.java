@@ -1,13 +1,14 @@
 package net.prezz.mpr.mpd.command;
 
 import net.prezz.mpr.model.Statistics;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 
 public class MpdGetStatisticsCommand extends MpdConnectionCommand<Void, Statistics>{
 
-    public MpdGetStatisticsCommand(String partition) {
-        super(partition, null);
+    public MpdGetStatisticsCommand(MpdPartitionProvider partitionProvider) {
+        super(partitionProvider, null);
     }
 
     @Override

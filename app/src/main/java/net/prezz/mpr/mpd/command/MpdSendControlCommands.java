@@ -50,6 +50,7 @@ import net.prezz.mpr.model.command.UpdateLibraryCommand;
 import net.prezz.mpr.model.command.UpdatePrioritiesCommand;
 import net.prezz.mpr.model.command.VolumeDownCommand;
 import net.prezz.mpr.model.command.VolumeUpCommand;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.Filter;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.mpd.connection.RejectAllFilter;
@@ -70,8 +71,8 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
         }
     };
 
-    public MpdSendControlCommands(String partition, List<Command> commands) {
-        super(partition, commands);
+    public MpdSendControlCommands(MpdPartitionProvider partitionProvider, List<Command> commands) {
+        super(partitionProvider, commands);
     }
 
     @Override

@@ -12,13 +12,14 @@ import java.util.Locale;
 import android.util.Log;
 
 import net.prezz.mpr.model.StoredPlaylistEntity;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 
 public class MpdGetStoredPlaylistsCommand extends MpdConnectionCommand<Void, StoredPlaylistEntity[]>{
 
-    public MpdGetStoredPlaylistsCommand(String partition) {
-        super(partition, null);
+    public MpdGetStoredPlaylistsCommand(MpdPartitionProvider partitionProvider) {
+        super(partitionProvider, null);
     }
 
     @Override

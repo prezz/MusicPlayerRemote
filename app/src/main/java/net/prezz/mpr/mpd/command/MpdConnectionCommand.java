@@ -2,11 +2,14 @@ package net.prezz.mpr.mpd.command;
 
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.TaskHandleImpl;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.mpd.connection.RejectAllFilter;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import java.io.IOException;
 
 public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
 
@@ -14,11 +17,11 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
         void receive(Result result);
     }
 
-    private String partition;
+    private MpdPartitionProvider partitionProvider;
     private Param param;
 
-    public MpdConnectionCommand(String partition, Param param) {
-        this.partition = partition;
+    public MpdConnectionCommand(MpdPartitionProvider partitionProvider, Param param) {
+        this.partitionProvider = partitionProvider;
         this.param = param;
     }
 
@@ -33,7 +36,7 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
                         MpdConnection connectionParam = (MpdConnection)params[0];
                         try {
                             connectionParam.connect();
-                            connectionParam.setPartition(partition);
+                            connectionParam.setPartition(partitionProvider.getPartition());
 
                             return doExecute(connectionParam, (Param)params[1]);
                         } finally {

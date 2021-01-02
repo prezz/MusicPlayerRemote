@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.prezz.mpr.model.AudioOutput;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 
 public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput[]>{
 
-    public MpdGetOutputsCommand(String partition) {
-        super(partition, null);
+    public MpdGetOutputsCommand(MpdPartitionProvider partitionProvider) {
+        super(partitionProvider, null);
     }
 
     @Override
