@@ -268,8 +268,8 @@ public class PlayerActivity extends FragmentActivity {
         startActivity(intent);
     }
 
-    public void onSelectServer() {
-        // selectServer();
+    public void onSelectOutput() {
+        selectOutputs();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

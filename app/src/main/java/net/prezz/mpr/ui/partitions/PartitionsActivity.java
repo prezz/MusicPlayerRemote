@@ -36,7 +36,6 @@ import net.prezz.mpr.model.command.Command;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.model.command.MoveOutputToPartitionCommand;
-import net.prezz.mpr.model.command.ToggleOutputCommand;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
@@ -44,7 +43,6 @@ import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
-import net.prezz.mpr.ui.player.PlayerActivity;
 import net.prezz.mpr.ui.view.DataFragment;
 
 import java.util.ArrayList;
@@ -142,9 +140,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                 assignOutput(partitionEntity);
                 break;
             case 1:
-                if (canDelete(partitionEntity)) {
-                    MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partitionEntity.getPartitionName()), refreshResponseReceiver);
-                }
+                MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partitionEntity.getPartitionName()), refreshResponseReceiver);
                 return true;
         }
 
@@ -267,10 +263,10 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 final String partitionName = editTextView.getText().toString();
-                if (partitionName.isEmpty() || partitionName.contains(" ") || Arrays.asList(getPartitionNames(adapterEntities)).contains(partitionName)) {
-                    Boast.makeText(PartitionsActivity.this, R.string.partitions_invalid_name_toast).show();
-                } else {
+                if (isValidPartitionName(partitionName)) {
                     MusicPlayerControl.sendControlCommand(new CreatePartitionCommand(partitionName), refreshResponseReceiver);
+                } else {
+                    Boast.makeText(PartitionsActivity.this, R.string.partitions_invalid_name_toast).show();
                 }
             }
         });
@@ -344,13 +340,25 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         });
     }
 
-
     private String[] getPartitionNames(PartitionAdapterEntity[] adapterEntities) {
         String[] result = new String[adapterEntities.length];
         for (int i = 0; i < adapterEntities.length; i++) {
             result[i] = adapterEntities[i].getEntity().getPartitionName();
         }
         return result;
+    }
+
+    private boolean isValidPartitionName(String name) {
+        if (name.isEmpty()) {
+            return false;
+        }
+        if (name.contains(" ")) {
+            return false;
+        }
+        if (Arrays.asList(getPartitionNames(adapterEntities)).contains(name)) {
+            return false;
+        }
+        return true;
     }
 
     private boolean canDelete(PartitionEntity partitionEntity) {

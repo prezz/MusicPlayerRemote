@@ -197,7 +197,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.player_text_output:
-                ((PlayerActivity)getActivity()).onSelectServer();
+                ((PlayerActivity)getActivity()).onSelectOutput();
                 break;
             case R.id.player_button_volume_down:
                 MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
