@@ -5,11 +5,11 @@
     <string name="partitions_create_button">Create partition</string>
 
     <string-array name="partitions_context_menu">
+        <item>Assign output</item>
         <item>Delete</item>
     </string-array>
 
     <string name="partitions_invalid_name_toast">Invalid partition name.</string>
-    <string name="partitions_delete_default_toast">Unable to delete default partition.</string>
     <string name="partitions_server_error_toast">Server returned an error. Partition might still be active.</string>
 
 </resources>

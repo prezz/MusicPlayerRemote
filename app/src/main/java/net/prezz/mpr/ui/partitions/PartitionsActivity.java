@@ -33,6 +33,7 @@ import net.prezz.mpr.model.ResponseResult;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
 import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
@@ -117,6 +118,8 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                 MenuItem menuItem = menu.add(Menu.NONE, i, i, menuItems[i]);
                 menuItem.setOnMenuItemClickListener(this);
             }
+
+            menu.getItem(menuItems.length-1).setVisible(canDelete(entity.getEntity()));
         }
     }
 
@@ -127,10 +130,9 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionEntity partitionEntity = entity.getEntity();
         switch (item.getItemId()) {
             case 0:
-                // unable to delete if it is current client partition and f it has outputs
-                if (Utils.equals("default", entity.getText())) {
-                    Boast.makeText(PartitionsActivity.this, R.string.partitions_delete_default_toast).show();
-                } else {
+                break;
+            case 1:
+                if (canDelete(partitionEntity)) {
                     MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partitionEntity.getPartitionName()), refreshResponseReceiver);
                 }
                 return true;
@@ -285,6 +287,22 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             result[i] = adapterEntities[i].getEntity().getPartitionName();
         }
         return result;
+    }
+
+    private boolean canDelete(PartitionEntity partitionEntity) {
+        if (partitionEntity == null) {
+            return false;
+        }
+        if (Utils.equals(partitionEntity.getPartitionName(), MpdPartitionProvider.DEFAULT_PARTITION)) {
+            return false;
+        }
+        if (partitionEntity.isClientPartition()) {
+            return false;
+        }
+        if (partitionEntity.getPartitionOutputs().length > 0) {
+            return false;
+        }
+        return true;
     }
 
     private void refreshEntities(PartitionEntity[] entities) {
