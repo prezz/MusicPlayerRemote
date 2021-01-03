@@ -302,13 +302,18 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         assignOutputsHandle = MusicPlayerControl.getOutputs(true, new ResponseReceiver<AudioOutput[]>() {
             @Override
             public void receiveResponse(final AudioOutput[] response) {
-                String[] items = new String[response.length];
-                final boolean[] preChecked = new boolean[response.length];
-                final boolean[] postChecked = new boolean[response.length];
-                for (int i = 0; i < response.length; i++) {
-                    items[i] = response[i].getOutputName();
-                    preChecked[i] = preAssigned.contains(items[i]);
-                    postChecked[i] = preAssigned.contains(items[i]);
+                final List<AudioOutput> assignable = new ArrayList<AudioOutput>();
+                for (AudioOutput output : response) {
+                    if (!preAssigned.contains(output.getOutputName())) {
+                        assignable.add(output);
+                    }
+                }
+
+                final String[] items = new String[assignable.size()];
+                final boolean[] postChecked = new boolean[assignable.size()];
+                for (int i = 0; i < assignable.size(); i++) {
+                    items[i] = assignable.get(i).getOutputName();
+                    postChecked[i] = false;
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(PartitionsActivity.this);
@@ -323,13 +328,9 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         List<Command> commands = new ArrayList<Command>();
-                        for (int i = 0; i < response.length; i++) {
-                            if (preChecked[i] != postChecked[i]) {
-                                if (postChecked[i]) {
-                                    commands.add(new MoveOutputToPartitionCommand(response[i], partitionEntity.getPartitionName()));
-                                } else {
-                                    commands.add(new MoveOutputToPartitionCommand(response[i], MpdPartitionProvider.DEFAULT_PARTITION));
-                                }
+                        for (int i = 0; i < assignable.size(); i++) {
+                            if (postChecked[i]) {
+                                commands.add(new MoveOutputToPartitionCommand(assignable.get(i), partitionEntity.getPartitionName()));
                             }
                         }
                         if (!commands.isEmpty()) {
