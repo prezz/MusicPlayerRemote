@@ -26,14 +26,17 @@ import androidx.core.app.NavUtils;
 
 import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PartitionEntity;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.ResponseResult;
 import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.model.command.Command;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.model.command.MoveOutputToPartitionCommand;
+import net.prezz.mpr.model.command.ToggleOutputCommand;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
@@ -41,10 +44,14 @@ import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
+import net.prezz.mpr.ui.player.PlayerActivity;
 import net.prezz.mpr.ui.view.DataFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PartitionsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
 
@@ -55,6 +62,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     private PartitionAdapterEntity[] adapterEntities = null;
     private boolean updating = false;
     private TaskHandle updatingPartitionsHandle = TaskHandle.NULL_HANDLE;
+    private TaskHandle assignOutputsHandle = TaskHandle.NULL_HANDLE;
 
 
     @Override
@@ -131,7 +139,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionEntity partitionEntity = entity.getEntity();
         switch (item.getItemId()) {
             case 0:
-                // MusicPlayerControl.sendControlCommand(new MoveOutputToPartitionCommand(adapterEntities[0].getEntity().getPartitionOutputs()[0], partitionEntity.getPartitionName()), refreshResponseReceiver);
+                assignOutput(partitionEntity);
                 break;
             case 1:
                 if (canDelete(partitionEntity)) {
@@ -259,7 +267,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 final String partitionName = editTextView.getText().toString();
-                if (partitionName.isEmpty() || Arrays.asList(getPartitionNames(adapterEntities)).contains(partitionName)) {
+                if (partitionName.isEmpty() || partitionName.contains(" ") || Arrays.asList(getPartitionNames(adapterEntities)).contains(partitionName)) {
                     Boast.makeText(PartitionsActivity.this, R.string.partitions_invalid_name_toast).show();
                 } else {
                     MusicPlayerControl.sendControlCommand(new CreatePartitionCommand(partitionName), refreshResponseReceiver);
@@ -282,6 +290,59 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         });
         dialog.show();
     }
+
+    private void assignOutput(final PartitionEntity partitionEntity) {
+
+        final Set<String> preAssigned = new HashSet<String>(partitionEntity.getPartitionOutputs().length);
+        for (AudioOutput output : partitionEntity.getPartitionOutputs()) {
+            preAssigned.add(output.getOutputName());
+        }
+
+        assignOutputsHandle.cancelTask();
+        assignOutputsHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+            @Override
+            public void receiveResponse(final AudioOutput[] response) {
+                String[] items = new String[response.length];
+                final boolean[] preChecked = new boolean[response.length];
+                final boolean[] postChecked = new boolean[response.length];
+                for (int i = 0; i < response.length; i++) {
+                    items[i] = response[i].getOutputName();
+                    preChecked[i] = preAssigned.contains(items[i]);
+                    postChecked[i] = preAssigned.contains(items[i]);
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PartitionsActivity.this);
+                builder.setTitle(R.string.partitions_assign_outputs);
+                builder.setMultiChoiceItems(items, postChecked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        postChecked[which] = isChecked;
+                    }
+                });
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<Command> commands = new ArrayList<Command>();
+                        for (int i = 0; i < response.length; i++) {
+                            if (preChecked[i] != postChecked[i]) {
+                                if (postChecked[i]) {
+                                    commands.add(new MoveOutputToPartitionCommand(response[i], partitionEntity.getPartitionName()));
+                                } else {
+                                    commands.add(new MoveOutputToPartitionCommand(response[i], MpdPartitionProvider.DEFAULT_PARTITION));
+                                }
+                            }
+                        }
+                        if (!commands.isEmpty()) {
+                            MusicPlayerControl.sendControlCommands(commands, refreshResponseReceiver);
+                        }
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
+    }
+
 
     private String[] getPartitionNames(PartitionAdapterEntity[] adapterEntities) {
         String[] result = new String[adapterEntities.length];

@@ -3,9 +3,10 @@
     <string name="partitions_activity_title">Manage partitions</string>
 
     <string name="partitions_create_button">Create partition</string>
+    <string name="partitions_assign_outputs">Assign outputs</string>
 
     <string-array name="partitions_context_menu">
-        <item>Assign output</item>
+        <item>Assign outputs</item>
         <item>Delete</item>
     </string-array>
 

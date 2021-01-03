@@ -91,7 +91,7 @@ public class MpdConnection {
 
     public boolean setPartition(String partition) throws IOException {
         if (partition != null && isConnected() && isMinimumVersion(0, 22, 0)) {
-            writeCommand(String.format("partition %s\n", partition));
+            writeCommand(String.format("partition \"%s\"\n", partition));
             String response = readLine();
             if (!OK.equals(response)) {
                 return false;

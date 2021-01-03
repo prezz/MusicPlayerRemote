@@ -122,7 +122,7 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
             if (command instanceof CreatePartitionCommand) {
                 if (connection.isMinimumVersion(0, 22, 0)) {
                     String name = ((CreatePartitionCommand) command).getName();
-                    connection.writeResponseCommand(String.format("newpartition %s\n", name), RejectAllFilter.INSTANCE);
+                    connection.writeResponseCommand(String.format("newpartition \"%s\"\n", name), RejectAllFilter.INSTANCE);
                 }
             }
             if (command instanceof DeleteFromPlaylistCommand) {
@@ -144,7 +144,7 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
             if (command instanceof DeletePartitionCommand) {
                 if (connection.isMinimumVersion(0, 22, 0)) {
                     String name = ((DeletePartitionCommand) command).getName();
-                    connection.writeResponseCommand(String.format("delpartition %s\n", name), RejectAllFilter.INSTANCE);
+                    connection.writeResponseCommand(String.format("delpartition \"%s\"\n", name), RejectAllFilter.INSTANCE);
                 }
             }
             if (command instanceof DeleteStoredPlaylistCommand) {
@@ -173,7 +173,7 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                     if (!connection.setPartition(partition)) {
                         throw new IOException("Invalid partition.");
                     }
-                    connection.writeResponseCommand(String.format("moveoutput %s\n", output.getOutputName()), RejectAllFilter.INSTANCE);
+                    connection.writeResponseCommand(String.format("moveoutput \"%s\"\n", output.getOutputName()), RejectAllFilter.INSTANCE);
                     connection.setPartition(super.getPartition());
                 }
             }
