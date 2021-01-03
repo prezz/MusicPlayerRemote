@@ -22,18 +22,21 @@ import java.util.concurrent.ThreadFactory;
 public class MpdStatusMonitor extends Handler {
 
     private static final int STATUS_EVENT = 10001;
+    private static final int INVALID_PARTITION_EVENT = 10002;
     private static final String STATUS_BUNDLE_KEY = "status";
 
     private MpdSettings settings;
     private ExecutorService executor;
     private Monitor monitor;
     private StatusListener statusListener;
+    private MpdPartitionProvider partitionProvider;
 
     public MpdStatusMonitor(MpdSettings settings) {
         this.settings = settings;
         this.executor = Executors.newCachedThreadPool(new DaemonThreadFactory());
         this.monitor = null;
         this.statusListener = null;
+        this.partitionProvider = null;
     }
 
     public void switchPartition(MpdPartitionProvider partitionProvider) {
@@ -46,31 +49,36 @@ public class MpdStatusMonitor extends Handler {
             monitor = null;
         }
 
-        statusListener = listener;
+        this.statusListener = listener;
+        this.partitionProvider = partitionProvider;
 
-        if (statusListener != null) {
-            monitor = new Monitor(settings, partitionProvider);
+        if (statusListener != null && partitionProvider != null) {
+            monitor = new Monitor(settings, partitionProvider.getPartition());
             executor.execute(monitor);
         }
-    }
-
-    public StatusListener getStatusListener() {
-        return statusListener;
     }
 
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
-        case STATUS_EVENT:
-            Bundle bundle = msg.getData();
-            PlayerStatus status = (PlayerStatus)bundle.getSerializable(STATUS_BUNDLE_KEY);
-            if (status != null && statusListener != null) {
-                statusListener.statusUpdated(status);
-                if (status.isConnected() && status.getState() != PlayerState.STOP) {
-                    PlaybackService.start();
+            case STATUS_EVENT:
+                Bundle bundle = msg.getData();
+                PlayerStatus status = (PlayerStatus)bundle.getSerializable(STATUS_BUNDLE_KEY);
+                if (status != null && statusListener != null) {
+                    statusListener.statusUpdated(status);
+                    if (status.isConnected() && status.getState() != PlayerState.STOP) {
+                        PlaybackService.start();
+                    }
                 }
-            }
-            break;
+                break;
+            case INVALID_PARTITION_EVENT:
+                partitionProvider.onInvalidPartition();
+
+                if (statusListener != null && partitionProvider != null) {
+                    monitor = new Monitor(settings, partitionProvider.getPartition());
+                    executor.execute(monitor);
+                }
+                break;
         }
     }
 
@@ -81,26 +89,26 @@ public class MpdStatusMonitor extends Handler {
         private final Object lock = new Object();
 
         private MpdConnection connection;
-        private MpdPartitionProvider partitionProvider;
+        private String partition;
         private boolean running;
         private boolean connected;
         private int errorCount;
         private int connectionHash;
 
-        public Monitor(MpdSettings settings, MpdPartitionProvider partitionProvider) {
+        public Monitor(MpdSettings settings, String partition) {
             this.connection = new MpdConnection(settings, 60000 * 5);
-            this.partitionProvider = partitionProvider;
+            this.partition = partition;
             this.running = true;
             this.connected = false;
             this.errorCount = 0;
-            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort(), partitionProvider.getPartition());
+            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort(), partition);
         }
 
         public void abort() {
             synchronized (lock) {
                 running = false;
                 try {
-                    executor.execute(new Abort(connection, partitionProvider));
+                    executor.execute(new Abort(connection, partition));
                 } catch (Exception ex) {
                     Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);
                 }
@@ -127,8 +135,9 @@ public class MpdStatusMonitor extends Handler {
                     }
 
                     connection.connect();
-                    if (!connection.setPartition(partitionProvider.getPartition())) {
-                        partitionProvider.onInvalidPartition();
+                    if (!connection.setPartition(partition)) {
+                        dispatchInvalidPartition();
+                        running = false;
                     }
                     synchronized (lock) {
                         if (!running) {
@@ -169,8 +178,8 @@ public class MpdStatusMonitor extends Handler {
             while (running) {
                 try {
                     connection.connect();
-                    if (!connection.setPartition(partitionProvider.getPartition())) {
-                        partitionProvider.onInvalidPartition();
+                    if (!connection.setPartition(partition)) {
+                        return new PlayerStatus(false);
                     }
                     PlayerStatus status = new PlayerStatus(true);
 
@@ -306,23 +315,32 @@ public class MpdStatusMonitor extends Handler {
                 }
             }
         }
+
+        private void dispatchInvalidPartition() {
+            synchronized (lock) {
+                if (running) {
+                    Message message = obtainMessage(INVALID_PARTITION_EVENT);
+                    sendMessage(message);
+                }
+            }
+        }
     }
 
     private static final class Abort implements Runnable {
 
         private MpdConnection connection;
-        private MpdPartitionProvider partitionProvider;
+        private String partition;
 
-        public Abort(MpdConnection connection, MpdPartitionProvider partitionProvider) {
+        public Abort(MpdConnection connection, String partition) {
             this.connection = connection;
-            this.partitionProvider = partitionProvider;
+            this.partition = partition;
         }
 
         @Override
         public void run() {
             try {
                 connection.connect();
-                connection.setPartition(partitionProvider.getPartition());
+                connection.setPartition(partition);
                 connection.writeCommand("noidle\n");
             } catch (Exception ex) {
                 Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);
