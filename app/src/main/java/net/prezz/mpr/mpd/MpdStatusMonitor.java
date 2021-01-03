@@ -346,7 +346,7 @@ public class MpdStatusMonitor extends Handler {
         public void run() {
             try {
                 connection.connect();
-                connection.setPartition(partition);
+                //connection.setPartition(partition);
                 connection.writeCommand("noidle\n");
             } catch (Exception ex) {
                 Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);
