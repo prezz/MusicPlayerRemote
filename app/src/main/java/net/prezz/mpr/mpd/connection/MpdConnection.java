@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +29,6 @@ public class MpdConnection {
     private BufferedWriter writer;
     private BufferedInputStream inputStream;
     private int[] version;
-    private String partition;
 
     
     public MpdConnection(MpdSettings settings) {
@@ -72,13 +72,12 @@ public class MpdConnection {
                 }
                 
                 version = parseVersion(split[2]);
-                partition = null;
-                
+
                 String password = settings.getMpdPassword();
                 if (password != null && !password.isEmpty()) {
                     writeCommand(String.format("password %s\n", password));
                     response = readLine();
-                    if (!"OK".equals(response)) {
+                    if (!OK.equals(response)) {
                         throw new IOException("Invalid MPD password");
                     }
                 }
@@ -90,14 +89,13 @@ public class MpdConnection {
         }
     }
 
-    public boolean setPartition(String partition) {
-        try {
-            if (isConnected() && partition != null && !Utils.equals(partition, this.partition) && isMinimumVersion(0, 22, 0)) {
-                writeResponseCommand(String.format("partition %s\n", partition), RejectAllFilter.INSTANCE);
-                this.partition = partition;
+    public boolean setPartition(String partition) throws IOException {
+        if (partition != null && isConnected() && isMinimumVersion(0, 22, 0)) {
+            writeCommand(String.format("partition %s\n", partition));
+            String response = readLine();
+            if (!OK.equals(response)) {
+                return false;
             }
-        } catch (IOException ex) {
-            return false;
         }
 
         return true;
@@ -128,7 +126,6 @@ public class MpdConnection {
         inputStream = null;
         socket = null;
         version = null;
-        partition = null;
     }
     
     public boolean isMinimumVersion(int major, int minor, int point) {
