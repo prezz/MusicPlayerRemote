@@ -23,13 +23,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="net.prezz.mpr.widget.RemoteWidgetProvider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_provider"></meta-data>
-        </receiver>
-
         <service android:enabled="true" android:name="net.prezz.mpr.service.StreamingService" />
         <service android:enabled="true" android:name="net.prezz.mpr.service.PlaybackService" />
 
