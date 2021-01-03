@@ -1,6 +1,8 @@
 package net.prezz.mpr.mpd;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
 import net.prezz.mpr.model.AudioOutput;
@@ -74,7 +76,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public void setStatusListener(StatusListener listener) {
-        monitor.setStatusListener(listener, partitionStore.getPartition());
+        monitor.setStatusListener(listener, partitionStore);
     }
 
     @Override
@@ -316,26 +318,19 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle switchPartition(final String partition, final ResponseReceiver<PartitionEntity[]> responseReceiver) {
-        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(new MpdPartitionProvider() {
-            @Override
-            public String getPartition() {
-                return partition;
-            }
-
-            @Override
-            public void onValidPartition() {
-            }
-
-            @Override
-            public void onInvalidPartition() {
-            }
-        });
-
+        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(new SwitchPartitionProvider(partition));
         return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
             @Override
             public void receive(PartitionEntity[] result) {
-                partitionStore.putPartition(partition);
-                monitor.switchPartition(partition);
+                Set<String> partitions = new HashSet<String>(result.length);
+                for (PartitionEntity entity : result) {
+                    partitions.add(entity.getPartitionName());
+                }
+
+                if (partitions.contains(partition)) {
+                    partitionStore.putPartition(partition);
+                    monitor.switchPartition(partitionStore);
+                }
 
                 responseReceiver.receiveResponse(result);
             }
@@ -351,5 +346,24 @@ public class MpdPlayer implements MusicPlayer {
                 responseReceiver.receiveResponse(result);
             }
         });
+    }
+
+    private static class SwitchPartitionProvider implements MpdPartitionProvider {
+
+        private String partition;
+
+        public SwitchPartitionProvider(String partition) {
+            this.partition = partition;
+        }
+
+        @Override
+        public String getPartition() {
+            return partition;
+        }
+
+        @Override
+        public void onInvalidPartition() {
+            this.partition = DEFAULT_PARTITION;
+        }
     }
 }

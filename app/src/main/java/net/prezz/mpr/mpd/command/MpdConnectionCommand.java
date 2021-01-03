@@ -36,7 +36,9 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
                         MpdConnection connectionParam = (MpdConnection)params[0];
                         try {
                             connectionParam.connect();
-                            connectionParam.setPartition(partitionProvider.getPartition());
+                            if (!connectionParam.setPartition(partitionProvider.getPartition())) {
+                                partitionProvider.onInvalidPartition();
+                            }
 
                             return doExecute(connectionParam, (Param)params[1]);
                         } finally {

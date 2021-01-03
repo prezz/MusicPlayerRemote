@@ -90,11 +90,17 @@ public class MpdConnection {
         }
     }
 
-    public void setPartition(String partition) throws IOException {
-        if (isConnected() && partition != null && !Utils.equals(partition, this.partition) && isMinimumVersion(0, 22, 0)) {
-            writeResponseCommand(String.format("partition %s\n", partition), RejectAllFilter.INSTANCE);
-            this.partition = partition;
+    public boolean setPartition(String partition) {
+        try {
+            if (isConnected() && partition != null && !Utils.equals(partition, this.partition) && isMinimumVersion(0, 22, 0)) {
+                writeResponseCommand(String.format("partition %s\n", partition), RejectAllFilter.INSTANCE);
+                this.partition = partition;
+            }
+        } catch (IOException ex) {
+            return false;
         }
+
+        return true;
     }
     
     public void disconnect() {

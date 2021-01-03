@@ -36,11 +36,11 @@ public class MpdStatusMonitor extends Handler {
         this.statusListener = null;
     }
 
-    public void switchPartition(String newPartition) {
-        setStatusListener(statusListener, newPartition);
+    public void switchPartition(MpdPartitionProvider partitionProvider) {
+        setStatusListener(statusListener, partitionProvider);
     }
 
-    public void setStatusListener(StatusListener listener, String partition) {
+    public void setStatusListener(StatusListener listener, MpdPartitionProvider partitionProvider) {
         if (monitor != null) {
             monitor.abort();
             monitor = null;
@@ -49,7 +49,7 @@ public class MpdStatusMonitor extends Handler {
         statusListener = listener;
 
         if (statusListener != null) {
-            monitor = new Monitor(settings, partition);
+            monitor = new Monitor(settings, partitionProvider);
             executor.execute(monitor);
         }
     }
@@ -81,26 +81,26 @@ public class MpdStatusMonitor extends Handler {
         private final Object lock = new Object();
 
         private MpdConnection connection;
-        private String partition;
+        private MpdPartitionProvider partitionProvider;
         private boolean running;
         private boolean connected;
         private int errorCount;
         private int connectionHash;
 
-        public Monitor(MpdSettings settings, String partition) {
+        public Monitor(MpdSettings settings, MpdPartitionProvider partitionProvider) {
             this.connection = new MpdConnection(settings, 60000 * 5);
-            this.partition = partition;
+            this.partitionProvider = partitionProvider;
             this.running = true;
             this.connected = false;
             this.errorCount = 0;
-            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort(), partition);
+            this.connectionHash = Utils.shortHashCode(settings.getMpdHost(), settings.getMpdPort(), partitionProvider.getPartition());
         }
 
         public void abort() {
             synchronized (lock) {
                 running = false;
                 try {
-                    executor.execute(new Abort(connection, partition));
+                    executor.execute(new Abort(connection, partitionProvider));
                 } catch (Exception ex) {
                     Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);
                 }
@@ -127,7 +127,9 @@ public class MpdStatusMonitor extends Handler {
                     }
 
                     connection.connect();
-                    connection.setPartition(partition);
+                    if (!connection.setPartition(partitionProvider.getPartition())) {
+                        partitionProvider.onInvalidPartition();
+                    }
                     synchronized (lock) {
                         if (!running) {
                             break;
@@ -167,7 +169,9 @@ public class MpdStatusMonitor extends Handler {
             while (running) {
                 try {
                     connection.connect();
-                    connection.setPartition(partition);
+                    if (!connection.setPartition(partitionProvider.getPartition())) {
+                        partitionProvider.onInvalidPartition();
+                    }
                     PlayerStatus status = new PlayerStatus(true);
 
                     String[] statusLines = connection.writeResponseCommand("status\n");
@@ -307,18 +311,18 @@ public class MpdStatusMonitor extends Handler {
     private static final class Abort implements Runnable {
 
         private MpdConnection connection;
-        private String partition;
+        private MpdPartitionProvider partitionProvider;
 
-        public Abort(MpdConnection connection, String partition) {
+        public Abort(MpdConnection connection, MpdPartitionProvider partitionProvider) {
             this.connection = connection;
-            this.partition = partition;
+            this.partitionProvider = partitionProvider;
         }
 
         @Override
         public void run() {
             try {
                 connection.connect();
-                connection.setPartition(partition);
+                connection.setPartition(partitionProvider.getPartition());
                 connection.writeCommand("noidle\n");
             } catch (Exception ex) {
                 Log.e(MpdStatusMonitor.class.getName(), "error sending noidle command", ex);

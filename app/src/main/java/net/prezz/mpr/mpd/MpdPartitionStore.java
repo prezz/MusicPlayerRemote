@@ -8,6 +8,7 @@ public class MpdPartitionStore implements MpdPartitionProvider {
 
     private static final String PREFERENCE_PARTITION_POSTFIX = "_client_partition";
 
+    private final Object lock = new Object();
     private final Context context;
     private final String preferenceKey;
     private String partition;
@@ -19,30 +20,30 @@ public class MpdPartitionStore implements MpdPartitionProvider {
     }
 
     public void putPartition(String partition) {
-        this.partition = null; // force load in get method
+        synchronized (lock) {
+            this.partition = null; // force load in get method
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (partition == null) {
-            editor.remove(preferenceKey);
-        } else {
-            editor.putString(preferenceKey, partition);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (partition == null) {
+                editor.remove(preferenceKey);
+            } else {
+                editor.putString(preferenceKey, partition);
+            }
+            editor.commit();
         }
-        editor.commit();
     }
 
     @Override
     public String getPartition() {
-        if (partition == null) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            partition = sharedPreferences.getString(preferenceKey, "default");
+        synchronized (lock) {
+            if (partition == null) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                partition = sharedPreferences.getString(preferenceKey, DEFAULT_PARTITION);
+            }
         }
 
         return partition;
-    }
-
-    @Override
-    public void onValidPartition() {
     }
 
     @Override

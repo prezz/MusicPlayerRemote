@@ -2,9 +2,9 @@ package net.prezz.mpr.mpd;
 
 public interface MpdPartitionProvider {
 
-    String getPartition();
+    String DEFAULT_PARTITION = "default";
 
-    void onValidPartition();
+    String getPartition();
 
     void onInvalidPartition();
 }
