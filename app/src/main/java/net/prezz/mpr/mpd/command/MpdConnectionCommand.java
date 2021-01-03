@@ -60,6 +60,10 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
         return new TaskHandleImpl<Object, Void, Result>(task.executeOnExecutor(executor, connection, param));
     }
 
+    protected String getPartition() {
+        return partitionProvider.getPartition();
+    }
+
     protected abstract Result doExecute(MpdConnection connection, Param param) throws Exception;
 
     protected abstract Result onError();

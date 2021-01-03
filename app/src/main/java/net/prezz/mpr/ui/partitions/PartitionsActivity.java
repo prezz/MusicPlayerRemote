@@ -33,6 +33,7 @@ import net.prezz.mpr.model.ResponseResult;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeletePartitionCommand;
+import net.prezz.mpr.model.command.MoveOutputToPartitionCommand;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.ui.adapter.PartitionAdapterEntity;
@@ -130,6 +131,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionEntity partitionEntity = entity.getEntity();
         switch (item.getItemId()) {
             case 0:
+                // MusicPlayerControl.sendControlCommand(new MoveOutputToPartitionCommand(adapterEntities[0].getEntity().getPartitionOutputs()[0], partitionEntity.getPartitionName()), refreshResponseReceiver);
                 break;
             case 1:
                 if (canDelete(partitionEntity)) {

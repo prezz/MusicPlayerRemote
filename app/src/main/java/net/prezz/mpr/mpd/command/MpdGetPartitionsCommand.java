@@ -12,11 +12,8 @@ import java.util.List;
 
 public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, PartitionEntity[]>{
 
-    private MpdPartitionProvider partitionProvider;
-
     public MpdGetPartitionsCommand(MpdPartitionProvider partitionProvider) {
         super(partitionProvider, null);
-        this.partitionProvider = partitionProvider;
     }
 
     @Override
@@ -39,12 +36,12 @@ public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, Partitio
             MpdGetOutputsCommand getOutputsCommand = new MpdGetOutputsCommand(null);
             for (String partition : partitions) {
                 if (connection.setPartition(partition)) {
-                    boolean isClientPartition = Utils.equals(partitionProvider.getPartition(), partition);
+                    boolean isClientPartition = Utils.equals(super.getPartition(), partition);
                     AudioOutput[] audioOutputs = getOutputsCommand.doExecute(connection, null);
                     result.add(new PartitionEntity(isClientPartition, partition, audioOutputs));
                 }
             }
-            connection.setPartition(partitionProvider.getPartition());
+            connection.setPartition(super.getPartition());
 
             return result.toArray(new PartitionEntity[result.size()]);
         } else {
