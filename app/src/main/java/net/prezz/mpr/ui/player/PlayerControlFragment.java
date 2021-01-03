@@ -27,6 +27,7 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.model.servers.ServerConfigurationService;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
@@ -552,6 +553,11 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
 
         if (visible) {
+            String partitionPrefix = "";
+            if (partition != null && !partition.isEmpty() && !Utils.equals(MpdPartitionProvider.DEFAULT_PARTITION, partition)) {
+                partitionPrefix = partition + " - ";
+            }
+
             StringBuilder outputName = new StringBuilder();
             for (int i = 0; i < audioOutputs.length; i++) {
                 if (audioOutputs[i].isEnabled()) {
@@ -562,7 +568,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                 }
             }
 
-            textView.setText(partition + " - " + outputName);
+            textView.setText(partitionPrefix + outputName);
             textView.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.GONE);
