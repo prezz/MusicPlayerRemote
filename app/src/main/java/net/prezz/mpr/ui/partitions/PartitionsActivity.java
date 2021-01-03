@@ -299,7 +299,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         }
 
         assignOutputsHandle.cancelTask();
-        assignOutputsHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+        assignOutputsHandle = MusicPlayerControl.getOutputs(true, new ResponseReceiver<AudioOutput[]>() {
             @Override
             public void receiveResponse(final AudioOutput[] response) {
                 String[] items = new String[response.length];

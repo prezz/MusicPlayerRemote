@@ -322,7 +322,7 @@ public class PlayerActivity extends FragmentActivity {
 
     private void selectOutputs() {
         selectOutputsHandle.cancelTask();
-        selectOutputsHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+        selectOutputsHandle = MusicPlayerControl.getOutputs(false, new ResponseReceiver<AudioOutput[]>() {
             @Override
             public void receiveResponse(final AudioOutput[] response) {
                 String[] items = new String[response.length];

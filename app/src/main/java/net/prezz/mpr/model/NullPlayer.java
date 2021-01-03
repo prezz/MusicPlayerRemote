@@ -92,7 +92,7 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getOutputs(ResponseReceiver<AudioOutput[]> responseReceiver) {
+    public TaskHandle getOutputs(boolean all, ResponseReceiver<AudioOutput[]> responseReceiver) {
         return createNullHandle();
     }
 

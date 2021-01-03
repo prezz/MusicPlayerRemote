@@ -249,6 +249,7 @@ public class MpdStatusMonitor extends Handler {
                     List<AudioOutput> audioOutputs = new ArrayList<AudioOutput>();
                     String outputId = null;
                     String outputName = null;
+                    String plugin = null;
                     Boolean outputEnabled = null;
                     for (String line : outputLines) {
                         if (line.startsWith("outputid: ")) {
@@ -259,17 +260,22 @@ public class MpdStatusMonitor extends Handler {
                             outputName = line.substring(12);
                         }
 
+                        if (line.startsWith("plugin: ")) {
+                            plugin = line.substring(8);
+                        }
+
                         if (line.startsWith("outputenabled: ")) {
                             String s = line.substring(15);
                             outputEnabled = Boolean.valueOf("1".equals(s));
                         }
 
-                        if (outputId != null && outputName != null && outputEnabled != null) {
+                        if (outputId != null && outputName != null && plugin != null && outputEnabled != null) {
                             if (outputEnabled) {
-                                audioOutputs.add(new AudioOutput(outputId, outputName, outputEnabled));
+                                audioOutputs.add(new AudioOutput(outputId, outputName, plugin, outputEnabled));
                             }
                             outputId = null;
                             outputName = null;
+                            plugin = null;
                             outputEnabled = null;
                         }
                     }

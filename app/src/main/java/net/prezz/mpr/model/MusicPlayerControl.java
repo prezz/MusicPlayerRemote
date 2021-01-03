@@ -80,8 +80,8 @@ public class MusicPlayerControl {
         return musicPlayer.getPlaylistDetails(storedPlaylist, responseReceiver);
     }
 
-    public static TaskHandle getOutputs(ResponseReceiver<AudioOutput[]> responseReceiver) {
-        return musicPlayer.getOutputs(responseReceiver);
+    public static TaskHandle getOutputs(boolean all, ResponseReceiver<AudioOutput[]> responseReceiver) {
+        return musicPlayer.getOutputs(all, responseReceiver);
     }
 
     public static TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver) {

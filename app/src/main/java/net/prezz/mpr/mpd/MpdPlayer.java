@@ -284,8 +284,8 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getOutputs(final ResponseReceiver<AudioOutput[]> responseReceiver) {
-        MpdGetOutputsCommand command = new MpdGetOutputsCommand(partitionStore);
+    public TaskHandle getOutputs(boolean all, final ResponseReceiver<AudioOutput[]> responseReceiver) {
+        MpdGetOutputsCommand command = new MpdGetOutputsCommand(all ? new ExplicitPartitionProvider(null) : partitionStore, all);
         return command.execute(connection, new MpdConnectionCommandReceiver<AudioOutput[]>() {
             @Override
             public void receive(AudioOutput[] result) {
@@ -318,7 +318,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle switchPartition(final String partition, final ResponseReceiver<PartitionEntity[]> responseReceiver) {
-        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(new SwitchPartitionProvider(partition));
+        MpdGetPartitionsCommand command = new MpdGetPartitionsCommand(new ExplicitPartitionProvider(partition));
         return command.execute(connection, new MpdConnectionCommandReceiver<PartitionEntity[]>() {
             @Override
             public void receive(PartitionEntity[] result) {
@@ -348,11 +348,11 @@ public class MpdPlayer implements MusicPlayer {
         });
     }
 
-    private static class SwitchPartitionProvider implements MpdPartitionProvider {
+    private static class ExplicitPartitionProvider implements MpdPartitionProvider {
 
         private String partition;
 
-        public SwitchPartitionProvider(String partition) {
+        public ExplicitPartitionProvider(String partition) {
             this.partition = partition;
         }
 

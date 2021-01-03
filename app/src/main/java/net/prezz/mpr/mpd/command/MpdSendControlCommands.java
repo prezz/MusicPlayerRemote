@@ -170,11 +170,15 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                 if (connection.isMinimumVersion(0, 22, 0)) {
                     AudioOutput output = ((MoveOutputToPartitionCommand) command).getAudioOutput();
                     String partition = ((MoveOutputToPartitionCommand) command).getPartition();
-                    if (!connection.setPartition(partition)) {
-                        throw new IOException("Invalid partition.");
+                    try {
+                        if (connection.setPartition(partition)) {
+                            connection.writeResponseCommand(String.format("moveoutput \"%s\"\n", output.getOutputName()), RejectAllFilter.INSTANCE);
+                        } else {
+                            throw new IOException("Invalid partition.");
+                        }
+                    } finally {
+                        connection.setPartition(super.getPartition());
                     }
-                    connection.writeResponseCommand(String.format("moveoutput \"%s\"\n", output.getOutputName()), RejectAllFilter.INSTANCE);
-                    connection.setPartition(super.getPartition());
                 }
             }
             if (command instanceof NextCommand) {

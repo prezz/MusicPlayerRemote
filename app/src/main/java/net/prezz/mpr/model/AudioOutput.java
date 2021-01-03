@@ -6,11 +6,13 @@ public class AudioOutput {
 
     private String outputId;
     private String outputName;
+    private String plugin;
     private boolean enabled;
 
-    public AudioOutput(String outputId, String outputName, boolean enabled) {
+    public AudioOutput(String outputId, String outputName, String plugin, boolean enabled) {
         this.outputId = outputId;
         this.outputName = outputName;
+        this.plugin = plugin;
         this.enabled = enabled;
     }
 
@@ -20,6 +22,10 @@ public class AudioOutput {
 
     public String getOutputName() {
         return outputName;
+    }
+
+    public String getPlugin() {
+        return plugin;
     }
 
     public boolean isEnabled() {
@@ -43,6 +49,10 @@ public class AudioOutput {
                 return false;
             }
 
+            if (!Utils.equals(this.plugin, other.plugin)) {
+                return false;
+            }
+
             if (this.enabled != other.enabled) {
                 return false;
             }
@@ -59,6 +69,7 @@ public class AudioOutput {
 
         hash = 31 * hash + Utils.hashCode(outputId);
         hash = 31 * hash + Utils.hashCode(outputName);
+        hash = 31 * hash + Utils.hashCode(plugin);
         hash = 31 * hash + Utils.hashCode(enabled);
 
         return hash;
