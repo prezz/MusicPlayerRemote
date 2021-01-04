@@ -54,9 +54,9 @@ public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, Partitio
             }
 
             return result.toArray(new PartitionEntity[result.size()]);
-        } else {
-            return new PartitionEntity[0];
         }
+
+        return new PartitionEntity[0];
     }
 
     @Override

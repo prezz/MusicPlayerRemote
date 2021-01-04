@@ -6,6 +6,7 @@
     <string name="partitions_assign_outputs">Assign outputs</string>
 
     <string-array name="partitions_context_menu">
+        <item>Select</item>
         <item>Assign outputs</item>
         <item>Delete</item>
     </string-array>

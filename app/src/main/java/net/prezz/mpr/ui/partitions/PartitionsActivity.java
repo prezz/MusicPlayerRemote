@@ -137,9 +137,12 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionEntity partitionEntity = entity.getEntity();
         switch (item.getItemId()) {
             case 0:
-                assignOutput(partitionEntity);
+                selectPartition(partitionEntity);
                 break;
             case 1:
+                assignOutput(partitionEntity);
+                break;
+            case 2:
                 MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partitionEntity.getPartitionName()), refreshResponseReceiver);
                 return true;
         }
@@ -152,15 +155,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         PartitionAdapterEntity entity = adapterEntities[position];
         PartitionEntity partitionEntity = entity.getEntity();
 
-        if (!partitionEntity.isClientPartition()) {
-            PlaybackService.stop();
-            MusicPlayerControl.switchPartition(partitionEntity.getPartitionName(), new ResponseReceiver<PartitionEntity[]>() {
-                @Override
-                public void receiveResponse(PartitionEntity[] partitionEntities) {
-                    refreshEntities(partitionEntities);
-                }
-            });
-        }
+        selectPartition(partitionEntity);
     }
 
     public void onCreatePartitionClick(View view) {
@@ -285,6 +280,18 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             }
         });
         dialog.show();
+    }
+
+    private void selectPartition(PartitionEntity partitionEntity) {
+        if (!partitionEntity.isClientPartition()) {
+            PlaybackService.stop();
+            MusicPlayerControl.switchPartition(partitionEntity.getPartitionName(), new ResponseReceiver<PartitionEntity[]>() {
+                @Override
+                public void receiveResponse(PartitionEntity[] partitionEntities) {
+                    refreshEntities(partitionEntities);
+                }
+            });
+        }
     }
 
     private void assignOutput(final PartitionEntity partitionEntity) {
