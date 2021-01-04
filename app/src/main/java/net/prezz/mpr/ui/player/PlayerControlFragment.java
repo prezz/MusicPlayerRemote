@@ -568,7 +568,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                 }
             }
 
-            textView.setText(partitionPrefix + outputName);
+            String text = partitionPrefix + outputName;
+            textView.setText(text.isEmpty() ? "-" : text);
             textView.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.GONE);
