@@ -34,12 +34,19 @@ public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, Partitio
             List<PartitionEntity> result = new ArrayList<PartitionEntity>();
 
             try {
-                MpdGetOutputsCommand getOutputsCommand = new MpdGetOutputsCommand(null, false);
+                MpdGetOutputsCommand getOutputsCommand = new MpdGetOutputsCommand(null);
                 for (String partition : partitions) {
                     if (connection.setPartition(partition)) {
                         boolean isClientPartition = Utils.equals(super.getPartition(), partition);
-                        AudioOutput[] audioOutputs = getOutputsCommand.doExecute(connection, Boolean.FALSE);
-                        result.add(new PartitionEntity(isClientPartition, partition, audioOutputs));
+
+                        AudioOutput[] outputs = getOutputsCommand.doExecute(connection, null);
+                        List<String> outputNames = new ArrayList<String>();
+                        for (AudioOutput output : outputs) {
+                            if (!Utils.equals(output.getPlugin(), "dummy")) {
+                                outputNames.add(output.getOutputName());
+                            }
+                        }
+                        result.add(new PartitionEntity(isClientPartition, partition, outputNames.toArray(new String[outputNames.size()])));
                     }
                 }
             } finally {

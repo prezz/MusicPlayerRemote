@@ -289,10 +289,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
     private void assignOutput(final PartitionEntity partitionEntity) {
 
-        final Set<String> preAssigned = new HashSet<String>(partitionEntity.getPartitionOutputs().length);
-        for (AudioOutput output : partitionEntity.getPartitionOutputs()) {
-            preAssigned.add(output.getOutputName());
-        }
+        final Set<String> preAssigned = new HashSet<String>(Arrays.asList(partitionEntity.getOutputs()));
 
         assignOutputsHandle.cancelTask();
         assignOutputsHandle = MusicPlayerControl.getOutputs(true, new ResponseReceiver<AudioOutput[]>() {
@@ -326,7 +323,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                         List<Command> commands = new ArrayList<Command>();
                         for (int i = 0; i < assignable.size(); i++) {
                             if (postChecked[i]) {
-                                commands.add(new MoveOutputToPartitionCommand(assignable.get(i), partitionEntity.getPartitionName()));
+                                commands.add(new MoveOutputToPartitionCommand(items[i], partitionEntity.getPartitionName()));
                             }
                         }
                         if (!commands.isEmpty()) {
@@ -371,7 +368,7 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         if (partitionEntity.isClientPartition()) {
             return false;
         }
-        if (partitionEntity.getPartitionOutputs().length > 0) {
+        if (partitionEntity.getOutputs().length > 0) {
             return false;
         }
         return true;

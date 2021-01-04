@@ -3,20 +3,19 @@ package net.prezz.mpr.mpd.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 
-public class MpdGetOutputsCommand extends MpdConnectionCommand<Boolean, AudioOutput[]>{
+public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput[]>{
 
-    public MpdGetOutputsCommand(MpdPartitionProvider partitionProvider, boolean all) {
-        super(partitionProvider, Boolean.valueOf(all));
+    public MpdGetOutputsCommand(MpdPartitionProvider partitionProvider) {
+        super(partitionProvider, null);
     }
 
     @Override
-    protected AudioOutput[] doExecute(MpdConnection connection, Boolean all) throws Exception {
+    protected AudioOutput[] doExecute(MpdConnection connection, Void param) throws Exception {
         String[] lines = connection.writeResponseCommand("outputs\n");
 
         List<AudioOutput> result = new ArrayList<AudioOutput>();
@@ -44,9 +43,7 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Boolean, AudioOut
             }
 
             if (outputId != null && outputName != null && plugin != null && outputEnabled != null) {
-                if (all == Boolean.TRUE || !Utils.equals(plugin, "dummy")) {
-                    result.add(new AudioOutput(outputId, outputName, plugin, outputEnabled));
-                }
+                result.add(new AudioOutput(outputId, outputName, plugin, outputEnabled));
                 outputId = null;
                 outputName = null;
                 plugin = null;

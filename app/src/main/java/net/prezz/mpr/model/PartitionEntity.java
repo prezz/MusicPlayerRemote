@@ -8,12 +8,12 @@ public class PartitionEntity {
 
     private boolean clientPartition;
     private String partitionName;
-    private AudioOutput[] partitionOutputs;
+    private String[] outputs;
 
-    public PartitionEntity(boolean clientPartition, String partitionName, AudioOutput[] partitionOutputs) {
+    public PartitionEntity(boolean clientPartition, String partitionName, String[] outputs) {
         this.clientPartition = clientPartition;
         this.partitionName = partitionName;
-        this.partitionOutputs = partitionOutputs;
+        this.outputs = outputs;
     }
 
     public boolean isClientPartition() {
@@ -24,8 +24,8 @@ public class PartitionEntity {
         return partitionName;
     }
 
-    public AudioOutput[] getPartitionOutputs() {
-        return partitionOutputs;
+    public String[] getOutputs() {
+        return outputs;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PartitionEntity {
                 return false;
             }
 
-            if (!Arrays.equals(this.partitionOutputs, other.partitionOutputs)) {
+            if (!Arrays.equals(this.outputs, other.outputs)) {
                 return false;
             }
 
@@ -66,7 +66,7 @@ public class PartitionEntity {
 
         hash = 31 * hash + Utils.hashCode(clientPartition);
         hash = 31 * hash + Utils.hashCode(partitionName);
-        hash = 31 * hash + Arrays.hashCode(partitionOutputs);
+        hash = 31 * hash + Arrays.hashCode(outputs);
 
         return hash;
     }

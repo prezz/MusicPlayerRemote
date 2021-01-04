@@ -168,11 +168,11 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
             }
             if (command instanceof MoveOutputToPartitionCommand) {
                 if (connection.isMinimumVersion(0, 22, 0)) {
-                    AudioOutput output = ((MoveOutputToPartitionCommand) command).getAudioOutput();
+                    String outputName = ((MoveOutputToPartitionCommand) command).getOutputName();
                     String partition = ((MoveOutputToPartitionCommand) command).getPartition();
                     try {
                         if (connection.setPartition(partition)) {
-                            connection.writeResponseCommand(String.format("moveoutput \"%s\"\n", output.getOutputName()), RejectAllFilter.INSTANCE);
+                            connection.writeResponseCommand(String.format("moveoutput \"%s\"\n", outputName), RejectAllFilter.INSTANCE);
                         } else {
                             throw new IOException("Invalid partition.");
                         }

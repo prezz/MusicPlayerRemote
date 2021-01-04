@@ -1,19 +1,17 @@
 package net.prezz.mpr.model.command;
 
-import net.prezz.mpr.model.AudioOutput;
-
 public class MoveOutputToPartitionCommand implements Command {
 
-    private AudioOutput output;
+    private String outputName;
     private String partition;
 
-    public MoveOutputToPartitionCommand(AudioOutput output, String partition) {
-        this.output = output;
+    public MoveOutputToPartitionCommand(String outputName, String partition) {
+        this.outputName = outputName;
         this.partition = partition;
     }
 
-    public AudioOutput getAudioOutput() {
-        return output;
+    public String getOutputName() {
+        return outputName;
     }
 
     public String getPartition() {

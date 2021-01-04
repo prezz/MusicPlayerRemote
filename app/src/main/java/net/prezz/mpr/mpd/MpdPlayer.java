@@ -284,8 +284,8 @@ public class MpdPlayer implements MusicPlayer {
     }
 
     @Override
-    public TaskHandle getOutputs(boolean all, final ResponseReceiver<AudioOutput[]> responseReceiver) {
-        MpdGetOutputsCommand command = new MpdGetOutputsCommand(all ? new ExplicitPartitionProvider(null) : partitionStore, all);
+    public TaskHandle getOutputs(boolean defaultPartition, final ResponseReceiver<AudioOutput[]> responseReceiver) {
+        MpdGetOutputsCommand command = new MpdGetOutputsCommand(defaultPartition ? new ExplicitPartitionProvider(null) : partitionStore);
         return command.execute(connection, new MpdConnectionCommandReceiver<AudioOutput[]>() {
             @Override
             public void receive(AudioOutput[] result) {

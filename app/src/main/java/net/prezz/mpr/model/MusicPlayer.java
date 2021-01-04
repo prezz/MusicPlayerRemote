@@ -39,7 +39,7 @@ public interface MusicPlayer {
 
     TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, ResponseReceiver<PlaylistEntity[]> responseReceiver);
 
-    TaskHandle getOutputs(boolean all, ResponseReceiver<AudioOutput[]> responseReceiver);
+    TaskHandle getOutputs(boolean defaultPartition, ResponseReceiver<AudioOutput[]> responseReceiver);
 
     TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver);
 

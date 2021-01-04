@@ -30,13 +30,13 @@ public class PartitionAdapterEntity implements AdapterEntity {
     public String getSubText() {
         StringBuilder sb = new StringBuilder();
 
-        AudioOutput[] outputs = entity.getPartitionOutputs();
+        String[] outputs = entity.getOutputs();
 
         for (int i = 0; i < outputs.length; i++) {
             if (sb.length() > 0) {
                 sb.append(", ");
             }
-            sb.append(outputs[i].getOutputName());
+            sb.append(outputs[i]);
         }
 
         return sb.toString();
