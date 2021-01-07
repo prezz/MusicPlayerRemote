@@ -62,6 +62,8 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
     private TaskHandle updatingPartitionsHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle assignOutputsHandle = TaskHandle.NULL_HANDLE;
 
+    private AlertDialog notSupportedDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +202,10 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
                     adapterEntities = createAdapterEntities(response);
                     createEntityAdapter(adapterEntities);
                     hideUpdatingIndicator();
+
+                    if (adapterEntities.length == 0) {
+                        showNotSupported();
+                    }
                 }
             });
         }
@@ -391,6 +397,24 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
             arrayAdapter.addAll(adapterEntities);
             arrayAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void showNotSupported() {
+        if (notSupportedDialog != null && notSupportedDialog.isShowing()) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.library_not_supported_header);
+        builder.setMessage(R.string.library_not_supported_message);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        notSupportedDialog = builder.create();
+        notSupportedDialog.show();
     }
 
     private final class RefreshEntitiesResponseReceiver extends ResponseReceiver<ResponseResult> {

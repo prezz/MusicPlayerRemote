@@ -14,4 +14,7 @@
     <string name="partitions_invalid_name_toast">Invalid partition name.</string>
     <string name="partitions_server_error_toast">Server returned an error. Partition might still be active.</string>
 
+    <string name="library_not_supported_header">No partitions found</string>
+    <string name="library_not_supported_message">Partition support requires MPD server version 0.22.0 or higher.</string>
+
 </resources>
