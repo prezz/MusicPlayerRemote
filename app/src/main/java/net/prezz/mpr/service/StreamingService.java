@@ -22,7 +22,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import net.prezz.mpr.R;

@@ -11,7 +11,6 @@ import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
 import net.prezz.mpr.model.ResponseReceiver;
-import net.prezz.mpr.model.Statistics;
 import net.prezz.mpr.model.StatusListener;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.Command;
@@ -28,6 +27,7 @@ import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
+import net.prezz.mpr.ui.partitions.PartitionsActivity;
 import net.prezz.mpr.ui.playlists.StoredPlaylistsActivity;
 import net.prezz.mpr.ui.search.SearchActivity;
 import net.prezz.mpr.ui.settings.SettingsActivity;
@@ -36,7 +36,6 @@ import net.prezz.mpr.ui.view.DataFragment;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -182,13 +181,22 @@ public class PlayerActivity extends FragmentActivity {
                 startActivityForResult(intent, SETTINGS_ACTIVITY_RESULT);
                 return true;
             }
+            case R.id.player_action_server: {
+                selectServer();
+                return true;
+            }
             case R.id.player_action_database: {
                 Intent intent = new Intent(this, DatabaseActivity.class);
                 startActivity(intent);
                 return true;
             }
-            case R.id.player_action_player: {
-                selectServer();
+            case R.id.player_action_partitions: {
+                Intent intent = new Intent(this, PartitionsActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            case R.id.player_action_outputs: {
+                selectOutputs();
                 return true;
             }
             case R.id.player_action_start_streaming: {
@@ -196,6 +204,7 @@ public class PlayerActivity extends FragmentActivity {
                 if (!Utils.nullOrEmpty(streamingUrl)) {
                     startStreaming(streamingUrl);
                 }
+                return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -259,8 +268,8 @@ public class PlayerActivity extends FragmentActivity {
         startActivity(intent);
     }
 
-    public void onSelectServer() {
-        selectServer();
+    public void onSelectOutput() {
+        selectOutputs();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -304,8 +313,6 @@ public class PlayerActivity extends FragmentActivity {
                         ServerConfigurationService.setSelectedServerConfiguration(selected);
                         reconnectMusicPlayerOnSettingsChanged(true);
                     }
-                    ((Dialog) dialog).dismiss();
-                    selectOutputs();
                 }
             }
         });
@@ -315,44 +322,42 @@ public class PlayerActivity extends FragmentActivity {
 
     private void selectOutputs() {
         selectOutputsHandle.cancelTask();
-        selectOutputsHandle = MusicPlayerControl.getOutputs(new ResponseReceiver<AudioOutput[]>() {
+        selectOutputsHandle = MusicPlayerControl.getOutputs(false, new ResponseReceiver<AudioOutput[]>() {
             @Override
             public void receiveResponse(final AudioOutput[] response) {
-                if (response.length > 1) {
-                    String[] items = new String[response.length];
-                    final boolean[] preChecked = new boolean[response.length];
-                    final boolean[] postChecked = new boolean[response.length];
-                    for (int i = 0; i < response.length; i++) {
-                        items[i] = response[i].getOutputName();
-                        preChecked[i] = response[i].isEnabled();
-                        postChecked[i] = response[i].isEnabled();
-                    }
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
-                    builder.setTitle(R.string.player_action_select_outputs);
-                    builder.setMultiChoiceItems(items, postChecked, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            postChecked[which] = isChecked;
-                        }
-                    });
-                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            List<Command> commands = new ArrayList<Command>();
-                            for (int i = 0; i < response.length; i++) {
-                                if (preChecked[i] != postChecked[i]) {
-                                    commands.add(new ToggleOutputCommand(response[i].getOutputId(), postChecked[i]));
-                                }
-                            }
-                            if (!commands.isEmpty()) {
-                                MusicPlayerControl.sendControlCommands(commands);
-                            }
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                String[] items = new String[response.length];
+                final boolean[] preChecked = new boolean[response.length];
+                final boolean[] postChecked = new boolean[response.length];
+                for (int i = 0; i < response.length; i++) {
+                    items[i] = response[i].getOutputName() + " (" + response[i].getPlugin() + ")";
+                    preChecked[i] = response[i].isEnabled();
+                    postChecked[i] = response[i].isEnabled();
                 }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
+                builder.setTitle(R.string.player_action_outputs);
+                builder.setMultiChoiceItems(items, postChecked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        postChecked[which] = isChecked;
+                    }
+                });
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<Command> commands = new ArrayList<Command>();
+                        for (int i = 0; i < response.length; i++) {
+                            if (preChecked[i] != postChecked[i]) {
+                                commands.add(new ToggleOutputCommand(response[i].getOutputId(), postChecked[i]));
+                            }
+                        }
+                        if (!commands.isEmpty()) {
+                            MusicPlayerControl.sendControlCommands(commands);
+                        }
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
     }
@@ -381,7 +386,6 @@ public class PlayerActivity extends FragmentActivity {
             return false;
         } else {
             MusicPlayerControl.setMusicPlayer(new MpdPlayer(currentMpdSettings));
-            ensureLocalServer();
             return true;
         }
     }
@@ -397,8 +401,6 @@ public class PlayerActivity extends FragmentActivity {
                 if (connectStatusListener) {
                     MusicPlayerControl.setStatusListener(musicPlayerRefreshListener);
                 }
-//                PlaybackService.start();
-                ensureLocalServer();
                 return true;
             } else {
                 MusicPlayerControl.setMusicPlayer(null);
@@ -409,34 +411,6 @@ public class PlayerActivity extends FragmentActivity {
         }
 
         return false;
-    }
-
-    private void ensureLocalServer() {
-        //try to launch aMPD if it isn't running
-        if (Utils.isLocalHost(currentMpdSettings.getMpdHost())) {
-            aMpdLaunchHandle.cancelTask();
-            aMpdLaunchHandle = MusicPlayerControl.getStatistics(new ResponseReceiver<Statistics>() {
-                @Override
-                public void receiveResponse(Statistics response) {
-                    if (response == null) {
-                        String aMpdName = "be.deadba.ampd";
-                        try {
-                            Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(aMpdName);
-                            if (LaunchIntent != null) {
-                                startActivity(LaunchIntent);
-                            } else {
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + aMpdName)));
-                                } catch (ActivityNotFoundException ex) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + aMpdName)));
-                                }
-                            }
-                        } catch (Exception ex) {
-                        }
-                    }
-                }
-            });
-        }
     }
 
     private void startStreaming(String url) {

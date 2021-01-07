@@ -1,0 +1,20 @@
+<resources>
+
+    <string name="partitions_activity_title">Manage partitions</string>
+
+    <string name="partitions_create_button">Create partition</string>
+    <string name="partitions_assign_outputs">Assign outputs</string>
+
+    <string-array name="partitions_context_menu">
+        <item>Select</item>
+        <item>Assign outputs</item>
+        <item>Delete</item>
+    </string-array>
+
+    <string name="partitions_invalid_name_toast">Invalid partition name.</string>
+    <string name="partitions_server_error_toast">Server returned an error. Partition might still be active.</string>
+
+    <string name="library_not_supported_header">No partitions found</string>
+    <string name="library_not_supported_message">Partition support requires MPD server version 0.22.0 or higher.</string>
+
+</resources>

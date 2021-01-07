@@ -9,13 +9,14 @@ import java.util.List;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.PlaylistEntity;
 import net.prezz.mpr.model.PlaylistEntity.Builder;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 
 public class MpdGetPlaylistCommand extends MpdConnectionCommand<Void, PlaylistEntity[]>{
 
-    public MpdGetPlaylistCommand() {
-        super(null);
+    public MpdGetPlaylistCommand(MpdPartitionProvider partitionProvider) {
+        super(partitionProvider, null);
     }
 
     @Override

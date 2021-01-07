@@ -80,12 +80,20 @@ public class MusicPlayerControl {
         return musicPlayer.getPlaylistDetails(storedPlaylist, responseReceiver);
     }
 
-    public static TaskHandle getOutputs(ResponseReceiver<AudioOutput[]> responseReceiver) {
-        return musicPlayer.getOutputs(responseReceiver);
+    public static TaskHandle getOutputs(boolean defaultPartition, ResponseReceiver<AudioOutput[]> responseReceiver) {
+        return musicPlayer.getOutputs(defaultPartition, responseReceiver);
     }
 
     public static TaskHandle getStatistics(ResponseReceiver<Statistics> responseReceiver) {
         return musicPlayer.getStatistics(responseReceiver);
+    }
+
+    public static TaskHandle getPartitions(ResponseReceiver<PartitionEntity[]> responseReceiver) {
+        return musicPlayer.getPartitions(responseReceiver);
+    }
+
+    public static void switchPartition(String partition, ResponseReceiver<PartitionEntity[]> responseReceiver) {
+        musicPlayer.switchPartition(partition, responseReceiver);
     }
 
     public static void sendControlCommand(Command command) {

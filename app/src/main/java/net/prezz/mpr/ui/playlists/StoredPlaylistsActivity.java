@@ -59,7 +59,7 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
 
     private StoredPlaylistAdapterEntity[] adapterEntities = null;
     private boolean updating = false;
-    private TaskHandle updatingPlaylistsHandle;
+    private TaskHandle updatingPlaylistsHandle = TaskHandle.NULL_HANDLE;
     private MiniControlHelper controlHelper;
 
 
@@ -72,8 +72,6 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
         // Show the Up button in the action bar.
         setupActionBar();
         setupLollipop();
-
-        updatingPlaylistsHandle = TaskHandle.NULL_HANDLE;
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {
@@ -176,7 +174,7 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,    long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         StoredPlaylistAdapterEntity storedPlaylist = adapterEntities[position];
         Intent intent = new Intent(this, PlaylistDetailsActivity.class);
         Bundle args = new Bundle();
@@ -196,10 +194,10 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
 
     public void onChoiceMenuClick(View view) {
         if (adapterEntities != null) {
-               final String[] items = getResources().getStringArray(R.array.stored_playlists_choice_menu);
+            final String[] items = getResources().getStringArray(R.array.stored_playlists_choice_menu);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-             builder.setTitle(getTitle());
+            builder.setTitle(getTitle());
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                     switch(item) {

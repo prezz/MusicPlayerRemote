@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".LibraryActivity" >
+    tools:context=".ui.library.LibraryActivity" >
 
     <androidx.viewpager.widget.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"

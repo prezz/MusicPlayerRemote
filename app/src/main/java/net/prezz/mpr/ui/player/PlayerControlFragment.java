@@ -27,6 +27,7 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.model.servers.ServerConfigurationService;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
@@ -145,8 +146,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         }
 
         boolean showOutput = showOutput();
-        if (showOutput != outputVisible || !Arrays.equals(playerStatus.getAudioOutputs(), status.getAudioOutputs())) {
-            setOutputText(showOutput, status.getAudioOutputs());
+        if (showOutput != outputVisible || !Utils.equals(playerStatus.getPartition(), status.getPartition()) || !Arrays.equals(playerStatus.getAudioOutputs(), status.getAudioOutputs())) {
+            setOutputText(showOutput, status.getPartition(), status.getAudioOutputs());
             outputVisible = showOutput;
         }
 
@@ -197,7 +198,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.player_text_output:
-                ((PlayerActivity)getActivity()).onSelectServer();
+                ((PlayerActivity)getActivity()).onSelectOutput();
                 break;
             case R.id.player_button_volume_down:
                 MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
@@ -547,12 +548,15 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         }
     }
 
-    public void setOutputText(boolean visible, AudioOutput[] audioOutputs) {
+    public void setOutputText(boolean visible, String partition, AudioOutput[] audioOutputs) {
 
         final TextView textView = (TextView) getView().findViewById(R.id.player_text_output);
 
         if (visible) {
-            final String serverName = ServerConfigurationService.getSelectedServerConfiguration().getName();
+            String partitionPrefix = "";
+            if (partition != null && !partition.isEmpty() && !Utils.equals(MpdPartitionProvider.DEFAULT_PARTITION, partition)) {
+                partitionPrefix = partition + " - ";
+            }
 
             StringBuilder outputName = new StringBuilder();
             for (int i = 0; i < audioOutputs.length; i++) {
@@ -564,7 +568,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                 }
             }
 
-            textView.setText(serverName + " - " + outputName);
+            String text = partitionPrefix + outputName;
+            textView.setText(text.isEmpty() ? "-" : text);
             textView.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.GONE);

@@ -16,9 +16,16 @@ public abstract class MpdDatabaseCommand<Param, Result> extends MpdCommand {
     }
 
     private Param param;
+    private boolean rebuild;
 
     public MpdDatabaseCommand(Param param) {
         this.param = param;
+        this.rebuild = true;
+    }
+
+    public MpdDatabaseCommand(Param param, boolean rebuild) {
+        this.param = param;
+        this.rebuild = rebuild;
     }
 
     @SuppressWarnings("unchecked")
@@ -30,7 +37,7 @@ public abstract class MpdDatabaseCommand<Param, Result> extends MpdCommand {
                 MpdLibraryDatabaseHelper databaseHelperParam = (MpdLibraryDatabaseHelper) params[0];
                 try {
                     synchronized (lock) {
-                        if (databaseHelperParam.getRowCount() == 0) {
+                        if (rebuild && databaseHelperParam.getRowCount() == 0) {
                             publishProgress();
                             MpdConnection connectionParam = (MpdConnection) params[1];
                             try {

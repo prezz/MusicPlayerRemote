@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.prezz.mpr.Utils;
 import net.prezz.mpr.mpd.MpdSettings;
 import android.util.Log;
 
@@ -70,12 +72,12 @@ public class MpdConnection {
                 }
                 
                 version = parseVersion(split[2]);
-                
+
                 String password = settings.getMpdPassword();
                 if (password != null && !password.isEmpty()) {
                     writeCommand(String.format("password %s\n", password));
                     response = readLine();
-                    if (!"OK".equals(response)) {
+                    if (!OK.equals(response)) {
                         throw new IOException("Invalid MPD password");
                     }
                 }
@@ -85,6 +87,18 @@ public class MpdConnection {
                 throw ex;
             }
         }
+    }
+
+    public boolean setPartition(String partition) throws IOException {
+        if (partition != null && isConnected() && isMinimumVersion(0, 22, 0)) {
+            writeCommand(String.format("partition \"%s\"\n", partition));
+            String response = readLine();
+            if (!OK.equals(response)) {
+                return false;
+            }
+        }
+
+        return true;
     }
     
     public void disconnect() {
@@ -111,6 +125,7 @@ public class MpdConnection {
         writer = null;
         inputStream = null;
         socket = null;
+        version = null;
     }
     
     public boolean isMinimumVersion(int major, int minor, int point) {

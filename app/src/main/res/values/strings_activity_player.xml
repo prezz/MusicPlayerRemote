@@ -2,10 +2,10 @@
 <resources>
 
     <string name="player_action_settings">Settings</string>
-    <string name="player_action_player">Select server/output</string>
     <string name="player_action_server">Select server</string>
     <string name="player_action_database">Update library</string>
-    <string name="player_action_select_outputs">Select outputs</string>
+    <string name="player_action_partitions">Manage partitions</string>
+    <string name="player_action_outputs">Select outputs</string>
     <string name="player_action_start_streaming">Start streaming</string>
     <string name="player_stored_playlists">Stored Playlists</string>
     <string name="player_music_library">Music Library</string>

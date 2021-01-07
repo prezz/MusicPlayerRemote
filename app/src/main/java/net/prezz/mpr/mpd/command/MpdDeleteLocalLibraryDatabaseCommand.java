@@ -1,17 +1,16 @@
 package net.prezz.mpr.mpd.command;
 
-import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 
-public class MpdDeleteLocalLibraryDatabaseCommand extends MpdConnectionCommand<MpdLibraryDatabaseHelper, Boolean> {
+public class MpdDeleteLocalLibraryDatabaseCommand extends MpdDatabaseCommand<Void, Boolean> {
 
-    public MpdDeleteLocalLibraryDatabaseCommand(MpdLibraryDatabaseHelper libraryDatabaseHelper) {
-        super(libraryDatabaseHelper);
+    public MpdDeleteLocalLibraryDatabaseCommand() {
+        super(null, false);
     }
 
     @Override
-    protected Boolean doExecute(MpdConnection connection, MpdLibraryDatabaseHelper libraryDatabaseHelper) throws Exception {
-        libraryDatabaseHelper.cleanDatabase();
+    protected Boolean doExecute(MpdLibraryDatabaseHelper databaseHelper, Void param) throws Exception {
+        databaseHelper.cleanDatabase();
         return Boolean.TRUE;
     }
 

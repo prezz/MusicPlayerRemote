@@ -2,13 +2,14 @@ package net.prezz.mpr.mpd.command;
 
 import net.prezz.mpr.model.PlaylistEntity;
 import net.prezz.mpr.model.PlaylistEntity.Builder;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 
 
 public class MpdGetPlaylistEntityCommand extends MpdConnectionCommand<Integer, PlaylistEntity>{
 
-    public MpdGetPlaylistEntityCommand(int position) {
-        super(Integer.valueOf(position));
+    public MpdGetPlaylistEntityCommand(MpdPartitionProvider partitionProvider, int position) {
+        super(partitionProvider, Integer.valueOf(position));
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.ResponseResult;
@@ -20,13 +21,16 @@ import net.prezz.mpr.model.command.AddUriToStoredPlaylistCommand;
 import net.prezz.mpr.model.command.ClearPlaylistCommand;
 import net.prezz.mpr.model.command.Command;
 import net.prezz.mpr.model.command.ConsumeCommand;
+import net.prezz.mpr.model.command.CreatePartitionCommand;
 import net.prezz.mpr.model.command.DeleteFromPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteFromStoredPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteMultipleFromPlaylistCommand;
+import net.prezz.mpr.model.command.DeletePartitionCommand;
 import net.prezz.mpr.model.command.DeleteStoredPlaylistCommand;
 import net.prezz.mpr.model.command.LoadStoredPlaylistCommand;
 import net.prezz.mpr.model.command.MoveInPlaylistCommand;
 import net.prezz.mpr.model.command.MoveInStoredPlaylistCommand;
+import net.prezz.mpr.model.command.MoveOutputToPartitionCommand;
 import net.prezz.mpr.model.command.NextCommand;
 import net.prezz.mpr.model.command.PauseCommand;
 import net.prezz.mpr.model.command.PlayCommand;
@@ -46,6 +50,7 @@ import net.prezz.mpr.model.command.UpdateLibraryCommand;
 import net.prezz.mpr.model.command.UpdatePrioritiesCommand;
 import net.prezz.mpr.model.command.VolumeDownCommand;
 import net.prezz.mpr.model.command.VolumeUpCommand;
+import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.Filter;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.mpd.connection.RejectAllFilter;
@@ -66,8 +71,8 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
         }
     };
 
-    public MpdSendControlCommands(List<Command> commands) {
-        super(commands);
+    public MpdSendControlCommands(MpdPartitionProvider partitionProvider, List<Command> commands) {
+        super(partitionProvider, commands);
     }
 
     @Override
@@ -114,6 +119,12 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                 boolean consume = ((ConsumeCommand) command).getConsume();
                 connection.writeResponseCommand(String.format("consume %s\n", consume ? "1" : "0"), RejectAllFilter.INSTANCE);
             }
+            if (command instanceof CreatePartitionCommand) {
+                if (connection.isMinimumVersion(0, 22, 0)) {
+                    String name = ((CreatePartitionCommand) command).getName();
+                    connection.writeResponseCommand(String.format("newpartition \"%s\"\n", name), RejectAllFilter.INSTANCE);
+                }
+            }
             if (command instanceof DeleteFromPlaylistCommand) {
                 int pos = ((DeleteFromPlaylistCommand) command).getPos();
                 connection.writeResponseCommand(String.format("delete %s\n", pos), RejectAllFilter.INSTANCE);
@@ -129,6 +140,12 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                     commandList.add(String.format("deleteid %s\n", id));
                 }
                 connection.writeResponseCommandList(commandList.toArray(new String[commandList.size()]), RejectAllFilter.INSTANCE);
+            }
+            if (command instanceof DeletePartitionCommand) {
+                if (connection.isMinimumVersion(0, 22, 0)) {
+                    String name = ((DeletePartitionCommand) command).getName();
+                    connection.writeResponseCommand(String.format("delpartition \"%s\"\n", name), RejectAllFilter.INSTANCE);
+                }
             }
             if (command instanceof DeleteStoredPlaylistCommand) {
                 StoredPlaylistEntity entity = ((DeleteStoredPlaylistCommand) command).getEntity();
@@ -148,6 +165,21 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
                 int from = ((MoveInStoredPlaylistCommand) command).getFrom();
                 int to = ((MoveInStoredPlaylistCommand) command).getTo();
                 connection.writeResponseCommand(String.format("playlistmove \"%s\" %s %s\n", name, from, to), RejectAllFilter.INSTANCE);
+            }
+            if (command instanceof MoveOutputToPartitionCommand) {
+                if (connection.isMinimumVersion(0, 22, 0)) {
+                    String outputName = ((MoveOutputToPartitionCommand) command).getOutputName();
+                    String partition = ((MoveOutputToPartitionCommand) command).getPartition();
+                    try {
+                        if (connection.setPartition(partition)) {
+                            connection.writeResponseCommand(String.format("moveoutput \"%s\"\n", outputName), RejectAllFilter.INSTANCE);
+                        } else {
+                            throw new IOException("Invalid partition.");
+                        }
+                    } finally {
+                        connection.setPartition(super.getPartition());
+                    }
+                }
             }
             if (command instanceof NextCommand) {
                 connection.writeResponseCommand("next\n", RejectAllFilter.INSTANCE);

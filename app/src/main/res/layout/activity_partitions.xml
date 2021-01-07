@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".ui.settings.servers.ServersActivity" >
+    tools:context=".ui.partitions.PartitionsActivity" >
 
     <net.prezz.mpr.ui.view.KitKatFixedListView
-        android:id="@+id/servers_list_view_browse"
+        android:id="@+id/partitions_list_view_browse"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -15,14 +15,21 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:fastScrollEnabled="false" />
 
+    <ProgressBar
+        android:id="@+id/partitions_progress_bar_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
     <View
-        android:id="@+id/servers_choice_bar_seperator"
+        android:id="@+id/partitions_choice_bar_seperator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
-    
+
     <LinearLayout
-        android:id="@+id/servers_choice_bar"
+        android:id="@+id/partitions_choice_bar"
         android:layout_width="match_parent"
         android:background="?choiceBarColor"
         android:layout_height="50dp" >
@@ -33,15 +40,15 @@
             android:layout_weight="2" />
 
         <ImageButton
-            android:id="@+id/servers_add_button"
+            android:id="@+id/partitions_add_button"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:padding="8dp"
-            android:contentDescription="@string/servers_add_button"
-            android:onClick="onAddServerClick"
+            android:contentDescription="@string/partitions_create_button"
+            android:onClick="onCreatePartitionClick"
             android:scaleType="fitCenter"
             android:tint="?iconColor"
             android:src="@drawable/ic_add" />
