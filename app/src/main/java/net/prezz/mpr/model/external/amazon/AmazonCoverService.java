@@ -24,9 +24,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Xml;
+
+import androidx.preference.PreferenceManager;
 
 public class AmazonCoverService implements CoverService {
 

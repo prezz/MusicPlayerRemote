@@ -5,8 +5,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import net.prezz.mpr.R;
 import net.prezz.mpr.model.UriEntity;

@@ -41,9 +41,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 public class PlaybackService extends Service {
 

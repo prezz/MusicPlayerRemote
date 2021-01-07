@@ -14,8 +14,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+
+import androidx.preference.PreferenceManager;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 

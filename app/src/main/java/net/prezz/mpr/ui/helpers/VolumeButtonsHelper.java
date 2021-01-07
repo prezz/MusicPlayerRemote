@@ -3,9 +3,9 @@ package net.prezz.mpr.ui.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
-import android.view.Gravity;
 import android.view.KeyEvent;
+
+import androidx.preference.PreferenceManager;
 
 import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;

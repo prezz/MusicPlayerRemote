@@ -3,7 +3,8 @@ package net.prezz.mpr.ui.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import net.prezz.mpr.R;
 

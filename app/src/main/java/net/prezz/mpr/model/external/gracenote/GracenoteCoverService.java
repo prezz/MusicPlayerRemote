@@ -3,9 +3,10 @@ package net.prezz.mpr.model.external.gracenote;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Xml;
+
+import androidx.preference.PreferenceManager;
 
 import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
