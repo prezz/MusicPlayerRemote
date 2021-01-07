@@ -16,6 +16,15 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput
 
     @Override
     protected AudioOutput[] doExecute(MpdConnection connection, Void param) throws Exception {
+        return getOutputs(connection);
+    }
+
+    @Override
+    protected AudioOutput[] onError() {
+        return new AudioOutput[0];
+    }
+
+    protected static AudioOutput[] getOutputs(MpdConnection connection) throws Exception {
         String[] lines = connection.writeResponseCommand("outputs\n");
 
         List<AudioOutput> result = new ArrayList<AudioOutput>();
@@ -52,10 +61,5 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput
         }
 
         return result.toArray(new AudioOutput[result.size()]);
-    }
-
-    @Override
-    protected AudioOutput[] onError() {
-        return new AudioOutput[0];
     }
 }
