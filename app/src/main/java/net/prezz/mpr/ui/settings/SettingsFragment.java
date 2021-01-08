@@ -24,28 +24,26 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.text.InputType;
+
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 3003;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    // see: https://stackoverflow.com/questions/32487206/inner-preferencescreen-does-not-open-with-preferencefragmentcompat
 
-        setupSimplePreferencesScreen();
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setupSimplePreferencesScreen(rootKey);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -61,8 +59,8 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    private void setupSimplePreferencesScreen() {
-        addPreferencesFromResource(R.xml.settings_screen);
+    private void setupSimplePreferencesScreen(String rootKey) {
+        setPreferencesFromResource(R.xml.settings_screen, rootKey);
 
         setupServersPreferences();
         setupThemePreferences();
@@ -103,8 +101,8 @@ public class SettingsFragment extends PreferenceFragment {
             } else {
                 boolean password = false;
                 if (preference instanceof EditTextPreference) {
-                    int inputMask = ((EditTextPreference)preference).getEditText().getInputType();
-                    password = ((inputMask & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0);
+                    //int inputMask = ((EditTextPreference)preference).getEditText().getInputType();
+                    //password = ((inputMask & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0);
                 }
                 preference.setSummary(password ? createString(stringValue.length(), '*') : stringValue);
             }
@@ -123,7 +121,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupServersPreferences() {
         Preference serversPreference = findPreference(getString(R.string.settings_servers_key));
-        serversPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        serversPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), ServersActivity.class);
                 startActivity(intent);
@@ -134,7 +132,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupThemePreferences() {
         Preference themePreference = findPreference(getString(R.string.settings_interface_dark_theme_key));
-        themePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 getActivity().recreate();
@@ -145,7 +143,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupProperSortingPreferences() {
         Preference notificationPreference = findPreference(getString(R.string.settings_library_proper_sort_key));
-        notificationPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        notificationPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 MusicPlayerControl.deleteLocalLibraryDatabase(new ResponseReceiver<Boolean>() {
@@ -163,7 +161,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupGracenoteCoverPreferences() {
         Preference gracenotePreference = findPreference(getString(R.string.settings_covers_gracenote_client_id_key));
-        gracenotePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        gracenotePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 Context context = ApplicationActivator.getContext();
@@ -183,7 +181,7 @@ public class SettingsFragment extends PreferenceFragment {
     private void setupPauseOnPhoneCallPreferences() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Preference pauseOnPhonePreference = findPreference(getString(R.string.settings_behavior_pause_on_phonecall_key));
-            pauseOnPhonePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            pauseOnPhonePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (Boolean.TRUE == newValue) {
@@ -201,7 +199,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupNotificationPreferences() {
         Preference notificationPreference = findPreference(getString(R.string.settings_behavior_show_notification_key));
-        notificationPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        notificationPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (Boolean.FALSE.equals(newValue)) {
@@ -232,7 +230,7 @@ public class SettingsFragment extends PreferenceFragment {
         Preference aboutPreference = findPreference(getString(R.string.settings_about_key));
         aboutPreference.setSummary(getString(R.string.settings_about_summary) + " " + version + buildTime);
 
-         aboutPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+         aboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(intent);

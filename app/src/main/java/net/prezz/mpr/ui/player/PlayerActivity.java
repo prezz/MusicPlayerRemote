@@ -44,7 +44,8 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import android.view.KeyEvent;
@@ -52,7 +53,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class PlayerActivity extends FragmentActivity {
+public class PlayerActivity extends AppCompatActivity {
 
     private static final int SETTINGS_ACTIVITY_RESULT = 1001;
 

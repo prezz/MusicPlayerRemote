@@ -6,20 +6,31 @@ import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
+
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ThemeHelper.applyTheme(this);
+        //ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_settings);
-        setupActionBar();
+        //setupActionBar();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.settings_fragment_container, new SettingsFragment())
+                .commit();
     }
 
     @Override
