@@ -174,7 +174,7 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search_action_search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setFocusable(true);
         searchView.setOnQueryTextListener(this);
         if (setSearchFocus == Boolean.TRUE) {
