@@ -4,20 +4,19 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceScreen;
+import androidx.fragment.app.Fragment;
 
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final String FRAGMENT_TAG = "settings_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +25,17 @@ public class SettingsActivity extends AppCompatActivity {
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_settings);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.settings_fragment_container, new SettingsFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+            if (fragment == null) {
+                fragment = new SettingsFragment();
+            }
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.settings_fragment_container, fragment, FRAGMENT_TAG)
+                    .commit();
+        }
     }
 
     @Override
