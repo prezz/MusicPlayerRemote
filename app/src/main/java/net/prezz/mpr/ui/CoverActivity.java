@@ -12,7 +12,6 @@ import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,7 +25,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class CoverActivity extends Activity implements OnEditorActionListener {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class CoverActivity extends AppCompatActivity implements OnEditorActionListener {
 
     public static final String ARTIST_ARGUMENT_KEY = "artist";
     public static final String ALBUM_ARGUMENT_KEY = "album";

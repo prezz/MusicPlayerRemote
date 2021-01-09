@@ -39,12 +39,13 @@ import net.prezz.mpr.ui.view.DragListView.DropListener;
 import net.prezz.mpr.ui.view.DragListView.RemoveListener;
 import net.prezz.mpr.R;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -61,7 +62,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class PlaylistDetailsActivity extends Activity implements OnMenuItemClickListener {
+public class PlaylistDetailsActivity extends AppCompatActivity implements OnMenuItemClickListener {
 
     public static final String PLAYLIST_ARGUMENT_KEY = "playlistArgument";
 
@@ -80,7 +81,6 @@ public class PlaylistDetailsActivity extends Activity implements OnMenuItemClick
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_playlist_details);
         // Show the Up button in the action bar.
-        setupActionBar();
         setupLollipop();
 
         updatingPlaylistsHandle = TaskHandle.NULL_HANDLE;
@@ -268,10 +268,6 @@ public class PlaylistDetailsActivity extends Activity implements OnMenuItemClick
 
     public void onControlMenuClick(View view) {
         controlHelper.toggleVisibility();
-    }
-
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

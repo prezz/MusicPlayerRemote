@@ -9,13 +9,14 @@ import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-public class DatabaseActivity extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DatabaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

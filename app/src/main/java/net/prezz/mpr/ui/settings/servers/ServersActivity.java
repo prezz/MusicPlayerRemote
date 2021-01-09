@@ -10,7 +10,6 @@ import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +25,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ServersActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ServersActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
 
     private static final int ADD_EDIT_SERVER_ACTIVITY_RESULT = 3002;
     private ServerConfiguration[] serverConfigurations;

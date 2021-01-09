@@ -44,7 +44,6 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.ui.view.DataFragment;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -54,6 +53,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.preference.PreferenceManager;
 
@@ -72,7 +73,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
-public class SearchActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener, SearchView.OnQueryTextListener, UriFilterHelper.UriFilterChangedListener {
+public class SearchActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener, SearchView.OnQueryTextListener, UriFilterHelper.UriFilterChangedListener {
 
     private static final String ACTIVITY_TITLE_SAVED_INSTANCE_STATE = "activityTitle";
     private static final String FOCUS_SEARCH_SAVED_INSTANCE_STATE = "focusSearch";
@@ -92,7 +93,6 @@ public class SearchActivity extends Activity implements OnItemClickListener, OnM
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_search);
-        setupActionBar();
         setupLollipop();
 
         searchLibraryHandle = TaskHandle.NULL_HANDLE;
@@ -174,7 +174,7 @@ public class SearchActivity extends Activity implements OnItemClickListener, OnM
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search_action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setFocusable(true);
         searchView.setOnQueryTextListener(this);
         if (setSearchFocus == Boolean.TRUE) {
@@ -434,10 +434,6 @@ public class SearchActivity extends Activity implements OnItemClickListener, OnM
         }
     }
     
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupLollipop() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

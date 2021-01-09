@@ -23,9 +23,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //ThemeHelper.applyTheme(this);
+        ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_settings);
-        //setupActionBar();
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -40,13 +39,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

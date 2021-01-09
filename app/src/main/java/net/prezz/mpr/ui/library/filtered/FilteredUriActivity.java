@@ -31,12 +31,13 @@ import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -51,7 +52,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class FilteredUriActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
+public class FilteredUriActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
 
     public static final String TITLE_ARGUMENT_KEY = "title";
     public static final String ENTITY_ARGUMENT_KEY = "entity";
@@ -71,7 +72,6 @@ public class FilteredUriActivity extends Activity implements OnItemClickListener
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_filtered);
         // Show the Up button in the action bar.
-        setupActionBar();
         setupLollipop();
 
         String title = this.getIntent().getExtras().getString(TITLE_ARGUMENT_KEY);
@@ -274,10 +274,6 @@ public class FilteredUriActivity extends Activity implements OnItemClickListener
         controlHelper.hideVisibility();
     }
     
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupLollipop() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

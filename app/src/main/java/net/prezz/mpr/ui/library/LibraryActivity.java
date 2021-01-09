@@ -21,7 +21,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
@@ -32,7 +33,7 @@ import android.view.View;
 
 import java.util.SortedSet;
 
-public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
+public class LibraryActivity extends AppCompatActivity implements UriFilterHelper.UriFilterChangedListener {
 
     private static final String ENTITIES_CHANGED = "entities_changed";
     private static final String URI_ENTITY_FILTER = "uri_entity_filter";
@@ -58,8 +59,6 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_library);
-        // Show the Up button in the action bar.
-        setupActionBar();
         setupLollipop();
 
         buildDatabaseErrorDialog = null;
@@ -186,10 +185,6 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

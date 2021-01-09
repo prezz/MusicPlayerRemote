@@ -7,7 +7,6 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,7 +16,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class AddEditServerActivity extends Activity implements OnEditorActionListener {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class AddEditServerActivity extends AppCompatActivity implements OnEditorActionListener {
 
     public static final String CONFIGURATION_ARGUMENT_KEY = "serverConfiguration";
     private ServerConfiguration editConfiguration;
