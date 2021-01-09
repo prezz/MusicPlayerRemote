@@ -3,7 +3,6 @@ package net.prezz.mpr.ui.view;
 
 import net.prezz.mpr.R;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -17,9 +16,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 
-public class DragListView extends KitKatFixedListView {
+public class DragListView extends ListView {
 
     private ImageView dragView;
     private WindowManager windowManager;
