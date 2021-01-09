@@ -111,28 +111,10 @@
 
     <string name="settings_category_covers">Cover settings</string>
 
-    <string name="settings_covers_local_screen_title">Configure local cover server</string>
-    <string name="settings_covers_local_screen_summary">Setup cover download from local HTTP server</string>
-    <string name="settings_covers_local_enabled_title">Download covers from local server</string>
-    <string name="settings_covers_local_enabled_key">local_cover_enabled</string>
-    <string name="settings_covers_local_path_title">Path</string>
-    <string name="settings_covers_local_path_key">local_cover_path_v2</string>
-    <string name="settings_covers_local_port_title">Port</string>
-    <string name="settings_covers_local_port_key">local_cover_port</string>
-    <string name="settings_covers_local_file_title">Filename</string>
-    <string name="settings_covers_local_file_key">local_cover_filename</string>
-
     <string name="settings_covers_gracenote_client_id_title">Configure Gracenote client id</string>
     <string name="settings_covers_gracenote_client_id_summary">Add client id required to retrieve covers from Gracenote</string>
     <string name="settings_covers_gracenote_client_id_key">gracentore_client_id_</string>
     <string name="settings_covers_gracenote_user_id_key">gracentore_user_id_</string>
-
-    <string name="settings_covers_amazon_access_key_screen_title">Configure Amazon access keys</string>
-    <string name="settings_covers_amazon_access_key_screen_summary">Add access key required to retrieve covers from Amazon</string>
-    <string name="settings_covers_amazon_access_key_id_title">Access Key Id</string>
-    <string name="settings_covers_amazon_access_key_id_key">amazon_access_key_id</string>
-    <string name="settings_covers_amazon_secret_key_title">Secret Key</string>
-    <string name="settings_covers_amazon_secret_key_key">amazon_secret_key</string>
 
     <string name="settings_category_behavior">Behavior settings</string>
     

@@ -13,11 +13,9 @@ import java.util.concurrent.RejectedExecutionException;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.TaskHandleImpl;
-import net.prezz.mpr.model.external.amazon.AmazonCoverService;
 import net.prezz.mpr.model.external.cache.CoverCache;
 import net.prezz.mpr.model.external.gracenote.GracenoteCoverService;
 import net.prezz.mpr.model.external.lastfm.LastFmCoverAndInfoService;
-import net.prezz.mpr.model.external.local.HttpCoverService;
 import net.prezz.mpr.model.external.local.MpdCoverService;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.ui.ApplicationActivator;
@@ -60,10 +58,8 @@ public class ExternalInformationService {
 
     private static CoverCache coverCache = new CoverCache();
     private static MpdCoverService mpdCoverService = new MpdCoverService();
-    private static HttpCoverService httpCoverService = new HttpCoverService();
     private static LastFmCoverAndInfoService lastFmCoverAndInfoService = new LastFmCoverAndInfoService();
     private static GracenoteCoverService gracenoteCoverService = new GracenoteCoverService();
-    private static AmazonCoverService amazonCoverService = new AmazonCoverService();
     private static Executor executor = Utils.createExecutor();
 
 
@@ -172,11 +168,6 @@ public class ExternalInformationService {
             return coverUrlList.get(0);
         }
 
-        coverUrlList.addAll(httpCoverService.getCoverUrls(artistParam, albumParam));
-        if (!coverUrlList.isEmpty()) {
-            return coverUrlList.get(0);
-        }
-
         List<String> artists = createQueryStrings(artistParam, false);
         List<String> albums = createQueryStrings(albumParam, true);
         artists.add(null);
@@ -188,10 +179,6 @@ public class ExternalInformationService {
                     return coverUrlList.get(0);
                 }
                 coverUrlList = gracenoteCoverService.getCoverUrls(artist, album);
-                if (!coverUrlList.isEmpty()) {
-                    return coverUrlList.get(0);
-                }
-                coverUrlList = amazonCoverService.getCoverUrls(artist, album);
                 if (!coverUrlList.isEmpty()) {
                     return coverUrlList.get(0);
                 }
@@ -255,9 +242,6 @@ public class ExternalInformationService {
                         List<String> mpdUrlList = mpdCoverService.getCoverUrls(artistParam, albumParam);
                         result.addAll(mpdUrlList);
 
-                        List<String> httpUrlList = httpCoverService.getCoverUrls(artistParam, albumParam);
-                        result.addAll(httpUrlList);
-
                         List<String> artists = createQueryStrings(artistParam, false);
                         List<String> albums = createQueryStrings(albumParam, true);
                         artists.add(null);
@@ -269,9 +253,6 @@ public class ExternalInformationService {
 
                                 List<String> gracenoteUrlList = gracenoteCoverService.getCoverUrls(artist, album);
                                 result.addAll(gracenoteUrlList);
-
-                                List<String> amazonUrlList = amazonCoverService.getCoverUrls(artist, album);
-                                result.addAll(amazonUrlList);
                             }
                         }
                     } catch (Exception ex) {

@@ -27,17 +27,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/settings_category_covers" >
-        <PreferenceScreen app:iconSpaceReserved="false" app:title="@string/settings_covers_local_screen_title" app:summary="@string/settings_covers_local_screen_summary">
-            <CheckBoxPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_local_enabled_key" app:title="@string/settings_covers_local_enabled_title" app:defaultValue="false" />
-            <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_local_path_key" app:title="@string/settings_covers_local_path_title" app:defaultValue="/" />
-            <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_local_port_key" app:title="@string/settings_covers_local_port_title" app:defaultValue="80" />
-            <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_local_file_key" app:title="@string/settings_covers_local_file_title" app:defaultValue="Folder.jpg" />
-        </PreferenceScreen>
         <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_gracenote_client_id_key" app:summary="@string/settings_covers_gracenote_client_id_summary" app:title="@string/settings_covers_gracenote_client_id_title"/>
-        <PreferenceScreen app:iconSpaceReserved="false" app:title="@string/settings_covers_amazon_access_key_screen_title" app:summary="@string/settings_covers_amazon_access_key_screen_summary">
-            <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_amazon_access_key_id_key" app:title="@string/settings_covers_amazon_access_key_id_title"/>
-            <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_amazon_secret_key_key" app:title="@string/settings_covers_amazon_secret_key_title"/>
-        </PreferenceScreen>
     </PreferenceCategory>
 
     <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/settings_category_behavior" >
