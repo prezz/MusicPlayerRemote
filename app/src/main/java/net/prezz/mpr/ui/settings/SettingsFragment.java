@@ -10,7 +10,6 @@ import net.prezz.mpr.ui.settings.servers.ServersActivity;
 import net.prezz.mpr.R;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -41,7 +40,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setupSimplePreferencesScreen(rootKey);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
