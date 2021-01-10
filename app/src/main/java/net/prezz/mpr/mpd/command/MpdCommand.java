@@ -1,12 +1,15 @@
 package net.prezz.mpr.mpd.command;
 
-import net.prezz.mpr.Utils;
+import android.os.Handler;
+import android.os.Looper;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class MpdCommand {
 
-    protected static final Executor executor = Utils.createExecutor();
+    protected static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected static final Handler handler = new Handler(Looper.getMainLooper());
     protected static final Object lock = new Object();
 
 }

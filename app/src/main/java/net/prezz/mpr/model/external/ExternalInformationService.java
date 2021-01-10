@@ -12,7 +12,7 @@ import java.util.concurrent.RejectedExecutionException;
 
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.TaskHandleImpl;
+import net.prezz.mpr.model.AsyncTaskHandleImpl;
 import net.prezz.mpr.model.external.cache.CoverCache;
 import net.prezz.mpr.model.external.gracenote.GracenoteCoverService;
 import net.prezz.mpr.model.external.lastfm.LastFmCoverAndInfoService;
@@ -152,7 +152,7 @@ public class ExternalInformationService {
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, artist, album, maxHeight));
+            return new AsyncTaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, artist, album, maxHeight));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
@@ -221,7 +221,7 @@ public class ExternalInformationService {
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, url));
+            return new AsyncTaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, url));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
@@ -270,7 +270,7 @@ public class ExternalInformationService {
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist, album));
+            return new AsyncTaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist, album));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
@@ -328,7 +328,7 @@ public class ExternalInformationService {
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, artist, album, url, maxHeight, Boolean.valueOf(coverReceiver != null)));
+            return new AsyncTaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, artist, album, url, maxHeight, Boolean.valueOf(coverReceiver != null)));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
@@ -363,7 +363,7 @@ public class ExternalInformationService {
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist));
+            return new AsyncTaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to artist info. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
@@ -401,7 +401,7 @@ public class ExternalInformationService {
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist, album));
+            return new AsyncTaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist, album));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to album info. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;

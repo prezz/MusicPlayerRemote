@@ -13,7 +13,7 @@ import java.util.List;
 public class MpdGetPartitionsCommand extends MpdConnectionCommand<Void, PartitionEntity[]>{
 
     public MpdGetPartitionsCommand(MpdPartitionProvider partitionProvider) {
-        super(partitionProvider, null);
+        super(null, partitionProvider);
     }
 
     @Override

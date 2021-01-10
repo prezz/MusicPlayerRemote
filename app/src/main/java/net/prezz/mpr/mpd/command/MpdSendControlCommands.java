@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.ResponseResult;
@@ -71,8 +70,8 @@ public class MpdSendControlCommands extends MpdConnectionCommand<List<Command>, 
         }
     };
 
-    public MpdSendControlCommands(MpdPartitionProvider partitionProvider, List<Command> commands) {
-        super(partitionProvider, commands);
+    public MpdSendControlCommands(List<Command> commands, MpdPartitionProvider partitionProvider) {
+        super(commands, partitionProvider);
     }
 
     @Override

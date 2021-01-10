@@ -252,7 +252,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPlaylistEntity(int position, final ResponseReceiver<PlaylistEntity> responseReceiver) {
-        MpdGetPlaylistEntityCommand command = new MpdGetPlaylistEntityCommand(partitionStore, position);
+        MpdGetPlaylistEntityCommand command = new MpdGetPlaylistEntityCommand(position, partitionStore);
         return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity>() {
             @Override
             public void receive(PlaylistEntity result) {
@@ -274,7 +274,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle getPlaylistDetails(StoredPlaylistEntity storedPlaylist, final ResponseReceiver<PlaylistEntity[]> responseReceiver) {
-        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(partitionStore, storedPlaylist);
+        MpdGetPlaylistDetailsCommand command = new MpdGetPlaylistDetailsCommand(storedPlaylist, partitionStore);
         return command.execute(connection, new MpdConnectionCommandReceiver<PlaylistEntity[]>() {
             @Override
             public void receive(PlaylistEntity[] result) {
@@ -339,7 +339,7 @@ public class MpdPlayer implements MusicPlayer {
 
     @Override
     public TaskHandle sendControlCommands(List<Command> commands, final ResponseReceiver<ResponseResult> responseReceiver) {
-        MpdSendControlCommands command = new MpdSendControlCommands(partitionStore, commands);
+        MpdSendControlCommands command = new MpdSendControlCommands(commands, partitionStore);
         return command.execute(connection, new MpdConnectionCommandReceiver<ResponseResult>() {
             @Override
             public void receive(ResponseResult result) {
