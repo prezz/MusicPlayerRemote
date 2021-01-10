@@ -48,7 +48,7 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
             }
         };
 
-        return new FutureTaskHandleImpl(executor.submit(task, null));
+        return new FutureTaskHandleImpl(executor.submit(task));
     }
 
     protected String getPartition() {

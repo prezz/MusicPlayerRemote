@@ -57,7 +57,7 @@ public abstract class MpdDatabaseCommand<Param, Result> extends MpdCommand {
             }
         };
 
-        return new FutureTaskHandleImpl(executor.submit(task, null));
+        return new FutureTaskHandleImpl(executor.submit(task));
     }
 
     protected abstract Result doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception;
