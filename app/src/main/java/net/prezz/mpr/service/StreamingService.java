@@ -216,7 +216,9 @@ public class StreamingService extends Service {
 
         mediaSession = new MediaSession(this, "MPD Remote");
 
-        mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        }
         mediaSession.setCallback(new MediaSessionCallback());
         mediaSession.setActive(true);
 

@@ -1,9 +1,7 @@
 package net.prezz.mpr.ui.partitions;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -71,8 +69,6 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_partitions);
-
-        setupLollipop();
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {
@@ -172,17 +168,6 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.partitions_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.partitions_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     private void updateEntities() {

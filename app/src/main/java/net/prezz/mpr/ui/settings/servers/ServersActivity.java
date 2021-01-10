@@ -9,9 +9,7 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -39,8 +37,6 @@ public class ServersActivity extends AppCompatActivity implements OnItemClickLis
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_servers);
-
-        setupLollipop();
     }
 
     @Override
@@ -122,17 +118,6 @@ public class ServersActivity extends AppCompatActivity implements OnItemClickLis
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.servers_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.servers_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     private void updateListView() {

@@ -14,12 +14,10 @@ import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,7 +57,6 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_library);
-        setupLollipop();
 
         buildDatabaseErrorDialog = null;
         swipeHintDialog = null;
@@ -185,23 +182,6 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.library_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.library_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-
-            View controlSeperator = findViewById(R.id.control_layout_seperator);
-            controlSeperator.setVisibility(View.GONE);
-
-            View controlLayout = findViewById(R.id.control_layout_mini_control);
-            controlLayout.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     @Override

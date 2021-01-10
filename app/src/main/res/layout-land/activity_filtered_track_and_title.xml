@@ -120,16 +120,11 @@
     <!-- Remove this incude to fix rendering issue in editor -->
     <include layout="@layout/view_mini_control" />
     
-    <View
-        android:id="@+id/filtered_choice_bar_seperator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-
     <LinearLayout
         android:id="@+id/filtered_choice_bar"
         android:layout_width="match_parent"
         android:background="?choiceBarColor"
+        android:elevation="50px"
         android:layout_height="50dp" >
 
         <View

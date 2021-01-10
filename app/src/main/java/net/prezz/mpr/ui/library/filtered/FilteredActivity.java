@@ -24,10 +24,8 @@ import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,8 +62,6 @@ public abstract class FilteredActivity extends AppCompatActivity implements OnIt
 
         ThemeHelper.applyTheme(this);
         setContentView(getLayout());
-        // Show the Up button in the action bar.
-        setupLollipop();
 
         getFromLibraryHandle = TaskHandle.NULL_HANDLE;
 
@@ -261,23 +257,6 @@ public abstract class FilteredActivity extends AppCompatActivity implements OnIt
     protected abstract AdapterEntity[] createAdapterEntities(LibraryEntity[] entities);
 
     protected abstract ListAdapter createAdapter(AdapterEntity[] adapterEntities);
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.filtered_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.filtered_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-
-            View controlSeperator = findViewById(R.id.control_layout_seperator);
-            controlSeperator.setVisibility(View.GONE);
-
-            View controlLayout = findViewById(R.id.control_layout_mini_control);
-            controlLayout.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
-    }
 
     private void sendControlCommands(CharSequence displayText, List<Command> commands) {
         MusicPlayerControl.sendControlCommands(commands);

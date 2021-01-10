@@ -43,7 +43,6 @@ import net.prezz.mpr.ui.library.filtered.FilteredUriActivity;
 import net.prezz.mpr.R;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -51,7 +50,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -93,7 +91,6 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_search);
-        setupLollipop();
 
         searchLibraryHandle = TaskHandle.NULL_HANDLE;
 
@@ -434,23 +431,6 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
         }
     }
     
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.search_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.search_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-
-            View controlSeperator = findViewById(R.id.control_layout_seperator);
-            controlSeperator.setVisibility(View.GONE);
-
-            View controlLayout = findViewById(R.id.control_layout_mini_control);
-            controlLayout.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
-    }
-
     private void sendControlCommands(CharSequence displayText, List<Command> commands) {
         MusicPlayerControl.sendControlCommands(commands);
         Boast.makeText(this, displayText).show();
