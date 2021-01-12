@@ -6,30 +6,26 @@
         res/values-v14/styles.xml on API 21+ devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- API 21 theme customizations can go here. -->
 
         <item name="choiceBarColor">?android:colorBackground</item>
         <item name="iconColor">#ff2d2b2b</item>
         <item name="playlistDragColor">#c0e3e3e3</item>
         <item name="redFocusColor">#ffd32a2a</item>
 
-        <item name="android:colorPrimaryDark">#ff222222</item>
-        <item name="android:colorPrimary">#ffaaaaaa</item>
+        <item name="android:colorPrimaryDark">#ff0f0f0f</item>
         <item name="android:textColor">#ff2d2b2b</item>
 
     </style>
 
-    <style name="AppDarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppDarkTheme" parent="Theme.AppCompat">
 
-        <item name="choiceBarColor">#ff212121</item>
-        <item name="iconColor">#ffbebebe</item>
+        <item name="choiceBarColor">?android:colorBackground</item>
+        <item name="iconColor">#ffcfcfcf</item>
         <item name="playlistDragColor">#c0535353</item>
         <item name="redFocusColor">#ffe31a1a</item>
 
-        <item name="android:colorPrimaryDark">#ff222222</item>
-        <item name="android:textColor">#ffbebebe</item>
-
-        <item name="android:background">#ff212121</item>
+        <item name="android:colorPrimaryDark">#ff0f0f0f</item>
+        <item name="android:textColor">#ffcfcfcf</item>
 
     </style>
 
