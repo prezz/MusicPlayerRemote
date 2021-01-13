@@ -58,7 +58,7 @@
             android:onClick="onChoiceMenuClick"
             android:scaleType="center"
             android:tint="?iconColor"
-            android:src="@drawable/ic_choice_menu" />
+            android:src="@drawable/ic_choice_menu_2" />
 
         <ImageButton
             android:id="@+id/player_button_search_library"
