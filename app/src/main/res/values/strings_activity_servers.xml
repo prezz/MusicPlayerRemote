@@ -16,7 +16,7 @@
     <string name="add_edit_server_name_label">Name:</string>
     <string name="add_edit_server_name_hint">e.g. My MPD Server</string>
     <string name="add_edit_server_host_label">Hostname or IP address:</string>
-    <string name="add_edit_server_host_hint">e.g. 127.0.0.1</string>
+    <string name="add_edit_server_host_hint">e.g. 192.168.1.10</string>
     <string name="add_edit_server_port_label">Port:</string>
     <string name="add_edit_server_port_hint">Default is 6600</string>
     <string name="add_edit_server_password_label">Password:</string>
