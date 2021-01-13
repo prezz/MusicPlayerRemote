@@ -58,7 +58,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setupServersPreferences();
         setupThemePreferences();
         setupProperSortingPreferences();
-        setupGracenoteCoverPreferences();
         setupPauseOnPhoneCallPreferences();
         setupNotificationPreferences();
         setupAboutPreferences();
@@ -127,24 +126,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         }
                     }
                 });
-                return true;
-            }
-        });
-    }
-
-    private void setupGracenoteCoverPreferences() {
-        Preference gracenotePreference = findPreference(getString(R.string.settings_covers_gracenote_client_id_key));
-        gracenotePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Context context = ApplicationActivator.getContext();
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Resources resources = context.getResources();
-                editor.putString(resources.getString(R.string.settings_covers_gracenote_user_id_key), "");
-                editor.commit();
-
                 return true;
             }
         });

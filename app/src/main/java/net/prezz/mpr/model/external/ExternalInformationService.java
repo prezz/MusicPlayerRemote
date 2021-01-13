@@ -15,7 +15,6 @@ import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.FutureTaskHandleImpl;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.external.cache.CoverCache;
-import net.prezz.mpr.model.external.gracenote.GracenoteCoverService;
 import net.prezz.mpr.model.external.lastfm.LastFmCoverAndInfoService;
 import net.prezz.mpr.model.external.local.MpdCoverService;
 import net.prezz.mpr.mpd.connection.MpdConnection;
@@ -61,7 +60,6 @@ public class ExternalInformationService {
     private static final CoverCache coverCache = new CoverCache();
     private static final MpdCoverService mpdCoverService = new MpdCoverService();
     private static final LastFmCoverAndInfoService lastFmCoverAndInfoService = new LastFmCoverAndInfoService();
-    private static final GracenoteCoverService gracenoteCoverService = new GracenoteCoverService();
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -184,10 +182,6 @@ public class ExternalInformationService {
                 if (!coverUrlList.isEmpty()) {
                     return coverUrlList.get(0);
                 }
-                coverUrlList = gracenoteCoverService.getCoverUrls(artist, album);
-                if (!coverUrlList.isEmpty()) {
-                    return coverUrlList.get(0);
-                }
             }
         }
 
@@ -254,9 +248,6 @@ public class ExternalInformationService {
                             for (String album : albums) {
                                 List<String> lastfmUrlList = lastFmCoverAndInfoService.getCoverUrls(artist, album);
                                 result.addAll(lastfmUrlList);
-
-                                List<String> gracenoteUrlList = gracenoteCoverService.getCoverUrls(artist, album);
-                                result.addAll(gracenoteUrlList);
                             }
                         }
                     } catch (Exception ex) {

@@ -20,12 +20,12 @@
     <style name="AppDarkTheme" parent="Theme.AppCompat">
 
         <item name="choiceBarColor">?android:colorBackground</item>
-        <item name="iconColor">#ffcfcfcf</item>
+        <item name="iconColor">#ffefefef</item>
         <item name="playlistDragColor">#c0535353</item>
         <item name="redFocusColor">#ffe31a1a</item>
 
         <item name="android:colorPrimaryDark">#ff0f0f0f</item>
-        <item name="android:textColor">#ffcfcfcf</item>
+        <item name="android:textColor">#ffefefef</item>
 
     </style>
 

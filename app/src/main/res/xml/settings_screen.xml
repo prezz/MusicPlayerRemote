@@ -26,10 +26,6 @@
         <CheckBoxPreference app:iconSpaceReserved="false" app:key="@string/settings_library_search_uri_key" app:title="@string/settings_library_search_uri_title" app:defaultValue="false" app:summaryOff="@string/settings_library_search_uri_summary_off" app:summaryOn="@string/settings_library_search_uri_summary_on" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/settings_category_covers" >
-        <EditTextPreference app:iconSpaceReserved="false" app:key="@string/settings_covers_gracenote_client_id_key" app:summary="@string/settings_covers_gracenote_client_id_summary" app:title="@string/settings_covers_gracenote_client_id_title"/>
-    </PreferenceCategory>
-
     <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/settings_category_behavior" >
         <CheckBoxPreference app:iconSpaceReserved="false" app:key="@string/settings_behavior_pause_on_phonecall_key" app:title="@string/settings_behavior_pause_on_phonecall_title" app:defaultValue="false" app:summaryOff="@string/settings_behavior_pause_on_phonecall_summary_off" app:summaryOn="@string/settings_behavior_pause_on_phonecall_summary_on" />
         <CheckBoxPreference app:iconSpaceReserved="false" app:key="@string/settings_behavior_show_notification_key" app:title="@string/settings_behavior_show_notification_title" app:defaultValue="false" app:summaryOff="@string/settings_behavior_show_notification_summary_off" app:summaryOn="@string/settings_behavior_show_notification_summary_on" />

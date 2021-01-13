@@ -109,13 +109,6 @@
     <string name="settings_library_search_uri_summary_on">Files and directory names will be included in library search results</string>
     <string name="settings_library_search_uri_summary_off">Files and directory names will not be included in library search results</string>
 
-    <string name="settings_category_covers">Cover settings</string>
-
-    <string name="settings_covers_gracenote_client_id_title">Configure Gracenote client id</string>
-    <string name="settings_covers_gracenote_client_id_summary">Add client id required to retrieve covers from Gracenote</string>
-    <string name="settings_covers_gracenote_client_id_key">gracentore_client_id_</string>
-    <string name="settings_covers_gracenote_user_id_key">gracentore_user_id_</string>
-
     <string name="settings_category_behavior">Behavior settings</string>
     
     <string name="settings_behavior_pause_on_phonecall_title">Pause on phone call</string>
