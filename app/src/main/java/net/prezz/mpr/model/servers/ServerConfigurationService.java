@@ -11,7 +11,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 public class ServerConfigurationService {
 

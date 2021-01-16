@@ -1,21 +1,22 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <item
         android:id="@+id/filtered_change_cover"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/library_action_change_cover"/>
+        android:title="@string/library_action_change_cover"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/filtered_clear_cover"
         android:orderInCategory="200"
-        android:showAsAction="never"
-        android:title="@string/library_action_clear_cover"/>
+        android:title="@string/library_action_clear_cover"
+        app:showAsAction="never" />
     
     <item
         android:id="@+id/filtered_lastfm_album"
         android:orderInCategory="300"
-        android:showAsAction="never"
-        android:title="@string/library_action_lastfm"/>
+        android:title="@string/library_action_lastfm"
+        app:showAsAction="never" />
     
 </menu>

@@ -14,16 +14,15 @@ import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import androidx.fragment.app.FragmentActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -32,7 +31,7 @@ import android.view.View;
 
 import java.util.SortedSet;
 
-public class LibraryActivity extends FragmentActivity implements UriFilterHelper.UriFilterChangedListener {
+public class LibraryActivity extends AppCompatActivity implements UriFilterHelper.UriFilterChangedListener {
 
     private static final String ENTITIES_CHANGED = "entities_changed";
     private static final String URI_ENTITY_FILTER = "uri_entity_filter";
@@ -58,9 +57,6 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_library);
-        // Show the Up button in the action bar.
-        setupActionBar();
-        setupLollipop();
 
         buildDatabaseErrorDialog = null;
         swipeHintDialog = null;
@@ -186,27 +182,6 @@ public class LibraryActivity extends FragmentActivity implements UriFilterHelper
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.library_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.library_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-
-            View controlSeperator = findViewById(R.id.control_layout_seperator);
-            controlSeperator.setVisibility(View.GONE);
-
-            View controlLayout = findViewById(R.id.control_layout_mini_control);
-            controlLayout.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     @Override

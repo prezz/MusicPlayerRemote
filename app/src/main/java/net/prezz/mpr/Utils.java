@@ -1,10 +1,5 @@
 package net.prezz.mpr;
 
-import android.os.AsyncTask;
-
-import java.util.ArrayDeque;
-import java.util.concurrent.Executor;
-
 public class Utils {
 
     @SuppressWarnings("unchecked")
@@ -56,10 +51,6 @@ public class Utils {
         return "localhost".equalsIgnoreCase(host) || "127.0.0.1".equals(host);
     }
 
-    public static Executor createExecutor() {
-        return new SerialExecutor();
-    }
-
     public static String moveInsignificantWordsLast(String input) {
         if (input != null) {
             if (input.toLowerCase().startsWith("the ")) {
@@ -70,31 +61,5 @@ public class Utils {
         }
 
         return input;
-    }
-
-    private static class SerialExecutor implements Executor {
-        final ArrayDeque<Runnable> mTasks = new ArrayDeque<Runnable>();
-        Runnable mActive;
-
-        public synchronized void execute(final Runnable r) {
-            mTasks.offer(new Runnable() {
-                public void run() {
-                    try {
-                        r.run();
-                    } finally {
-                        scheduleNext();
-                    }
-                }
-            });
-            if (mActive == null) {
-                scheduleNext();
-            }
-        }
-
-        protected synchronized void scheduleNext() {
-            if ((mActive = mTasks.poll()) != null) {
-                AsyncTask.THREAD_POOL_EXECUTOR.execute(mActive);
-            }
-        }
     }
 }

@@ -1,10 +1,7 @@
 package net.prezz.mpr.ui.partitions;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -22,6 +19,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import net.prezz.mpr.R;
@@ -51,7 +49,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PartitionsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
+public class PartitionsActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
 
     private static final String PARTITIONS_SAVED_INSTANCE_STATE = "partitions";
 
@@ -71,9 +69,6 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_partitions);
-
-        setupActionBar();
-        setupLollipop();
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {
@@ -173,21 +168,6 @@ public class PartitionsActivity extends Activity implements OnItemClickListener,
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.partitions_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.partitions_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     private void updateEntities() {

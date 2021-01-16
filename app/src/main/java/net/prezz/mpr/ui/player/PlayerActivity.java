@@ -22,7 +22,6 @@ import net.prezz.mpr.mpd.MpdPlayer;
 import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.service.StreamingService;
 import net.prezz.mpr.ui.DatabaseActivity;
-import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
@@ -34,7 +33,6 @@ import net.prezz.mpr.ui.settings.SettingsActivity;
 import net.prezz.mpr.R;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -42,17 +40,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import androidx.fragment.app.FragmentActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class PlayerActivity extends FragmentActivity {
+public class PlayerActivity extends AppCompatActivity {
 
     private static final int SETTINGS_ACTIVITY_RESULT = 1001;
 
@@ -83,7 +81,6 @@ public class PlayerActivity extends FragmentActivity {
 
         darkTheme = ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_player);
-        setupLollipop();
 
         final PlayerPagerAdapter pageAdapter = new PlayerPagerAdapter(getSupportFragmentManager(), this);
         ViewPager viewPager = (ViewPager) findViewById(R.id.player_view_pager_swipe);
@@ -272,17 +269,6 @@ public class PlayerActivity extends FragmentActivity {
         selectOutputs();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.player_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.player_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
-    }
-
     private void selectServer() {
         final ServerConfiguration[] serverConfigurations = ServerConfigurationService.getServerConfigurations();
         final ServerConfiguration selectedConfiguration = ServerConfigurationService.getSelectedServerConfiguration();
@@ -434,27 +420,23 @@ public class PlayerActivity extends FragmentActivity {
 
     private void launchVlc(String url) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            String vlcName = "org.videolan.vlc";
-            try {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(vlcName);
-                if (launchIntent != null) {
-                    Uri uri = Uri.parse(url);
-                    Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
-                    vlcIntent.setPackage("org.videolan.vlc");
-                    vlcIntent.setDataAndTypeAndNormalize(uri, "audio/*");
-                    startActivity(vlcIntent);
-                } else {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + vlcName)));
-                    } catch (ActivityNotFoundException ex) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + vlcName)));
-                    }
+        String vlcName = "org.videolan.vlc";
+        try {
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(vlcName);
+            if (launchIntent != null) {
+                Uri uri = Uri.parse(url);
+                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                vlcIntent.setPackage("org.videolan.vlc");
+                vlcIntent.setDataAndTypeAndNormalize(uri, "audio/*");
+                startActivity(vlcIntent);
+            } else {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + vlcName)));
+                } catch (ActivityNotFoundException ex) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + vlcName)));
                 }
-            } catch (Exception ex) {
             }
-        } else {
-            Boast.makeText(this, R.string.player_vlc_stream_version_error);
+        } catch (Exception ex) {
         }
     }
 

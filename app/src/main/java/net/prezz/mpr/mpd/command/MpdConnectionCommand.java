@@ -1,15 +1,11 @@
 package net.prezz.mpr.mpd.command;
 
+import net.prezz.mpr.model.FutureTaskHandleImpl;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.TaskHandleImpl;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.mpd.connection.MpdConnection;
-import net.prezz.mpr.mpd.connection.RejectAllFilter;
 
-import android.os.AsyncTask;
 import android.util.Log;
-
-import java.io.IOException;
 
 public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
 
@@ -17,47 +13,42 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
         void receive(Result result);
     }
 
-    private MpdPartitionProvider partitionProvider;
     private Param param;
+    private MpdPartitionProvider partitionProvider;
 
-    public MpdConnectionCommand(MpdPartitionProvider partitionProvider, Param param) {
-        this.partitionProvider = partitionProvider;
+    public MpdConnectionCommand(Param param, MpdPartitionProvider partitionProvider) {
         this.param = param;
+        this.partitionProvider = partitionProvider;
     }
 
-    @SuppressWarnings("unchecked")
-    public final TaskHandle execute(MpdConnection connection, final MpdConnectionCommandReceiver<Result> commandReceiver) {
+    public final TaskHandle execute(final MpdConnection connection, final MpdConnectionCommandReceiver<Result> commandReceiver) {
 
-        AsyncTask<Object, Void, Result> task = new AsyncTask<Object, Void, Result>() {
+        Runnable task = new Runnable() {
             @Override
-            protected Result doInBackground(Object... params) {
+            public void run() {
                 try {
                     synchronized (lock) {
-                        MpdConnection connectionParam = (MpdConnection)params[0];
                         try {
-                            connectionParam.connect();
-                            if (!connectionParam.setPartition(partitionProvider.getPartition())) {
+                            connection.connect();
+                            if (!connection.setPartition(partitionProvider.getPartition())) {
                                 partitionProvider.onInvalidPartition();
                             }
 
-                            return doExecute(connectionParam, (Param)params[1]);
+                            Result result = doExecute(connection, param);
+                            postResult(result, commandReceiver);
                         } finally {
-                            connectionParam.disconnect();
+                            connection.disconnect();
                         }
                     }
                 } catch (Exception ex) {
                     Log.e(MpdConnectionCommand.class.getName(), "error executing command", ex);
-                    return onError();
+                    Result result = onError();
+                    postResult(result, commandReceiver);
                 }
-            }
-
-            @Override
-            protected void onPostExecute(Result result) {
-                commandReceiver.receive(result);
             }
         };
 
-        return new TaskHandleImpl<Object, Void, Result>(task.executeOnExecutor(executor, connection, param));
+        return new FutureTaskHandleImpl(executor.submit(task));
     }
 
     protected String getPartition() {
@@ -67,4 +58,13 @@ public abstract class MpdConnectionCommand<Param, Result> extends MpdCommand {
     protected abstract Result doExecute(MpdConnection connection, Param param) throws Exception;
 
     protected abstract Result onError();
+
+    private void postResult(final Result result, final MpdConnectionCommandReceiver<Result> commandReceiver) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                commandReceiver.receive(result);
+            }
+        });
+    }
 }

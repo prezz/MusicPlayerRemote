@@ -1,9 +1,11 @@
 package net.prezz.mpr.ui.view;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +16,7 @@ public class DataFragment extends Fragment {
     private Map<String, Object> data = null;
 
     public static DataFragment getRestoreFragment(Activity activity, Class<?> clazz) {
-        FragmentManager fm = activity.getFragmentManager();
+        FragmentManager fm = ((AppCompatActivity) activity).getSupportFragmentManager();
         DataFragment dataFragment = (DataFragment) fm.findFragmentByTag(getTag(clazz));
         if (dataFragment == null) {
             dataFragment = new DataFragment();
@@ -25,7 +27,7 @@ public class DataFragment extends Fragment {
     }
 
     public static DataFragment getSaveFragment(Activity activity, Class<?> clazz) {
-        FragmentManager fm = activity.getFragmentManager();
+        FragmentManager fm = ((AppCompatActivity) activity).getSupportFragmentManager();
         DataFragment dataFragment = (DataFragment) fm.findFragmentByTag(getTag(clazz));
 
         return dataFragment;

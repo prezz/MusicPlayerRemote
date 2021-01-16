@@ -3,8 +3,8 @@ package net.prezz.mpr.ui.view;
 
 import net.prezz.mpr.R;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -17,9 +17,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 
-public class DragListView extends KitKatFixedListView {
+public class DragListView extends ListView {
 
     private ImageView dragView;
     private WindowManager windowManager;
@@ -88,10 +89,23 @@ public class DragListView extends KitKatFixedListView {
                 dragger.getDrawingRect(r);
 //                Drag icon is supposed to be in the left, so if we touch left of the drag icons right side we are dragging.
                 if (x < r.right) {
-                    //enable drawing cache to allow us to create a bitmap of the item we are dragging
-                    item.setDrawingCacheEnabled(true);
-                    Bitmap bitmap = Bitmap.createBitmap(item.getDrawingCache());
-                    item.setDrawingCacheEnabled(false);
+                    Bitmap bitmap = Bitmap.createBitmap(item.getWidth(), item.getHeight(), Bitmap.Config.ARGB_8888);
+
+                    // method 1
+                    Canvas canvas = new Canvas(bitmap);
+                    item.draw(canvas);
+
+//                    // alternative method to canvas method above. Requires Android API 26 or higher
+//                    int[] location = new int[2];
+//                    item.getLocationInWindow(location);
+//                    Window window = ((Activity) getContext()).getWindow();
+//                    PixelCopy.request(window, new Rect(location[0], location[1], location[0] + item.getWidth(), location[1] + item.getHeight()), bitmap, new PixelCopy.OnPixelCopyFinishedListener() {
+//                        @Override
+//                        public void onPixelCopyFinished(int copyResult) {
+//                        }
+//                    }, new Handler());
+//                    // consider blocking here until onPixelCopyFinished returns copyResult == PixelCopy.SUCCESS
+
                     startDragging(bitmap, x, y);
                     dragPos = itemnum;
                     srcDragPos = dragPos;

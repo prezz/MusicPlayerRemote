@@ -9,10 +9,7 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -26,7 +23,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ServersActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ServersActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
 
     private static final int ADD_EDIT_SERVER_ACTIVITY_RESULT = 3002;
     private ServerConfiguration[] serverConfigurations;
@@ -38,8 +37,6 @@ public class ServersActivity extends Activity implements OnItemClickListener, On
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_servers);
-
-        setupLollipop();
     }
 
     @Override
@@ -121,17 +118,6 @@ public class ServersActivity extends Activity implements OnItemClickListener, On
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.servers_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.servers_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     private void updateListView() {

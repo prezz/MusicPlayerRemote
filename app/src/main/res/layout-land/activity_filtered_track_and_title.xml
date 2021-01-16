@@ -97,7 +97,7 @@
             android:layout_weight="3"
             android:orientation="vertical" >
 
-            <net.prezz.mpr.ui.view.KitKatFixedListView
+            <ListView
                 android:id="@+id/filtered_list_view_browse"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -120,16 +120,11 @@
     <!-- Remove this incude to fix rendering issue in editor -->
     <include layout="@layout/view_mini_control" />
     
-    <View
-        android:id="@+id/filtered_choice_bar_seperator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-
     <LinearLayout
         android:id="@+id/filtered_choice_bar"
         android:layout_width="match_parent"
         android:background="?choiceBarColor"
+        android:elevation="50px"
         android:layout_height="50dp" >
 
         <View
@@ -148,7 +143,7 @@
             android:onClick="onChoiceMenuClick"
             android:scaleType="center"
             android:tint="?iconColor"
-            android:src="@drawable/ic_choice_menu" />
+            android:src="@drawable/ic_choice_menu_2" />
 
         <View
             android:layout_width="0dp"

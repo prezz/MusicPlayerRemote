@@ -5,7 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;
@@ -16,7 +17,6 @@ import net.prezz.mpr.model.servers.ServerConfigurationService;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 

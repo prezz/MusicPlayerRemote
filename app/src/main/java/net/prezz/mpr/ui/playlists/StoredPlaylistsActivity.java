@@ -25,14 +25,13 @@ import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -51,7 +50,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class StoredPlaylistsActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener {
+public class StoredPlaylistsActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
 
     private static final String ENTITIES_SAVED_INSTANCE_STATE = "storedPlaylists";
 
@@ -69,9 +68,6 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_stored_playlists);
-        // Show the Up button in the action bar.
-        setupActionBar();
-        setupLollipop();
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {
@@ -217,27 +213,6 @@ public class StoredPlaylistsActivity extends Activity implements OnItemClickList
 
     public void onControlMenuClick(View view) {
         controlHelper.toggleVisibility();
-    }
-
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.stored_playlists_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.stored_playlists_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-
-            View controlSeperator = findViewById(R.id.control_layout_seperator);
-            controlSeperator.setVisibility(View.GONE);
-
-            View controlLayout = findViewById(R.id.control_layout_mini_control);
-            controlLayout.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
     }
 
     private void sendControlCommands(CharSequence displayText, List<Command> commands) {

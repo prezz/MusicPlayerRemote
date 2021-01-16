@@ -11,7 +11,7 @@ class PlayerPagerAdapter extends FragmentPagerAdapter {
     private Context context;
 
     public PlayerPagerAdapter(FragmentManager fm, Context context) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         this.context = context;
     }

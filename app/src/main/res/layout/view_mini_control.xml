@@ -5,14 +5,9 @@
     android:layout_marginTop="4dp"
     android:background="?choiceBarColor"
     android:orientation="vertical"
+    android:elevation="50px"
     android:visibility="gone" >
 
-    <View
-        android:id="@+id/control_layout_seperator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

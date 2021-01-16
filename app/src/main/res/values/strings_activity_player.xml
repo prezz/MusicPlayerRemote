@@ -73,6 +73,4 @@
     <string name="player_swipe_hint_message">Swipe left and right to navigate between the current playlist and the remote control.</string>
     <string name="player_swipe_hint_button">Got It</string>
 
-    <string name="player_vlc_stream_version_error">VLC Streaming requires Android 4.1 or higher</string>
-
 </resources>

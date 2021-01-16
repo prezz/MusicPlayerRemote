@@ -43,8 +43,6 @@ import net.prezz.mpr.ui.library.filtered.FilteredUriActivity;
 import net.prezz.mpr.R;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -52,10 +50,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.preference.PreferenceManager;
+
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -71,7 +71,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
-public class SearchActivity extends Activity implements OnItemClickListener, OnMenuItemClickListener, SearchView.OnQueryTextListener, UriFilterHelper.UriFilterChangedListener {
+public class SearchActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener, SearchView.OnQueryTextListener, UriFilterHelper.UriFilterChangedListener {
 
     private static final String ACTIVITY_TITLE_SAVED_INSTANCE_STATE = "activityTitle";
     private static final String FOCUS_SEARCH_SAVED_INSTANCE_STATE = "focusSearch";
@@ -91,8 +91,6 @@ public class SearchActivity extends Activity implements OnItemClickListener, OnM
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_search);
-        setupActionBar();
-        setupLollipop();
 
         searchLibraryHandle = TaskHandle.NULL_HANDLE;
 
@@ -433,27 +431,6 @@ public class SearchActivity extends Activity implements OnItemClickListener, OnM
         }
     }
     
-    private void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupLollipop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View choiceBarSeperator = findViewById(R.id.search_choice_bar_seperator);
-            choiceBarSeperator.setVisibility(View.GONE);
-
-            View choiceBar = findViewById(R.id.search_choice_bar);
-            choiceBar.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-
-            View controlSeperator = findViewById(R.id.control_layout_seperator);
-            controlSeperator.setVisibility(View.GONE);
-
-            View controlLayout = findViewById(R.id.control_layout_mini_control);
-            controlLayout.setElevation(getResources().getDimension(R.dimen.choice_bar_elevation));
-        }
-    }
-
     private void sendControlCommands(CharSequence displayText, List<Command> commands) {
         MusicPlayerControl.sendControlCommands(commands);
         Boast.makeText(this, displayText).show();

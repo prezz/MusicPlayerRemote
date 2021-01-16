@@ -26,7 +26,6 @@ import net.prezz.mpr.model.command.VolumeUpCommand;
 import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
-import net.prezz.mpr.model.servers.ServerConfigurationService;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
@@ -40,15 +39,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -396,7 +394,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean enabled = !sharedPreferences.getBoolean(PREFERENCE_SEEK_BAR_ENABLED_KEY, true);
 
-        Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(PREFERENCE_SEEK_BAR_ENABLED_KEY, enabled);
         editor.commit();
 

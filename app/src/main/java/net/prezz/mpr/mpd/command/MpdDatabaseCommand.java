@@ -1,11 +1,10 @@
 package net.prezz.mpr.mpd.command;
 
+import net.prezz.mpr.model.FutureTaskHandleImpl;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.TaskHandleImpl;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.mpd.database.MpdDatabaseBuilder;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
-import android.os.AsyncTask;
 import android.util.Log;
 
 public abstract class MpdDatabaseCommand<Param, Result> extends MpdCommand {
@@ -28,51 +27,58 @@ public abstract class MpdDatabaseCommand<Param, Result> extends MpdCommand {
         this.rebuild = rebuild;
     }
 
-    @SuppressWarnings("unchecked")
-    public final TaskHandle execute(MpdLibraryDatabaseHelper databaseHelper, MpdConnection connection, final MpdDatabaseCommandReceiver<Result> commandReceiver) {
+    public final TaskHandle execute(final MpdLibraryDatabaseHelper databaseHelper, final MpdConnection connection, final MpdDatabaseCommandReceiver<Result> commandReceiver) {
 
-        AsyncTask<Object, Void, Result> task = new AsyncTask<Object, Void, Result>() {
+        Runnable task = new Runnable() {
             @Override
-            protected Result doInBackground(Object... params) {
-                MpdLibraryDatabaseHelper databaseHelperParam = (MpdLibraryDatabaseHelper) params[0];
+            public void run() {
                 try {
                     synchronized (lock) {
-                        if (rebuild && databaseHelperParam.getRowCount() == 0) {
-                            publishProgress();
-                            MpdConnection connectionParam = (MpdConnection) params[1];
+                        if (rebuild && databaseHelper.getRowCount() == 0) {
+                            postBuild(commandReceiver);
                             try {
-                                connectionParam.connect();
-                                MpdDatabaseBuilder.buildDatabase(connectionParam, databaseHelperParam);
+                                connection.connect();
+                                MpdDatabaseBuilder.buildDatabase(connection, databaseHelper);
                             } finally {
-                                connectionParam.disconnect();
+                                connection.disconnect();
                             }
                         }
                     }
 
-                    return doExecute(databaseHelperParam, (Param) params[2]);
+                    Result result = doExecute(databaseHelper, param);
+                    postResult(result, commandReceiver);
                 } catch (Exception ex) {
                     Log.e(MpdDatabaseCommand.class.getName(), "error executing command", ex);
-                    return onError();
+                    Result result = onError();
+                    postResult(result, commandReceiver);
                 } finally {
-                    databaseHelperParam.close();
+                    databaseHelper.close();
                 }
-            }
-
-            @Override
-            protected void onProgressUpdate(Void... values) {
-                commandReceiver.build();
-            }
-
-            @Override
-            protected void onPostExecute(Result result) {
-                commandReceiver.receive(result);
             }
         };
 
-        return new TaskHandleImpl<Object, Void, Result>(task.executeOnExecutor(executor, databaseHelper, connection, param));
+        return new FutureTaskHandleImpl(executor.submit(task));
     }
 
     protected abstract Result doExecute(MpdLibraryDatabaseHelper databaseHelper, Param param) throws Exception;
 
     protected abstract Result onError();
+
+    private void postBuild(final MpdDatabaseCommandReceiver<Result> commandReceiver) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                commandReceiver.build();
+            }
+        });
+    }
+
+    private void postResult(final Result result, final MpdDatabaseCommandReceiver<Result> commandReceiver) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                commandReceiver.receive(result);
+            }
+        });
+    }
 }

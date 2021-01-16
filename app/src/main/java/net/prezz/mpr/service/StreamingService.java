@@ -12,7 +12,6 @@ import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -20,8 +19,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
+
 import android.util.Log;
 
 import net.prezz.mpr.R;
@@ -56,15 +54,12 @@ public class StreamingService extends Service {
     private static final Object lock = new Object();
     private static boolean started = false;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private MpdPlayer mpdPlayer;
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private PlayerState mpdState;
-
     private MediaSession mediaSession;
     private MediaPlayer mediaPlayer;
     private WifiManager.WifiLock wifiLock;
+    private PowerManager.WakeLock wakeLock;
     private String url;
     private MediaPlayerListener mediaPlayerListener;
     private StreamBroadcastReceiver broadcastReceiver;
@@ -120,8 +115,12 @@ public class StreamingService extends Service {
         }
 
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "mpd_stream_wifi_lock");
+        wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "mpd_stream:wifi_lock");
         wifiLock.acquire();
+
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mpd_stream:wake_lock");
+        wakeLock.acquire();
 
         if (broadcastReceiver != null) {
             unregisterReceiver(broadcastReceiver);
@@ -133,10 +132,7 @@ public class StreamingService extends Service {
         filter.addAction(CMD_PAUSE);
         registerReceiver(broadcastReceiver, filter);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            startMediaSession();
-        }
-
+        startMediaSession();
         startMediaPlayer(context);
 
         return START_REDELIVER_INTENT;
@@ -144,8 +140,10 @@ public class StreamingService extends Service {
 
     @Override
     public void onDestroy() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            stopMediaSession();
+        stopMediaSession();
+
+        if (wakeLock != null) {
+            wakeLock.release();
         }
 
         if (wifiLock != null) {
@@ -170,17 +168,10 @@ public class StreamingService extends Service {
     }
 
     private void updateNotification(String text) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            updateMediaNotificationM(text);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            updateMediaNotificationL(text);
-        } else {
-            updateBasicNotification(text);
-        }
+        updateMediaNotification(text);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void updateMediaNotificationM(String text) {
+    private void updateMediaNotification(String text) {
         Intent stopIntent = new Intent(CMD_STOP);
         Intent pauseIntent = new Intent(CMD_PAUSE);
         Intent launchIntent = new Intent(this, PlayerActivity.class);
@@ -220,68 +211,14 @@ public class StreamingService extends Service {
         startForeground(NOTIFICATION_ID, notification);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void updateMediaNotificationL(String text) {
-        Intent stopIntent = new Intent(CMD_STOP);
-        Intent pauseIntent = new Intent(CMD_PAUSE);
-        Intent launchIntent = new Intent(this, PlayerActivity.class);
-
-        int ic_play = (mediaPlayer.isPlaying()) ? R.drawable.ic_pause_w : R.drawable.ic_paused_w;
-
-        Notification notification = new Notification.Builder(this)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.ic_stream)
-                .setShowWhen(false)
-
-                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, pauseIntent, 0)) // #0
-                .addAction(R.drawable.ic_stop_w, "", PendingIntent.getBroadcast(this, 0, stopIntent, 0)) // #1
-
-                .setStyle(new Notification.MediaStyle().setMediaSession(mediaSession.getSessionToken()).setShowActionsInCompactView(1))
-                .setContentTitle(getString(R.string.notification_streaming_service_title))
-                .setContentText(text)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, 0))
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
-    }
-
-    private void updateBasicNotification(String text) {
-        Intent stopIntent = new Intent(CMD_STOP);
-        Intent pauseIntent = new Intent(CMD_PAUSE);
-        Intent launchIntent = new Intent(this, PlayerActivity.class);
-
-        int ic_play = (mediaPlayer.isPlaying()) ? R.drawable.ic_pause_w : R.drawable.ic_paused_w;
-
-        Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stream)
-                .setShowWhen(false)
-
-                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, pauseIntent, 0))
-                .addAction(R.drawable.ic_stop_w, "", PendingIntent.getBroadcast(this, 0, stopIntent, 0))
-
-                .setContentTitle(getString(R.string.notification_streaming_service_title))
-                .setContentText(text)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, 0))
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void startMediaSession() {
         stopMediaSession();
 
         mediaSession = new MediaSession(this, "MPD Remote");
 
-        mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        }
         mediaSession.setCallback(new MediaSessionCallback());
         mediaSession.setActive(true);
 
@@ -292,7 +229,6 @@ public class StreamingService extends Service {
         mpdPlayer.setStatusListener(new PlayerInfoRefreshListener());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void stopMediaSession() {
         if (mpdPlayer != null) {
             mpdPlayer.dispose();
@@ -304,7 +240,6 @@ public class StreamingService extends Service {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setMediaSessionState(PlayerState playerState) {
         final long COMMON_ACTION = PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS;
 
@@ -332,11 +267,7 @@ public class StreamingService extends Service {
         }
 
         mediaPlayer = new MediaPlayer();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
-        } else {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        }
+        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
 
         mediaPlayerListener = new MediaPlayerListener();
         mediaPlayer.setOnPreparedListener(mediaPlayerListener);
@@ -377,14 +308,10 @@ public class StreamingService extends Service {
         public void onCompletion(MediaPlayer mediaPlayer) {
             Log.i(StreamingService.class.getName(), "Stream completed");
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (mpdState == PlayerState.PLAY) {
-                    startMediaPlayer(getApplicationContext());
-                } else {
-                    updateNotification(getString(R.string.notification_streaming_service_idle));
-                }
+            if (mpdState == PlayerState.PLAY) {
+                startMediaPlayer(getApplicationContext());
             } else {
-                StreamingService.stop();
+                updateNotification(getString(R.string.notification_streaming_service_idle));
             }
         }
 
@@ -405,14 +332,10 @@ public class StreamingService extends Service {
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
             Log.i(StreamingService.class.getName(), "Stream error code " + what + ", " + extra);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (mpdState == PlayerState.PLAY) {
-                    startMediaPlayer(getApplicationContext());
-                } else {
-                    updateNotification(getString(R.string.notification_streaming_service_idle));
-                }
+            if (mpdState == PlayerState.PLAY) {
+                startMediaPlayer(getApplicationContext());
             } else {
-                StreamingService.stop();
+                updateNotification(getString(R.string.notification_streaming_service_idle));
             }
 
             return true;
@@ -440,7 +363,6 @@ public class StreamingService extends Service {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private class PlayerInfoRefreshListener implements StatusListener {
 
         @Override
@@ -456,7 +378,6 @@ public class StreamingService extends Service {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private class MediaSessionCallback extends MediaSession.Callback {
 
         @Override

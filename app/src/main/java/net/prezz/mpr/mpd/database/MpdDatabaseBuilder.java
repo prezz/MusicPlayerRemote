@@ -3,7 +3,8 @@ package net.prezz.mpr.mpd.database;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 

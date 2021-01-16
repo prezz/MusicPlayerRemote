@@ -11,10 +11,10 @@ android {
     buildToolsVersion '30.0.0'
     defaultConfig {
         applicationId 'net.prezz.mpr'
-        minSdkVersion 14
+        minSdkVersion 23
         targetSdkVersion 29
-        versionCode 127
-        versionName '1.127.0'
+        versionCode 128
+        versionName '1.128.0'
     }
     buildTypes {
         release {
@@ -29,4 +29,9 @@ android {
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:deprecation'
+    options.deprecation = true
 }

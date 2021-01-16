@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".ui.settings.servers.ServersActivity" >
 
-    <net.prezz.mpr.ui.view.KitKatFixedListView
+    <ListView
         android:id="@+id/servers_list_view_browse"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -15,16 +15,11 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:fastScrollEnabled="false" />
 
-    <View
-        android:id="@+id/servers_choice_bar_seperator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-    
     <LinearLayout
         android:id="@+id/servers_choice_bar"
         android:layout_width="match_parent"
         android:background="?choiceBarColor"
+        android:elevation="50px"
         android:layout_height="50dp" >
 
         <View

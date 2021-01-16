@@ -1,7 +1,5 @@
 package net.prezz.mpr.ui.settings;
 
-import java.util.Arrays;
-
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.service.PlaybackService;
@@ -12,7 +10,6 @@ import net.prezz.mpr.ui.settings.servers.ServersActivity;
 import net.prezz.mpr.R;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -24,31 +21,25 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.text.InputType;
+
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 3003;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setupSimplePreferencesScreen();
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setupSimplePreferencesScreen(rootKey);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -61,13 +52,12 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    private void setupSimplePreferencesScreen() {
-        addPreferencesFromResource(R.xml.settings_screen);
+    private void setupSimplePreferencesScreen(String rootKey) {
+        setPreferencesFromResource(R.xml.settings_screen, rootKey);
 
         setupServersPreferences();
         setupThemePreferences();
         setupProperSortingPreferences();
-        setupGracenoteCoverPreferences();
         setupPauseOnPhoneCallPreferences();
         setupNotificationPreferences();
         setupAboutPreferences();
@@ -78,9 +68,6 @@ public class SettingsFragment extends PreferenceFragment {
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_default_player_fragment_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_volume_control_amount_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_streaming_player_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_path_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_port_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_covers_local_file_key)));
 
     }
 
@@ -94,36 +81,19 @@ public class SettingsFragment extends PreferenceFragment {
     private static Preference.OnPreferenceChangeListener bindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
             if (preference instanceof ListPreference) {
+                String stringValue = value.toString();
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
                 preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-            } else {
-                boolean password = false;
-                if (preference instanceof EditTextPreference) {
-                    int inputMask = ((EditTextPreference)preference).getEditText().getInputType();
-                    password = ((inputMask & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0);
-                }
-                preference.setSummary(password ? createString(stringValue.length(), '*') : stringValue);
             }
             return true;
         }
     };
 
-    private static String createString(int length, char fillChar) {
-        if (length > 0) {
-            char[] array = new char[length];
-            Arrays.fill(array, fillChar);
-            return new String(array);
-        }
-        return "";
-    }
-
     private void setupServersPreferences() {
         Preference serversPreference = findPreference(getString(R.string.settings_servers_key));
-        serversPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        serversPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), ServersActivity.class);
                 startActivity(intent);
@@ -134,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupThemePreferences() {
         Preference themePreference = findPreference(getString(R.string.settings_interface_dark_theme_key));
-        themePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 getActivity().recreate();
@@ -145,7 +115,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupProperSortingPreferences() {
         Preference notificationPreference = findPreference(getString(R.string.settings_library_proper_sort_key));
-        notificationPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        notificationPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 MusicPlayerControl.deleteLocalLibraryDatabase(new ResponseReceiver<Boolean>() {
@@ -161,47 +131,26 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private void setupGracenoteCoverPreferences() {
-        Preference gracenotePreference = findPreference(getString(R.string.settings_covers_gracenote_client_id_key));
-        gracenotePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+    private void setupPauseOnPhoneCallPreferences() {
+        Preference pauseOnPhonePreference = findPreference(getString(R.string.settings_behavior_pause_on_phonecall_key));
+        pauseOnPhonePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Context context = ApplicationActivator.getContext();
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Resources resources = context.getResources();
-                editor.putString(resources.getString(R.string.settings_covers_gracenote_user_id_key), "");
-                editor.commit();
-
+                if (Boolean.TRUE == newValue) {
+                    Context context = getContext();
+                    if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_REQUEST_READ_PHONE_STATE);
+                        return false;
+                    }
+                }
                 return true;
             }
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private void setupPauseOnPhoneCallPreferences() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Preference pauseOnPhonePreference = findPreference(getString(R.string.settings_behavior_pause_on_phonecall_key));
-            pauseOnPhonePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (Boolean.TRUE == newValue) {
-                        Context context = getContext();
-                        if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_REQUEST_READ_PHONE_STATE);
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            });
-        }
-    }
-
     private void setupNotificationPreferences() {
         Preference notificationPreference = findPreference(getString(R.string.settings_behavior_show_notification_key));
-        notificationPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        notificationPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (Boolean.FALSE.equals(newValue)) {
@@ -227,12 +176,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupAboutPreferences() {
         String version = getVersion();
-        String buildTime = ""; //" (" + getBuildTime() + ")";
 
         Preference aboutPreference = findPreference(getString(R.string.settings_about_key));
-        aboutPreference.setSummary(getString(R.string.settings_about_summary) + " " + version + buildTime);
+        aboutPreference.setSummary(getString(R.string.settings_about_summary) + " " + version);
 
-         aboutPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+         aboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(intent);
@@ -251,16 +199,4 @@ public class SettingsFragment extends PreferenceFragment {
 
          return "-";
      }
-
-//    private String getBuildTime() {
-//        try {
-//            Activity activity = getActivity();
-//            PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
-//            Date date = new Date(info.lastUpdateTime);
-//            return date.toString();
-//        } catch (Exception e) {
-//        }
-//
-//        return "-";
-//    }
 }

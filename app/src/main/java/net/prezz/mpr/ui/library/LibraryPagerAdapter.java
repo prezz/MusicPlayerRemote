@@ -13,7 +13,7 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
     private Context context;
 
     public LibraryPagerAdapter(FragmentManager fm, Context context) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         this.context = context;
     }

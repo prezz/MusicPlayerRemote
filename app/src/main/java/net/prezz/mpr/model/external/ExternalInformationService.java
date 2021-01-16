@@ -7,17 +7,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.FutureTaskHandleImpl;
 import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.TaskHandleImpl;
-import net.prezz.mpr.model.external.amazon.AmazonCoverService;
 import net.prezz.mpr.model.external.cache.CoverCache;
-import net.prezz.mpr.model.external.gracenote.GracenoteCoverService;
 import net.prezz.mpr.model.external.lastfm.LastFmCoverAndInfoService;
-import net.prezz.mpr.model.external.local.HttpCoverService;
 import net.prezz.mpr.model.external.local.MpdCoverService;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.ui.ApplicationActivator;
@@ -27,7 +25,8 @@ import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 public class ExternalInformationService {
@@ -58,26 +57,24 @@ public class ExternalInformationService {
             + "\u0150\u0151\u0170\u0171"
             ;
 
-    private static CoverCache coverCache = new CoverCache();
-    private static MpdCoverService mpdCoverService = new MpdCoverService();
-    private static HttpCoverService httpCoverService = new HttpCoverService();
-    private static LastFmCoverAndInfoService lastFmCoverAndInfoService = new LastFmCoverAndInfoService();
-    private static GracenoteCoverService gracenoteCoverService = new GracenoteCoverService();
-    private static AmazonCoverService amazonCoverService = new AmazonCoverService();
-    private static Executor executor = Utils.createExecutor();
-
+    private static final CoverCache coverCache = new CoverCache();
+    private static final MpdCoverService mpdCoverService = new MpdCoverService();
+    private static final LastFmCoverAndInfoService lastFmCoverAndInfoService = new LastFmCoverAndInfoService();
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final Handler handler = new Handler(Looper.getMainLooper());
 
     private ExternalInformationService() {
     }
 
-    public static TaskHandle getCover(String artist, String album, Integer maxHeight, final CoverReceiver coverReceiver) {
-        AsyncTask<Object, Object, Bitmap> task = new AsyncTask<Object, Object, Bitmap>() {
+    public static TaskHandle getCover(final String artist, final String album, final Integer maxHeight, final CoverReceiver coverReceiver) {
+
+        Runnable task = new Runnable() {
             @Override
-            protected Bitmap doInBackground(Object... params) {
+            public void run() {
                 synchronized (lock) {
                     try {
-                        String artistParam = (params[0] != null) ? (String)params[0] : "";
-                        String albumParam = (params[1] != null) ? (String)params[1] : "";
+                        String artistParam = (artist != null) ? artist : "";
+                        String albumParam = (album != null) ? album : "";
 
                         byte[] coverData = null;
 
@@ -98,7 +95,9 @@ public class ExternalInformationService {
                         }
 
                         if (NULL_URL.equals(coverUrl)) {
-                            return getNoCoverImage((Integer) params[2]);
+                            Bitmap cover = getNoCoverImage(maxHeight);
+                            postResult(cover, coverReceiver);
+                            return;
                         }
 
                         if (coverData == null) {
@@ -108,7 +107,9 @@ public class ExternalInformationService {
                         if (coverData != null) {
                             try {
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(coverData, 0, coverData.length);
-                                return scaleImage((Integer) params[2], bitmap);
+                                Bitmap cover = scaleImage(maxHeight, bitmap);
+                                postResult(cover, coverReceiver);
+                                return;
                             } catch (Exception ex) {
                                 Log.e(ExternalInformationService.class.getName(), "Error decoding byte array to bitmap", ex);
                                 coverData = null;
@@ -132,31 +133,30 @@ public class ExternalInformationService {
                         coverCache.insertCoverUrl(artistParam, albumParam, coverUrl);
 
                         if (NULL_URL.equals(coverUrl)) {
-                            return getNoCoverImage((Integer)params[2]);
+                            Bitmap cover = getNoCoverImage(maxHeight);
+                            postResult(cover, coverReceiver);
+                            return;
                         }
 
                         if (coverData != null) {
                             Bitmap bitmap = BitmapFactory.decodeByteArray(coverData, 0, coverData.length);
-                            return scaleImage((Integer)params[2], bitmap);
+                            Bitmap cover = scaleImage(maxHeight, bitmap);
+                            postResult(cover, coverReceiver);
+                            return;
                         }
 
-                        return getNoCoverImage((Integer)params[2]);
+                        Bitmap cover = getNoCoverImage(maxHeight);
+                        postResult(cover, coverReceiver);
+                        return;
                     } catch (Exception ex) {
                         Log.e(ExternalInformationService.class.getName(), "Error fetching cover", ex);
                     }
-
-                    return null;
                 }
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                coverReceiver.receiveCover(result);
             }
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, artist, album, maxHeight));
+            return new FutureTaskHandleImpl(executor.submit(task));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
@@ -172,11 +172,6 @@ public class ExternalInformationService {
             return coverUrlList.get(0);
         }
 
-        coverUrlList.addAll(httpCoverService.getCoverUrls(artistParam, albumParam));
-        if (!coverUrlList.isEmpty()) {
-            return coverUrlList.get(0);
-        }
-
         List<String> artists = createQueryStrings(artistParam, false);
         List<String> albums = createQueryStrings(albumParam, true);
         artists.add(null);
@@ -187,76 +182,63 @@ public class ExternalInformationService {
                 if (!coverUrlList.isEmpty()) {
                     return coverUrlList.get(0);
                 }
-                coverUrlList = gracenoteCoverService.getCoverUrls(artist, album);
-                if (!coverUrlList.isEmpty()) {
-                    return coverUrlList.get(0);
-                }
-                coverUrlList = amazonCoverService.getCoverUrls(artist, album);
-                if (!coverUrlList.isEmpty()) {
-                    return coverUrlList.get(0);
-                }
             }
         }
 
         return NULL_URL;
     }
 
-    public static TaskHandle getCover(String url, final CoverReceiver coverReceiver) {
-        AsyncTask<Object, Object, Bitmap> task = new AsyncTask<Object, Object, Bitmap>() {
+    public static TaskHandle getCover(final String url, final CoverReceiver coverReceiver) {
+        Runnable task = new Runnable() {
             @Override
-            protected Bitmap doInBackground(Object... params) {
+            public void run() {
                 synchronized (lock) {
                     try {
-                        String url = (String)params[0];
                         if (Utils.nullOrEmpty(url)) {
-                            return getNoCoverImage(null);
+                            Bitmap cover = getNoCoverImage(null);
+                            postResult(cover, coverReceiver);
+                            return;
                         }
 
                         byte[] coverData = downloadCoverImage(url);
                         if (coverData == null) {
-                            return getNoCoverImage(null);
+                            Bitmap cover = getNoCoverImage(null);
+                            postResult(cover, coverReceiver);
+                            return;
                         }
 
                         Bitmap bitmap = BitmapFactory.decodeByteArray(coverData, 0, coverData.length);
-                        return scaleImage(null, bitmap);
+                        Bitmap cover = scaleImage(null, bitmap);
+                        postResult(cover, coverReceiver);
+                        return;
                     } catch (Exception ex) {
                         Log.e(ExternalInformationService.class.getName(), "Error fetching cover", ex);
                     }
-
-                    return null;
                 }
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                coverReceiver.receiveCover(result);
             }
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, url));
+            return new FutureTaskHandleImpl(executor.submit(task));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
         }
     }
 
-    public static TaskHandle getCoverUrls(String artist, String album, final UrlReceiver urlReceiver) {
-        AsyncTask<Object, Object, String[]> task = new AsyncTask<Object, Object, String[]>() {
+    public static TaskHandle getCoverUrls(final String artist, final String album, final UrlReceiver urlReceiver) {
+        Runnable task = new Runnable() {
             @Override
-            protected String[] doInBackground(Object... params) {
+            public void run() {
                 synchronized (lock) {
                     Set<String> result = new LinkedHashSet<String>();
 
                     try {
-                        String artistParam = (params[0] != null) ? (String)params[0] : "";
-                        String albumParam = (params[1] != null) ? (String)params[1] : "";
+                        String artistParam = (artist != null) ? artist : "";
+                        String albumParam = (album != null) ? album : "";
 
                         List<String> mpdUrlList = mpdCoverService.getCoverUrls(artistParam, albumParam);
                         result.addAll(mpdUrlList);
-
-                        List<String> httpUrlList = httpCoverService.getCoverUrls(artistParam, albumParam);
-                        result.addAll(httpUrlList);
 
                         List<String> artists = createQueryStrings(artistParam, false);
                         List<String> albums = createQueryStrings(albumParam, true);
@@ -266,46 +248,36 @@ public class ExternalInformationService {
                             for (String album : albums) {
                                 List<String> lastfmUrlList = lastFmCoverAndInfoService.getCoverUrls(artist, album);
                                 result.addAll(lastfmUrlList);
-
-                                List<String> gracenoteUrlList = gracenoteCoverService.getCoverUrls(artist, album);
-                                result.addAll(gracenoteUrlList);
-
-                                List<String> amazonUrlList = amazonCoverService.getCoverUrls(artist, album);
-                                result.addAll(amazonUrlList);
                             }
                         }
                     } catch (Exception ex) {
                         Log.e(ExternalInformationService.class.getName(), "Error fetching cover", ex);
                     }
 
-                    return result.toArray(new String[result.size()]);
+                    String[] urls = result.toArray(new String[result.size()]);
+                    postResult(urls, urlReceiver);
+                    return;
                 }
-            }
-
-            @Override
-            protected void onPostExecute(String[] result) {
-                urlReceiver.receiveUrls(result);
             }
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist, album));
+            return new FutureTaskHandleImpl(executor.submit(task));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
         }
     }
 
-    public static TaskHandle setCoverUrl(String artist, String album, String url, Integer maxHeight, final CoverReceiver coverReceiver) {
-        AsyncTask<Object, Object, Bitmap> task = new AsyncTask<Object, Object, Bitmap>() {
+    public static TaskHandle setCoverUrl(final String artist, final String album, final String url, final Integer maxHeight, final CoverReceiver coverReceiver) {
+        Runnable task = new Runnable() {
             @Override
-            protected Bitmap doInBackground(Object... params) {
+            public void run() {
                 synchronized (lock) {
                     try {
-                        String artistParam = (params[0] != null) ? (String)params[0] : "";
-                        String albumParam = (params[1] != null) ? (String)params[1] : "";
-                        String urlParam = (params[2] != null) ? (String)params[2] : NULL_URL;
-                        Boolean loadParam = (Boolean) params[4];
+                        String artistParam = (artist != null) ? artist : "";
+                        String albumParam = (album != null) ? album : "";
+                        String urlParam = (url != null) ? url : NULL_URL;
 
                         String existingUrl = coverCache.getCoverUrl(artistParam, albumParam);
                         if (existingUrl != null) {
@@ -314,54 +286,49 @@ public class ExternalInformationService {
                         }
                         coverCache.insertCoverUrl(artistParam, albumParam, urlParam);
 
-                        if (loadParam == Boolean.TRUE) {
+                        if (coverReceiver != null) {
                             if (NULL_URL.equals(urlParam)) {
-                                return getNoCoverImage((Integer)params[3]);
+                                Bitmap cover = getNoCoverImage(maxHeight);
+                                postResult(cover, coverReceiver);
+                                return;
                             }
 
                             byte[] coverData = downloadCoverImage(urlParam);
                             if (coverData == null) {
-                                return getNoCoverImage((Integer)params[3]);
+                                Bitmap cover = getNoCoverImage(maxHeight);
+                                postResult(cover, coverReceiver);
+                                return;
                             }
                             coverCache.insertCoverImage(urlParam, coverData);
 
                             Bitmap bitmap = BitmapFactory.decodeByteArray(coverData, 0, coverData.length);
-                            return scaleImage((Integer)params[3], bitmap);
+                            Bitmap cover = scaleImage(maxHeight, bitmap);
+                            postResult(cover, coverReceiver);
+                            return;
                         }
-
-                        return null;
                     } catch (Exception ex) {
                         Log.e(ExternalInformationService.class.getName(), "Error fetching cover", ex);
                     }
-
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                if (coverReceiver != null) {
-                    coverReceiver.receiveCover(result);
                 }
             }
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, Bitmap>(task.executeOnExecutor(executor, artist, album, url, maxHeight, Boolean.valueOf(coverReceiver != null)));
+            return new FutureTaskHandleImpl(executor.submit(task));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to load cover. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
         }
     }
 
-    public static TaskHandle getArtistInfoUrls(String artist, final UrlReceiver urlReceiver) {
-        AsyncTask<Object, Object, String[]> task = new AsyncTask<Object, Object, String[]>() {
+    public static TaskHandle getArtistInfoUrls(final String artist, final UrlReceiver urlReceiver) {
+        Runnable task = new Runnable() {
             @Override
-            protected String[] doInBackground(Object... params) {
+            public void run() {
                 synchronized (lock) {
                     List<String> result = new ArrayList<String>();
                     try {
-                        List<String> artists = createQueryStrings((String)params[0], false);
+                        List<String> artists = createQueryStrings(artist, false);
 
                         for (String artist : artists) {
                             List<String> infoUrlList = lastFmCoverAndInfoService.getArtistInfoUrls(artist);
@@ -371,33 +338,30 @@ public class ExternalInformationService {
                         Log.e(ExternalInformationService.class.getName(), "Error getting artist info", ex);
                     }
 
-                    return result.toArray(new String[result.size()]);
+                    String[] urls = result.toArray(new String[result.size()]);
+                    postResult(urls, urlReceiver);
+                    return;
                 }
-            }
-
-            @Override
-            protected void onPostExecute(String[] result) {
-                urlReceiver.receiveUrls(result);
             }
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist));
+            return new FutureTaskHandleImpl(executor.submit(task));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to artist info. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
         }
     }
 
-    public static TaskHandle getAlbumInfoUrls(String artist, String album, final UrlReceiver urlReceiver) {
-        AsyncTask<Object, Object, String[]> task = new AsyncTask<Object, Object, String[]>() {
+    public static TaskHandle getAlbumInfoUrls(final String artist, final String album, final UrlReceiver urlReceiver) {
+        Runnable task = new Runnable() {
             @Override
-            protected String[] doInBackground(Object... params) {
+            public void run() {
                 synchronized (lock) {
                     List<String> result = new ArrayList<String>();
                     try {
-                        List<String> artists = createQueryStrings((String)params[0], false);
-                        List<String> albums = createQueryStrings((String)params[1], true);
+                        List<String> artists = createQueryStrings(artist, false);
+                        List<String> albums = createQueryStrings(album, true);
 
                         for (String artist : artists) {
                             for (String album : albums) {
@@ -409,22 +373,37 @@ public class ExternalInformationService {
                         Log.e(ExternalInformationService.class.getName(), "Error getting album info", ex);
                     }
 
-                    return result.toArray(new String[result.size()]);
+                    String[] urls = result.toArray(new String[result.size()]);
+                    postResult(urls, urlReceiver);
+                    return;
                 }
-            }
-
-            @Override
-            protected void onPostExecute(String[] result) {
-                urlReceiver.receiveUrls(result);
             }
         };
 
         try {
-            return new TaskHandleImpl<Object, Object, String[]>(task.executeOnExecutor(executor, artist, album));
+            return new FutureTaskHandleImpl(executor.submit(task));
         } catch (RejectedExecutionException ex) {
             Log.e(ExternalInformationService.class.getName(), "Unable to album info. Exection rejected", ex);
             return TaskHandle.NULL_HANDLE;
         }
+    }
+
+    private static void postResult(final Bitmap bitmap, final CoverReceiver coverReceiver) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                coverReceiver.receiveCover(bitmap);
+            }
+        });
+    }
+
+    private static void postResult(final String[] urls, final UrlReceiver urlReceiver) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                urlReceiver.receiveUrls(urls);
+            }
+        });
     }
 
     private static Bitmap getNoCoverImage(Integer maxHeight) {

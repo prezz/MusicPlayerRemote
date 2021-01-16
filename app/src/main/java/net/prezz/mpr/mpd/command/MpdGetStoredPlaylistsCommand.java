@@ -1,15 +1,9 @@
 package net.prezz.mpr.mpd.command;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import android.util.Log;
 
 import net.prezz.mpr.model.StoredPlaylistEntity;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
@@ -19,7 +13,7 @@ import net.prezz.mpr.mpd.connection.MpdConnection;
 public class MpdGetStoredPlaylistsCommand extends MpdConnectionCommand<Void, StoredPlaylistEntity[]>{
 
     public MpdGetStoredPlaylistsCommand(MpdPartitionProvider partitionProvider) {
-        super(partitionProvider, null);
+        super(null, partitionProvider);
     }
 
     @Override

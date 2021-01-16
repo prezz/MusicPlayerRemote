@@ -25,7 +25,7 @@ import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import net.prezz.mpr.ui.player.PlayerActivity;
 import net.prezz.mpr.R;
-import android.annotation.TargetApi;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -41,9 +41,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 
-import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 public class PlaybackService extends Service {
 
@@ -216,17 +215,10 @@ public class PlaybackService extends Service {
 
         PlayerState playerState = (playerStatus != null) ? playerStatus.getState() : PlayerState.STOP;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            updateMediaNotificationM(artistText, titleText, volumeText, playerState, sticky);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            updateMediaNotificationL(artistText, titleText, volumeText, playerState);
-        } else {
-            updateBasicNotification(artistText, titleText, volumeText, playerState);
-        }
+        updateMediaNotification(artistText, titleText, volumeText, playerState, sticky);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private void updateMediaNotificationM(String artist, String title, String volume, PlayerState playerState, boolean sticky) {
+    private void updateMediaNotification(String artist, String title, String volume, PlayerState playerState, boolean sticky) {
         Intent volDownIntent = new Intent(CMD_VOL_DOWN);
         Intent volUpIntent = new Intent(CMD_VOL_UP);
         Intent prevIntent = new Intent(CMD_PREV);
@@ -283,71 +275,6 @@ public class PlaybackService extends Service {
             notificationManager.notify(NOTIFICATION_ID, notification);
             isForegroundService = false;
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void updateMediaNotificationL(String artist, String title, String volume, PlayerState playerState) {
-        Intent volDownIntent = new Intent(CMD_VOL_DOWN);
-        Intent volUpIntent = new Intent(CMD_VOL_UP);
-        Intent prevIntent = new Intent(CMD_PREV);
-        Intent playPauseIntent = new Intent(CMD_PLAY_PAUSE);
-        Intent nextIntent = new Intent(CMD_NEXT);
-        Intent launchIntent = new Intent(this, PlayerActivity.class);
-
-        int ic_play = (playerState == PlayerState.PLAY) ? R.drawable.ic_pause_w : (playerState == PlayerState.PAUSE) ? R.drawable.ic_paused_w : R.drawable.ic_play_w;
-
-        Notification notification = new Notification.Builder(this)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setShowWhen(false)
-
-                .addAction(R.drawable.ic_volume_down_w, "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0))    // #0
-                .addAction(R.drawable.ic_volume_up_w, "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0))        // #1
-                .addAction(R.drawable.ic_previous_w, "", PendingIntent.getBroadcast(this, 0, prevIntent, 0))            // #2
-                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0))                        // #3
-                .addAction(R.drawable.ic_next_w, "", PendingIntent.getBroadcast(this, 0, nextIntent, 0))                // #4
-
-                .setStyle(new Notification.MediaStyle().setShowActionsInCompactView(3)) // #3 play toggle button
-                .setContentTitle(title)
-                .setContentText(artist)
-                .setSubText(volume)
-                .setLargeIcon(cover)
-                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, 0))
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
-    }
-
-    private void updateBasicNotification(String artist, String title, String volume, PlayerState playerState) {
-        Intent volDownIntent = new Intent(CMD_VOL_DOWN);
-        Intent volUpIntent = new Intent(CMD_VOL_UP);
-        Intent playPauseIntent = new Intent(CMD_PLAY_PAUSE);
-        Intent launchIntent = new Intent(this, PlayerActivity.class);
-
-        int ic_play = (playerState == PlayerState.PLAY) ? R.drawable.ic_pause_w : (playerState == PlayerState.PAUSE) ? R.drawable.ic_paused_w : R.drawable.ic_play_w;
-
-        Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setShowWhen(false)
-
-                .addAction(R.drawable.ic_volume_down_w, "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0))    // #0
-                .addAction(R.drawable.ic_volume_up_w, "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0))        // #1
-                .addAction(ic_play, "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0))                        // #2
-
-                .setContentTitle(title)
-                .setContentText(artist)
-                .setSubText(volume)
-                .setLargeIcon(cover)
-                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, 0))
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
     private class PlayerInfoRefreshListener extends ResponseReceiver<PlaylistEntity> implements StatusListener {
@@ -417,11 +344,11 @@ public class PlaybackService extends Service {
             } else if (CMD_VOL_UP.equals(action)) {
                 sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(context)));
             } else if (CMD_PREV.equals(action)) {
-                sendControlCommand( new PreviousCommand());
+                sendControlCommand(new PreviousCommand());
             } else if (CMD_PLAY_PAUSE.equals(action)) {
-                sendControlCommand( new PlayPauseCommand());
+                sendControlCommand(new PlayPauseCommand());
             } else if (CMD_NEXT.equals(action)) {
-                sendControlCommand( new NextCommand());
+                sendControlCommand(new NextCommand());
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 player.setStatusListener(playerInfoRefreshListener);
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
