@@ -315,7 +315,8 @@ public class PlayerActivity extends AppCompatActivity {
                 final boolean[] preChecked = new boolean[response.length];
                 final boolean[] postChecked = new boolean[response.length];
                 for (int i = 0; i < response.length; i++) {
-                    items[i] = response[i].getOutputName() + " (" + response[i].getPlugin() + ")";
+                    String pluginSuffix = response[i].getPlugin().length() > 0 ? " (" + response[i].getPlugin() + ")" : "";
+                    items[i] = response[i].getOutputName() + pluginSuffix;
                     preChecked[i] = response[i].isEnabled();
                     postChecked[i] = response[i].isEnabled();
                 }

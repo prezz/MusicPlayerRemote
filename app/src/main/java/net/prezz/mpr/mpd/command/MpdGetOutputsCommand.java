@@ -1,5 +1,6 @@
 package net.prezz.mpr.mpd.command;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,28 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput
 
         List<AudioOutput> result = new ArrayList<AudioOutput>();
 
+        boolean add = false;
         String outputId = null;
         String outputName = null;
-        String plugin = null;
+        String plugin = "";
         Boolean outputEnabled = null;
         for (String line : lines) {
+            if (line.startsWith(MpdConnection.OK)) {
+                break;
+            }
+            if (line.startsWith(MpdConnection.ACK)) {
+                throw new IOException("Error reading MPD response: " + line);
+            }
+
             if (line.startsWith("outputid: ")) {
+                if (add) {
+                    result.add(new AudioOutput(outputId, outputName, plugin, outputEnabled));
+                }
+                add = false;
                 outputId = line.substring(10);
+                outputName = null;
+                plugin = "";
+                outputEnabled = null;
             }
 
             if (line.startsWith("outputname: ")) {
@@ -49,15 +65,11 @@ public class MpdGetOutputsCommand extends MpdConnectionCommand<Void, AudioOutput
             if (line.startsWith("outputenabled: ")) {
                 String s = line.substring(15);
                 outputEnabled = Boolean.valueOf("1".equals(s));
+                add = true;
             }
-
-            if (outputId != null && outputName != null && plugin != null && outputEnabled != null) {
-                result.add(new AudioOutput(outputId, outputName, plugin, outputEnabled));
-                outputId = null;
-                outputName = null;
-                plugin = null;
-                outputEnabled = null;
-            }
+        }
+        if (add) {
+            result.add(new AudioOutput(outputId, outputName, plugin, outputEnabled));
         }
 
         return result.toArray(new AudioOutput[result.size()]);
