@@ -140,7 +140,7 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
                 assignOutput(partitionEntity);
                 break;
             case 2:
-                MusicPlayerControl.sendControlCommand(new DeletePartitionCommand(partitionEntity.getPartitionName()), refreshResponseReceiver);
+                deletePartition(partitionEntity);
                 return true;
         }
 
@@ -330,6 +330,18 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
         });
     }
 
+    private void deletePartition(PartitionEntity partitionEntity) {
+
+        List<Command> commands = new ArrayList<Command>();
+
+        for (String output : partitionEntity.getOutputs()) {
+            commands.add(new MoveOutputToPartitionCommand(output, MpdPartitionProvider.DEFAULT_PARTITION));
+        }
+        commands.add(new DeletePartitionCommand(partitionEntity.getPartitionName()));
+
+        MusicPlayerControl.sendControlCommands(commands, refreshResponseReceiver);
+    }
+
     private String[] getPartitionNames(PartitionAdapterEntity[] adapterEntities) {
         String[] result = new String[adapterEntities.length];
         for (int i = 0; i < adapterEntities.length; i++) {
@@ -359,9 +371,6 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
             return false;
         }
         if (partitionEntity.isClientPartition()) {
-            return false;
-        }
-        if (partitionEntity.getOutputs().length > 0) {
             return false;
         }
         return true;
