@@ -105,6 +105,12 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateTimeHandler.running(playerStatus.getState() == PlayerState.PLAY);
+    }
+
+    @Override
     public void onPause() {
         updateTimeHandler.running(false);
         super.onPause();
