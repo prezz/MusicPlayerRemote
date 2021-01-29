@@ -67,10 +67,10 @@
         <item>1</item>
     </string-array>
 
-    <string name="settings_control_show_output_title">Show server and output</string>
+    <string name="settings_control_show_output_title">Show current output</string>
     <string name="settings_control_show_output_key">show_output_enabled</string>
-    <string name="settings_control_show_output_summary_on">Current server and output will be shown</string>
-    <string name="settings_control_show_output_summary_off">Current server and output will not be shown</string>
+    <string name="settings_control_show_output_summary_on">Current output will be shown</string>
+    <string name="settings_control_show_output_summary_off">Current output will not be shown</string>
 
     <string name="settings_playlist_show_priority_in_playlist_title">Show track priority in playlist</string>
     <string name="settings_playlist_show_priority_in_playlist_key">show_priority_in_playlist</string>
