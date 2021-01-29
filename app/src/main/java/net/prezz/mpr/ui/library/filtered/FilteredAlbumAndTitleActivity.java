@@ -157,6 +157,6 @@ public class FilteredAlbumAndTitleActivity extends FilteredActivity {
     private boolean showCovers() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Resources resources = getResources();
-        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_show_covers_for_artist_albums_key), true);
+        return sharedPreferences.getBoolean(resources.getString(R.string.settings_library_show_covers_for_all_albums_key), true);
     }
 }

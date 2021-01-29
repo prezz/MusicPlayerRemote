@@ -94,16 +94,11 @@
     <string name="settings_library_proper_sort_summary_on">Artists and albums are sorted as \"Something, The\"</string>
     <string name="settings_library_proper_sort_summary_off">Artists and albums are sorted as \"The Something\"</string>
 
-    <string name="settings_library_show_covers_for_all_albums_title">Show all album covers</string>
+    <string name="settings_library_show_covers_for_all_albums_title">Show album covers</string>
     <string name="settings_library_show_covers_for_all_albums_key">show_covers_all_albums</string>
-    <string name="settings_library_show_covers_for_all_albums_summary_on">Covers will be shown in all albums list in library</string>
-    <string name="settings_library_show_covers_for_all_albums_summary_off">Covers will not be shown in all albums list in library</string>
+    <string name="settings_library_show_covers_for_all_albums_summary_on">Album covers will be shown in library list views</string>
+    <string name="settings_library_show_covers_for_all_albums_summary_off">Album covers will not be shown in library list views</string>
     
-    <string name="settings_library_show_covers_for_artist_albums_title">Show musician album covers</string>
-    <string name="settings_library_show_covers_for_artist_albums_key">show_covers_artist_albums</string>
-    <string name="settings_library_show_covers_for_artist_albums_summary_on">Covers will be shown in a musicians albums list in library</string>
-    <string name="settings_library_show_covers_for_artist_albums_summary_off">Covers will not be shown in a musicians albums list in library</string>
-
     <string name="settings_library_search_uri_title">Search files and directories</string>
     <string name="settings_library_search_uri_key">search_files_and_directories</string>
     <string name="settings_library_search_uri_summary_on">Files and directory names will be included in library search results</string>
