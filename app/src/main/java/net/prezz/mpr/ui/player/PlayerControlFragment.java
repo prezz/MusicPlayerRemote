@@ -118,6 +118,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
 
     @Override
     public void onDestroyView() {
+        updateTimeHandler.running(false);
         getCoverHandle.cancelTask();
         lastFmHandle.cancelTask();
         ((PlayerActivity)getActivity()).detachFragment(FRAGMENT_POSITION);
