@@ -110,6 +110,8 @@ public class FilteredTrackAndTitleActivity extends FilteredActivity {
 
     @Override 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == COVER_ACTIVITY_RESULT) {
             if (resultCode == RESULT_OK) {
                 String url = data.getStringExtra(CoverActivity.URL_RESULT_KEY);
