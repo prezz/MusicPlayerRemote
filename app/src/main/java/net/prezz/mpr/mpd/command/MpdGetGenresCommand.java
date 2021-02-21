@@ -26,8 +26,6 @@ public class MpdGetGenresCommand extends MpdDatabaseCommand<LibraryEntity, Libra
                 do {
                     String genre = c.getString(0);
                     Integer metaCount = c.getInt(1);
-                    metaCount += c.getInt(2);
-                    metaCount += c.getInt(3);
                     result[i++] = entityBuilder.clear().setTag(Tag.GENRE).setGenre(genre).setUriEntity(entity.getUriEntity()).setUriFilter(entity.getUriFilter()).setMetaCount(metaCount).build();
                 } while (c.moveToNext());
             }

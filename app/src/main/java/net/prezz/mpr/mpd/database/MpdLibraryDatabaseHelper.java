@@ -136,7 +136,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor selectGenres(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(String.format("SELECT genre, count(a), sum(aa), sum(c) FROM (SELECT genre, artist a, count(DISTINCT album_artist) aa, count(DISTINCT composer) c FROM music_entities %s GROUP BY genre, artist) GROUP BY genre ORDER BY genre COLLATE NOCASE asc", buildFilter(null, entity)), null);
+        return db.rawQuery(String.format("SELECT genre, count(a) FROM (SELECT genre, album a FROM music_entities %s GROUP BY genre, album) GROUP BY genre ORDER BY genre COLLATE NOCASE asc", buildFilter(null, entity)), null);
     }
 
     public Cursor selectFilteredAlbumsWithStatistics(LibraryEntity entity) {

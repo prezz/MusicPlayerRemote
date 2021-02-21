@@ -27,9 +27,9 @@ public class GenreAdapterEntity extends LibraryAdapterEntity {
             sb.append(metaCount);
             sb.append(" ");
             if (metaCount != null && metaCount.intValue() == 1) {
-                sb.append(ApplicationActivator.getContext().getString(R.string.library_musician_count));
+                sb.append(ApplicationActivator.getContext().getString(R.string.library_album_count));
             } else {
-                sb.append(ApplicationActivator.getContext().getString(R.string.library_musicians_count));
+                sb.append(ApplicationActivator.getContext().getString(R.string.library_albums_count));
             }
         }
 
