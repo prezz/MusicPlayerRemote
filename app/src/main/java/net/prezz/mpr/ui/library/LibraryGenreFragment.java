@@ -10,7 +10,7 @@ import net.prezz.mpr.ui.adapter.LibraryAdapterEntity;
 import net.prezz.mpr.ui.adapter.LibraryArrayAdapter;
 import net.prezz.mpr.ui.adapter.SortedAdapterIndexStrategy;
 import net.prezz.mpr.ui.library.filtered.FilteredActivity;
-import net.prezz.mpr.ui.library.filtered.FilteredArtistActivity;
+import net.prezz.mpr.ui.library.filtered.FilteredAlbumsActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +25,7 @@ public class LibraryGenreFragment extends LibraryFragment {
         LibraryAdapterEntity adapterEntity = (LibraryAdapterEntity)getAdapterEntity(position);
         LibraryEntity entity = adapterEntity.getEntity();
 
-        Intent intent = new Intent(getActivity(), FilteredArtistActivity.class);
+        Intent intent = new Intent(getActivity(), FilteredAlbumsActivity.class);
         Bundle args = new Bundle();
         args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, adapterEntity.getText());
         args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, entity);
@@ -41,7 +41,7 @@ public class LibraryGenreFragment extends LibraryFragment {
     @Override
     protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
         LibraryActivity libraryActivity = (LibraryActivity) getActivity();
-        return MusicPlayerControl.getAllGenresFromLibrary(libraryActivity.getLibraryEntityFilter(), responseReceiver);
+        return MusicPlayerControl.getGenresFromLibrary(libraryActivity.getLibraryEntityFilter(), responseReceiver);
     }
 
     @Override

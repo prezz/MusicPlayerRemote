@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCommand.Param, LibraryEntity[]> {
+public class MpdGetAlbumsCommand extends MpdDatabaseCommand<MpdGetAlbumsCommand.Param, LibraryEntity[]> {
 
     protected static final class Param {
         public final Boolean sortByArtist;
@@ -26,7 +26,7 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
 
     private static final String VARIOUS = "Various";
 
-    public MpdGetAllAlbumsCommand(boolean sortByArtist, LibraryEntity entity) {
+    public MpdGetAlbumsCommand(boolean sortByArtist, LibraryEntity entity) {
         super(new Param(Boolean.valueOf(sortByArtist), entity));
     }
 
@@ -37,7 +37,7 @@ public class MpdGetAllAlbumsCommand extends MpdDatabaseCommand<MpdGetAllAlbumsCo
         Boolean sortByArtist = param.sortByArtist;
         LibraryEntity entity = param.entity;
 
-        Cursor c = databaseHelper.selectAllAlbums(sortByArtist.booleanValue(), entity);
+        Cursor c = databaseHelper.selectAlbums(sortByArtist.booleanValue(), entity);
 
         try {
             int compilationIndex = 0;

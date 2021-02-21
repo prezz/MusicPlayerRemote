@@ -6,10 +6,10 @@ import net.prezz.mpr.model.LibraryEntity.Tag;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 import android.database.Cursor;
 
-public class MpdGetAllGenresCommand extends MpdDatabaseCommand<LibraryEntity, LibraryEntity[]> {
+public class MpdGetGenresCommand extends MpdDatabaseCommand<LibraryEntity, LibraryEntity[]> {
 
 
-    public MpdGetAllGenresCommand(LibraryEntity entity) {
+    public MpdGetGenresCommand(LibraryEntity entity) {
         super(entity);
     }
 
@@ -17,7 +17,7 @@ public class MpdGetAllGenresCommand extends MpdDatabaseCommand<LibraryEntity, Li
     protected LibraryEntity[] doExecute(MpdLibraryDatabaseHelper databaseHelper, LibraryEntity entity) throws Exception {
         Builder entityBuilder = LibraryEntity.createBuilder();
 
-        Cursor c = databaseHelper.selectAllGenres(entity);
+        Cursor c = databaseHelper.selectGenres(entity);
 
         try {
             int i = 0;

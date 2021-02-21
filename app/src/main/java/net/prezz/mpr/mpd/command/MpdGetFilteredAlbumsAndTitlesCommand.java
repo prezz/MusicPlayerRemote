@@ -21,7 +21,7 @@ public class MpdGetFilteredAlbumsAndTitlesCommand extends MpdDatabaseCommand<Lib
 
         List<LibraryEntity> result = new ArrayList<LibraryEntity>();
 
-        Cursor c = databaseHelper.selectFilteredAlbums(entity);
+        Cursor c = databaseHelper.selectFilteredAlbumsWithStatistics(entity);
         try {
             if (c.moveToFirst()) {
                 do {
