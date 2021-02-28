@@ -10,9 +10,9 @@ import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MpdGetAllArtistsCommand extends MpdDatabaseCommand<LibraryEntity, LibraryEntity[]> {
+public class MpdGetArtistsCommand extends MpdDatabaseCommand<LibraryEntity, LibraryEntity[]> {
 
-    public MpdGetAllArtistsCommand(LibraryEntity entity) {
+    public MpdGetArtistsCommand(LibraryEntity entity) {
         super(entity);
     }
 
@@ -22,7 +22,7 @@ public class MpdGetAllArtistsCommand extends MpdDatabaseCommand<LibraryEntity, L
 
         List<LibraryEntity> libraryEntities = new ArrayList<LibraryEntity>();
 
-        Cursor c = databaseHelper.selectAllArtists(entity);
+        Cursor c = databaseHelper.selectArtists(entity);
         try {
             if (c.moveToFirst()) {
                 do {
@@ -36,7 +36,7 @@ public class MpdGetAllArtistsCommand extends MpdDatabaseCommand<LibraryEntity, L
             c.close();
         }
 
-        c = databaseHelper.selectAllAlbumArtists(entity);
+        c = databaseHelper.selectAlbumArtists(entity);
         try {
             if (c.moveToFirst()) {
                 do {
@@ -50,7 +50,7 @@ public class MpdGetAllArtistsCommand extends MpdDatabaseCommand<LibraryEntity, L
             c.close();
         }
 
-        c = databaseHelper.selectAllComposers(entity);
+        c = databaseHelper.selectComposers(entity);
         try {
             if (c.moveToFirst()) {
                 do {

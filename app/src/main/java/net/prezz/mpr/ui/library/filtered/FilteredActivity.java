@@ -189,14 +189,14 @@ public abstract class FilteredActivity extends AppCompatActivity implements OnIt
     }
 
     public void onChoiceMenuClick(View view) {
-           final CharSequence title = getTitle();
-           final String[] items = getResources().getStringArray(R.array.library_selected_menu);
-           for (int i = 0; i < items.length; i++) {
-               items[i] = String.format(items[i], title);
-           }
+       final CharSequence title = getTitle();
+       final String[] items = getResources().getStringArray(R.array.library_selected_menu);
+       for (int i = 0; i < items.length; i++) {
+           items[i] = String.format(items[i], title);
+       }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-         builder.setTitle(title);
+        builder.setTitle(title);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 if (adapterEntities != null) {

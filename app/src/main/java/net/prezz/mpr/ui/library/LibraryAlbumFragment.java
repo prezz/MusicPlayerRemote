@@ -99,7 +99,7 @@ public class LibraryAlbumFragment extends LibraryFragment {
     @Override
     protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
         LibraryActivity libraryActivity = (LibraryActivity) getActivity();
-        return MusicPlayerControl.getAllAlbumsFromLibrary(sortByArtist, libraryActivity.getLibraryEntityFilter(), responseReceiver);
+        return MusicPlayerControl.getAlbumsFromLibrary(sortByArtist, libraryActivity.getLibraryEntityFilter(), responseReceiver);
     }
 
     @Override

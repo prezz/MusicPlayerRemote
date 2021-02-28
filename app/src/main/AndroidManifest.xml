@@ -123,10 +123,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.prezz.mpr.ui.player.PlayerActivity" />
         </activity>
-        
+
         <activity
             android:launchMode="standard"
-            android:name="net.prezz.mpr.ui.library.filtered.FilteredArtistActivity"
+            android:name="net.prezz.mpr.ui.library.filtered.FilteredAlbumsActivity"
             android:label="@string/library_activity_title"
             android:parentActivityName="net.prezz.mpr.ui.player.PlayerActivity" >
             <meta-data

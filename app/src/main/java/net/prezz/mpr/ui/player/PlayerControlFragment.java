@@ -29,6 +29,7 @@ import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
+import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.filtered.FilteredActivity;
 import net.prezz.mpr.ui.library.filtered.FilteredAlbumAndTitleActivity;
@@ -70,6 +71,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     private boolean seeking = false;
     private boolean outputVisible = false;
 
+    private UriFilterHelper uriFilterHelper;
+
     private TaskHandle getCoverHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle lastFmHandle = TaskHandle.NULL_HANDLE;
 
@@ -88,7 +91,14 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         setSeekBarEnablement(seekBar);
         seekBar.setOnSeekBarChangeListener(new TimeBarChangedListener());
 
+
         updateTimeHandler = new UpdateTimeHandler(this);
+
+        uriFilterHelper = new UriFilterHelper(getActivity(), new UriFilterHelper.UriFilterChangedListener() {
+            @Override
+            public void entityFilterChanged() {
+            }
+        });
 
         ((PlayerActivity)getActivity()).attachFragment(this, FRAGMENT_POSITION);
 
@@ -440,7 +450,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                                 Intent intent = new Intent(getActivity(), FilteredAlbumAndTitleActivity.class);
                                 Bundle args = new Bundle();
                                 args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, artist);
-                                args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, LibraryEntity.createBuilder().setArtist(artist).build());
+                                args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, LibraryEntity.createBuilder().setArtist(artist).setUriFilter(uriFilterHelper.getUriFilter()).build());
                                 intent.putExtras(args);
                                 startActivity(intent);
                             } else {
@@ -459,7 +469,7 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                                 Intent intent = new Intent(getActivity(), FilteredTrackAndTitleActivity.class);
                                 Bundle args = new Bundle();
                                 args.putString(FilteredActivity.TITLE_ARGUMENT_KEY, album);
-                                args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, LibraryEntity.createBuilder().setAlbum(album).build());
+                                args.putSerializable(FilteredActivity.ENTITY_ARGUMENT_KEY, LibraryEntity.createBuilder().setAlbum(album).setUriFilter(uriFilterHelper.getUriFilter()).build());
                                 intent.putExtras(args);
                                 startActivity(intent);
                             } else {

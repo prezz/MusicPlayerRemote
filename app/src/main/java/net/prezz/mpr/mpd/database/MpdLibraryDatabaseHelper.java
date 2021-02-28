@@ -110,7 +110,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public Cursor selectAllAlbums(boolean orderByArtist, LibraryEntity entity) {
+    public Cursor selectAlbums(boolean orderByArtist, LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         if (orderByArtist) {
             return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', ') g, count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma FROM music_entities %s ORDER BY track, meta_artist, title) GROUP BY album ORDER BY g COLLATE NOCASE asc, album COLLATE NOCASE asc", buildFilter(null, entity)), null);
@@ -119,27 +119,27 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor selectAllArtists(LibraryEntity entity) {
+    public Cursor selectArtists(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT artist, meta_artist, count(title) FROM music_entities %s GROUP BY meta_artist ORDER BY meta_artist COLLATE NOCASE asc", buildFilter(null, entity)), null);
     }
 
-    public Cursor selectAllAlbumArtists(LibraryEntity entity) {
+    public Cursor selectAlbumArtists(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT album_artist, meta_album_artist, count(title) FROM music_entities %s GROUP BY meta_album_artist ORDER BY meta_album_artist COLLATE NOCASE asc", buildFilter("WHERE album_artist IS NOT NULL", entity)), null);
     }
 
-    public Cursor selectAllComposers(LibraryEntity entity) {
+    public Cursor selectComposers(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT composer, count(title) FROM music_entities %s GROUP BY composer ORDER BY composer COLLATE NOCASE asc", buildFilter("WHERE composer IS NOT NULL", entity)), null);
     }
 
-    public Cursor selectAllGenres(LibraryEntity entity) {
+    public Cursor selectGenres(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(String.format("SELECT genre, count(a), sum(aa), sum(c) FROM (SELECT genre, artist a, count(DISTINCT album_artist) aa, count(DISTINCT composer) c FROM music_entities %s GROUP BY genre, artist) GROUP BY genre ORDER BY genre COLLATE NOCASE asc", buildFilter(null, entity)), null);
+        return db.rawQuery(String.format("SELECT genre, count(a) FROM (SELECT genre, album a FROM music_entities %s GROUP BY genre, album) GROUP BY genre ORDER BY genre COLLATE NOCASE asc", buildFilter(null, entity)), null);
     }
 
-    public Cursor selectFilteredAlbums(LibraryEntity entity) {
+    public Cursor selectFilteredAlbumsWithStatistics(LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), count(a), sum(t), sum(l) FROM (SELECT DISTINCT album, meta_album, artist a, count(title) t, sum(length) l FROM music_entities %s GROUP BY album, meta_album, artist) GROUP BY meta_album ORDER BY meta_album COLLATE NOCASE asc", buildFilter(null, entity)), null);
     }

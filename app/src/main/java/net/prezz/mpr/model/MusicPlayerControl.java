@@ -32,24 +32,20 @@ public class MusicPlayerControl {
         return musicPlayer.getHideableUriFolders(responseReceiver);
     }
 
-    public static TaskHandle getAllArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getAllArtistsFromLibrary(entity, responseReceiver);
+    public static TaskHandle getArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getArtistsFromLibrary(entity, responseReceiver);
     }
 
-    public static TaskHandle getAllAlbumsFromLibrary(boolean sortByArtist, LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getAllAlbumsFromLibrary(sortByArtist, entity, responseReceiver);
+    public static TaskHandle getAlbumsFromLibrary(boolean sortByArtist, LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getAlbumsFromLibrary(sortByArtist, entity, responseReceiver);
     }
 
-    public static TaskHandle getAllGenresFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getAllGenresFromLibrary(entity, responseReceiver);
+    public static TaskHandle getGenresFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
+        return musicPlayer.getGenresFromLibrary(entity, responseReceiver);
     }
 
     public static TaskHandle getFilteredAlbumsAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
         return musicPlayer.getFilteredAlbumsAndTitlesFromLibrary(entity, responseReceiver);
-    }
-
-    public static TaskHandle getFilteredArtistsFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {
-        return musicPlayer.getFilteredArtistsFromLibrary(entity, responseReceiver);
     }
 
     public static TaskHandle getFilteredTracksAndTitlesFromLibrary(LibraryEntity entity, ResponseReceiver<LibraryEntity[]> responseReceiver) {

@@ -48,7 +48,7 @@ public class LibraryArtistFragment extends LibraryFragment {
     @Override
     protected TaskHandle getEntities(ResponseReceiver<LibraryEntity[]> responseReceiver) {
         LibraryActivity libraryActivity = (LibraryActivity) getActivity();
-        return MusicPlayerControl.getAllArtistsFromLibrary(libraryActivity.getLibraryEntityFilter(), responseReceiver);
+        return MusicPlayerControl.getArtistsFromLibrary(libraryActivity.getLibraryEntityFilter(), responseReceiver);
     }
 
     @Override

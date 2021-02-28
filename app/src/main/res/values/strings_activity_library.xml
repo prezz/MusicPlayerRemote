@@ -65,6 +65,8 @@
     
     <string name="library_added_to_playlist_toast">%1$s added</string>
 
+    <string name="library_album_count">album</string>
+    <string name="library_albums_count">albums</string>
     <string name="library_musician_count">musician</string>
     <string name="library_musicians_count">musicians</string>
     <string name="library_track_count">track</string>
