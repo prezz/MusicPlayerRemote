@@ -50,16 +50,20 @@ public class MpdGetAlbumsCommand extends MpdDatabaseCommand<MpdGetAlbumsCommand.
                     String metaAlbum = c.getString(1);
                     String artist = c.getString(2);
                     String metaArtist = c.isNull(3) ? "" : c.getString(3);
-                    Boolean metaCompilation = c.getInt(4) > 1 ? Boolean.TRUE : Boolean.FALSE;
+                    Integer metaLength =  c.getInt(4);
+                    Boolean metaCompilation = c.getInt(5) > 1 ? Boolean.TRUE : Boolean.FALSE;
 
                     if (Utils.nullOrEmpty(album)) {
-                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(entity.getUriFilter()).build();
+                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist)
+                                .setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaLength(metaLength).setUriFilter(entity.getUriFilter()).build();
                         tracks.add(e);
                     } else if (sortByArtist == Boolean.TRUE && metaCompilation == Boolean.TRUE) {
-                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS).setLookupArtist(VARIOUS).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(entity.getUriFilter()).build();
+                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(VARIOUS)
+                                .setLookupArtist(VARIOUS).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaLength(metaLength).setUriFilter(entity.getUriFilter()).build();
                         compilations.add(e);
                     } else {
-                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist).setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setUriFilter(entity.getUriFilter()).build();
+                        LibraryEntity e = entityBuilder.clear().setTag(Tag.ALBUM).setGenre(entity.getGenre()).setAlbum(album).setUriEntity(entity.getUriEntity()).setMetaAlbum(metaAlbum).setMetaArtist(metaArtist)
+                                .setLookupArtist(artist).setLookupAlbum(album).setMetaCompilation(metaCompilation).setMetaLength(metaLength).setUriFilter(entity.getUriFilter()).build();
                         result.add(e);
                         if (sortByArtist == Boolean.TRUE && VARIOUS.compareToIgnoreCase(metaArtist) > 0) {
                             compilationIndex++;

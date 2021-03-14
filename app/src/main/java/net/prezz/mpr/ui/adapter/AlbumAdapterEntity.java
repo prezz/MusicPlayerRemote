@@ -1,5 +1,7 @@
 package net.prezz.mpr.ui.adapter;
 
+import android.annotation.SuppressLint;
+
 import net.prezz.mpr.model.LibraryEntity;
 
 public class AlbumAdapterEntity extends LibraryAdapterEntity {
@@ -31,8 +33,10 @@ public class AlbumAdapterEntity extends LibraryAdapterEntity {
         return (artist != null) ? artist : "";
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String getTime() {
-        return null;
+        Integer metaLength = getEntity().getMetaLength();
+        return (metaLength != null) ? String.format("%d:%02d", metaLength.intValue() / 60, metaLength.intValue() % 60) : "";
     }
 }

@@ -113,9 +113,9 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
     public Cursor selectAlbums(boolean orderByArtist, LibraryEntity entity) {
         SQLiteDatabase db = this.getReadableDatabase();
         if (orderByArtist) {
-            return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', ') g, count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma FROM music_entities %s ORDER BY track, meta_artist, title) GROUP BY album ORDER BY g COLLATE NOCASE asc, album COLLATE NOCASE asc", buildFilter(null, entity)), null);
+            return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', ') g, sum(l), count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma, sum(length) l FROM music_entities %s GROUP BY album, meta_album, artist, meta_artist ORDER BY track, meta_artist, title) GROUP BY album ORDER BY g COLLATE NOCASE asc, album COLLATE NOCASE asc", buildFilter(null, entity)), null);
         } else {
-            return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', '), count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma FROM music_entities %s ORDER BY track, meta_artist, title) GROUP BY meta_album ORDER BY meta_album COLLATE NOCASE asc", buildFilter(null, entity)), null);
+            return db.rawQuery(String.format("SELECT album, meta_album, group_concat(a, ', '), group_concat(ma, ', '), sum(l), count(a) FROM (SELECT DISTINCT album, meta_album, artist a, meta_artist ma, sum(length) l FROM music_entities %s GROUP BY album, meta_album, artist, meta_artist ORDER BY track, meta_artist, title) GROUP BY meta_album ORDER BY meta_album COLLATE NOCASE asc", buildFilter(null, entity)), null);
         }
     }
 
