@@ -333,11 +333,18 @@ public class PlayerActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         List<Command> commands = new ArrayList<Command>();
-                        for (int i = 0; i < response.length; i++) {
-                            if (preChecked[i] != postChecked[i]) {
+
+                        for (int i = 0; i < response.length; i++) { // first add all commands that enables
+                            if (preChecked[i] != postChecked[i] && postChecked[i]) {
                                 commands.add(new ToggleOutputCommand(response[i].getOutputId(), postChecked[i]));
                             }
                         }
+                        for (int i = 0; i < response.length; i++) { // then the commands that disables
+                            if (preChecked[i] != postChecked[i] && !postChecked[i]) {
+                                commands.add(new ToggleOutputCommand(response[i].getOutputId(), postChecked[i]));
+                            }
+                        }
+
                         if (!commands.isEmpty()) {
                             MusicPlayerControl.sendControlCommands(commands);
                         }
