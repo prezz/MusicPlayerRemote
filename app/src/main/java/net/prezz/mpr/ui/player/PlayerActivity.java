@@ -69,7 +69,6 @@ public class PlayerActivity extends AppCompatActivity {
     private Menu optionsMenu;
 
     private TaskHandle updatePlaylistHandle = TaskHandle.NULL_HANDLE;
-    private TaskHandle aMpdLaunchHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle selectOutputsHandle = TaskHandle.NULL_HANDLE;
 
 
@@ -132,7 +131,6 @@ public class PlayerActivity extends AppCompatActivity {
         super.onPause();
         MusicPlayerControl.setStatusListener(null);
         updatePlaylistHandle.cancelTask();
-        aMpdLaunchHandle.cancelTask();
         selectOutputsHandle.cancelTask();
     }
 
