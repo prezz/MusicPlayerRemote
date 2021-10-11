@@ -56,17 +56,6 @@
         <item>5</item>
     </string-array>
 
-    <string name="settings_streaming_player_title">Streaming App</string>
-    <string name="settings_streaming_player_key">selected_streaming_app</string>
-    <string-array name="settings_streaming_player_entries">
-        <item>Media Player</item>
-        <item>VLC</item>
-    </string-array>
-    <string-array name="settings_streaming_player_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
     <string name="settings_control_show_output_title">Show current output</string>
     <string name="settings_control_show_output_key">show_output_enabled</string>
     <string name="settings_control_show_output_summary_on">Current output will be shown</string>

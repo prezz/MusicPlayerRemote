@@ -67,7 +67,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // to reflect the new value, per the Android Design guidelines.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_default_player_fragment_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_volume_control_amount_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_streaming_player_key)));
 
     }
 
