@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.media.AudioAttributes;
+import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -118,6 +119,10 @@ public class StreamingService extends Service {
         wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "mpd_stream:wifi_lock");
         wifiLock.acquire();
 
+        if (wakeLock != null) {
+            wakeLock.release();
+        }
+
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mpd_stream:wake_lock");
         wakeLock.acquire();
@@ -168,10 +173,22 @@ public class StreamingService extends Service {
     }
 
     private void updateNotification(String text) {
+        updateMediaMetadata(text);
         updateMediaNotification(text);
     }
 
+    private void updateMediaMetadata(String text) {
+
+        MediaMetadata mediaMetadata = new MediaMetadata.Builder()
+                .putString(MediaMetadata.METADATA_KEY_TITLE, getString(R.string.notification_streaming_service_title))
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, text)
+                .build();
+
+        mediaSession.setMetadata(mediaMetadata);
+    }
+
     private void updateMediaNotification(String text) {
+
         Intent stopIntent = new Intent(CMD_STOP);
         Intent pauseIntent = new Intent(CMD_PAUSE);
         Intent launchIntent = new Intent(this, PlayerActivity.class);
@@ -186,8 +203,7 @@ public class StreamingService extends Service {
                 .addAction(new Notification.Action.Builder(Icon.createWithResource(this, ic_play), "", PendingIntent.getBroadcast(this, 0, pauseIntent, 0)).build())  // #0
                 .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_stop_w), "", PendingIntent.getBroadcast(this, 0, stopIntent, 0)).build())  // #1
 
-//                .setStyle(new Notification.MediaStyle().setMediaSession(mediaSession.getSessionToken()).setShowActionsInCompactView(1))
-                .setStyle(new Notification.MediaStyle().setShowActionsInCompactView(1))
+                .setStyle(new Notification.MediaStyle().setMediaSession(mediaSession.getSessionToken()).setShowActionsInCompactView(1))
                 .setContentTitle(getString(R.string.notification_streaming_service_title))
                 .setContentText(text)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
