@@ -34,12 +34,10 @@ import net.prezz.mpr.R;
 import net.prezz.mpr.ui.view.DataFragment;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,7 +69,6 @@ public class PlayerActivity extends AppCompatActivity {
     private Menu optionsMenu;
 
     private TaskHandle updatePlaylistHandle = TaskHandle.NULL_HANDLE;
-    private TaskHandle aMpdLaunchHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle selectOutputsHandle = TaskHandle.NULL_HANDLE;
 
 
@@ -134,7 +131,6 @@ public class PlayerActivity extends AppCompatActivity {
         super.onPause();
         MusicPlayerControl.setStatusListener(null);
         updatePlaylistHandle.cancelTask();
-        aMpdLaunchHandle.cancelTask();
         selectOutputsHandle.cancelTask();
     }
 
@@ -412,40 +408,7 @@ public class PlayerActivity extends AppCompatActivity {
             MusicPlayerControl.sendControlCommand(new PlayCommand());
         }
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Resources resources = this.getResources();
-        int streamingApp = Integer.parseInt(sharedPreferences.getString(resources.getString(R.string.settings_streaming_player_key), "0"));
-
-        switch (streamingApp) {
-            case 0:
-                StreamingService.start(url);
-                break;
-            case 1:
-                launchVlc(url);
-                break;
-        }
-    }
-
-    private void launchVlc(String url) {
-
-        String vlcName = "org.videolan.vlc";
-        try {
-            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(vlcName);
-            if (launchIntent != null) {
-                Uri uri = Uri.parse(url);
-                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
-                vlcIntent.setPackage("org.videolan.vlc");
-                vlcIntent.setDataAndTypeAndNormalize(uri, "audio/*");
-                startActivity(vlcIntent);
-            } else {
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + vlcName)));
-                } catch (ActivityNotFoundException ex) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + vlcName)));
-                }
-            }
-        } catch (Exception ex) {
-        }
+        StreamingService.start(url);
     }
 
     private int getDefaultFragment() {
