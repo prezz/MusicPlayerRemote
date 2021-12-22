@@ -1,15 +1,7 @@
 package net.prezz.mpr.ui.player;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
@@ -35,8 +27,7 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
-import net.prezz.mpr.mpd.connection.MpdConnection;
-import net.prezz.mpr.phone.lyngdorf.LyngdorfHelper;
+import net.prezz.mpr.ui.helpers.LyngdorfHelper;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
 import net.prezz.mpr.ui.helpers.UriFilterHelper;
@@ -59,7 +50,6 @@ import android.os.Message;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -260,17 +250,15 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
     }
 
     private void volumeDown() {
-
-        // LyngdorfHelper.volumeDown();
-
-        MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+        if (!LyngdorfHelper.volumeDown(this.getContext())) {
+            MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+        }
     }
 
     private void volumeUp() {
-
-        // LyngdorfHelper.volumeUp();
-
-        MusicPlayerControl.sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+        if (!LyngdorfHelper.volumeUp(this.getContext())) {
+            MusicPlayerControl.sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+        }
     }
 
     private void refreshPlayingInfo() {

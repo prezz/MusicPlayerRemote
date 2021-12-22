@@ -168,14 +168,18 @@ public class MiniControlHelper implements StatusListener {
     private final class VolumeDownClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
-            MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(activity)));
+            if (!LyngdorfHelper.volumeDown(activity)) {
+                MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(activity)));
+            }
         }
     }
 
     private final class VolumeUpClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
-            MusicPlayerControl.sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(activity)));
+            if (!LyngdorfHelper.volumeUp(activity)) {
+                MusicPlayerControl.sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(activity)));
+            }
         }
     }
 

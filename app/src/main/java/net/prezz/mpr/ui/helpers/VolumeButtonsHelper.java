@@ -30,35 +30,39 @@ public class VolumeButtonsHelper {
             if (enabled) {
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_VOLUME_UP:
-                        MusicPlayerControl.sendControlCommand(new VolumeUpCommand(getVolumeAmount(context)), new ResponseReceiver<ResponseResult>() {
-                            @Override
-                            public void receiveResponse(ResponseResult response) {
-                                if (response.isSuccess()) {
-                                    Integer volume = (Integer) response.getResponseValue(ResponseResult.ValueType.VOLUME);
-                                    if (volume != null) {
-                                        String text = (volume.intValue() != -1) ? context.getString(R.string.general_volume_text_format, volume) : context.getString(R.string.general_volume_text_no_mixer);
-                                        Boast toast = Boast.makeText(context, text);
-                                        toast.show();
+                        if (!LyngdorfHelper.volumeUp(context)) {
+                            MusicPlayerControl.sendControlCommand(new VolumeUpCommand(getVolumeAmount(context)), new ResponseReceiver<ResponseResult>() {
+                                @Override
+                                public void receiveResponse(ResponseResult response) {
+                                    if (response.isSuccess()) {
+                                        Integer volume = (Integer) response.getResponseValue(ResponseResult.ValueType.VOLUME);
+                                        if (volume != null) {
+                                            String text = (volume.intValue() != -1) ? context.getString(R.string.general_volume_text_format, volume) : context.getString(R.string.general_volume_text_no_mixer);
+                                            Boast toast = Boast.makeText(context, text);
+                                            toast.show();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                         return true;
 
                     case KeyEvent.KEYCODE_VOLUME_DOWN:
-                        MusicPlayerControl.sendControlCommand(new VolumeDownCommand(getVolumeAmount(context)), new ResponseReceiver<ResponseResult>() {
-                            @Override
-                            public void receiveResponse(ResponseResult response) {
-                                if (response.isSuccess()) {
-                                    Integer volume = (Integer) response.getResponseValue(ResponseResult.ValueType.VOLUME);
-                                    if (volume != null) {
-                                        String text = (volume.intValue() != -1) ? context.getString(R.string.general_volume_text_format, volume) : context.getString(R.string.general_volume_text_no_mixer);
-                                        Boast toast = Boast.makeText(context, text);
-                                        toast.show();
+                        if (!LyngdorfHelper.volumeDown(context)) {
+                            MusicPlayerControl.sendControlCommand(new VolumeDownCommand(getVolumeAmount(context)), new ResponseReceiver<ResponseResult>() {
+                                @Override
+                                public void receiveResponse(ResponseResult response) {
+                                    if (response.isSuccess()) {
+                                        Integer volume = (Integer) response.getResponseValue(ResponseResult.ValueType.VOLUME);
+                                        if (volume != null) {
+                                            String text = (volume.intValue() != -1) ? context.getString(R.string.general_volume_text_format, volume) : context.getString(R.string.general_volume_text_no_mixer);
+                                            Boast toast = Boast.makeText(context, text);
+                                            toast.show();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                         return true;
                 }
             }
