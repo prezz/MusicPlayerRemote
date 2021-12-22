@@ -2,6 +2,8 @@ package net.prezz.mpr.ui.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
@@ -18,6 +20,7 @@ public class LyngdorfHelper {
 
     private static final String LYNGDORF_IP_KEY = "lyngdorfIpKey";
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final Handler handler = new Handler(Looper.getMainLooper());
 
     private static String lyngdorfIp = null;
 
@@ -49,7 +52,7 @@ public class LyngdorfHelper {
             return false;
         }
 
-        sendLyngdorfCommand(context, "!VOLDN\n");
+        sendLyngdorfCommand(context, "!VOLDN\n", new Callback(context));
         return true;
     }
 
@@ -58,11 +61,11 @@ public class LyngdorfHelper {
             return false;
         }
 
-        sendLyngdorfCommand(context, "!VOLUP\n");
+        sendLyngdorfCommand(context, "!VOLUP\n", new Callback(context));
         return true;
     }
 
-    private static void sendLyngdorfCommand(Context context, String command) {
+    private static void sendLyngdorfCommand(Context context, String command, Callback callback) {
 
         Runnable task = new Runnable() {
             @Override
@@ -76,13 +79,39 @@ public class LyngdorfHelper {
                         writer.write(command);
                         writer.flush();
                     }
+                    doCallback(true, callback);
                 } catch (IOException ex) {
                     Log.e(LyngdorfHelper.class.getName(), "error writing to Lyngdorf", ex);
+                    doCallback(false, callback);
                     //Boast.makeText(context, "Error writing to Lyngdorf").show();
                 }
             }
         };
 
         executor.submit(task);
+    }
+
+    private static void doCallback(final boolean result, final Callback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.call(result);
+            }
+        });
+    }
+
+    private static class Callback {
+
+        private Context context;
+
+        Callback(Context context) {
+            this.context = context;
+        }
+
+        void call(boolean success) {
+            if (!success) {
+                Boast.makeText(context, "Error writing to Lyngdorf").show();
+            }
+        }
     }
 }
