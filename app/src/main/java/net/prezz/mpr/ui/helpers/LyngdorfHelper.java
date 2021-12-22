@@ -83,7 +83,6 @@ public class LyngdorfHelper {
                 } catch (IOException ex) {
                     Log.e(LyngdorfHelper.class.getName(), "error writing to Lyngdorf", ex);
                     doCallback(false, callback);
-                    //Boast.makeText(context, "Error writing to Lyngdorf").show();
                 }
             }
         };
