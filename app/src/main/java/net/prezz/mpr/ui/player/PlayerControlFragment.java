@@ -27,6 +27,7 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
+import net.prezz.mpr.ui.helpers.LyngdorfHelper;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
 import net.prezz.mpr.ui.helpers.UriFilterHelper;
@@ -216,10 +217,10 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                 ((PlayerActivity)getActivity()).onSelectOutput();
                 break;
             case R.id.player_button_volume_down:
-                MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+                volumeDown();
                 break;
             case R.id.player_button_volume_up:
-                MusicPlayerControl.sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+                volumeUp();
                 break;
             case R.id.player_button_repeat:
                 MusicPlayerControl.sendControlCommand(new RepeatCommand(!playerStatus.getRepeat()));
@@ -245,6 +246,18 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
             case R.id.player_button_next:
                 MusicPlayerControl.sendControlCommand(new NextCommand());
                 break;
+        }
+    }
+
+    private void volumeDown() {
+        if (!LyngdorfHelper.volumeDown(this.getContext())) {
+            MusicPlayerControl.sendControlCommand(new VolumeDownCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
+        }
+    }
+
+    private void volumeUp() {
+        if (!LyngdorfHelper.volumeUp(this.getContext())) {
+            MusicPlayerControl.sendControlCommand(new VolumeUpCommand(VolumeButtonsHelper.getVolumeAmount(this.getContext())));
         }
     }
 

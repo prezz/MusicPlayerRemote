@@ -10,4 +10,6 @@
 
     <string name="about_source_code_text"><u>Source code available at GitHub</u></string>
 
+    <string name="about_hidden_lyngdorf_view">Hidden lyngdorf view</string>
+
 </resources>

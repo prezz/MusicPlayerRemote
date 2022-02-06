@@ -46,5 +46,15 @@
             android:textColor="#3366BB"
             android:layout_marginBottom="40dp" />
 
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@string/about_hidden_lyngdorf_view"
+            android:onClick="onHiddenLyngdorfClick"
+            android:layout_marginBottom="40dp" />
+
     </LinearLayout>
 </ScrollView>
