@@ -38,7 +38,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     public void onPrivacyPolicyClick(View view) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://mpr-privacy-policy.prezz.net"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://mpd-remote.s3.eu-west-1.amazonaws.com/index.html"));
         startActivity(browserIntent);
     }
 
