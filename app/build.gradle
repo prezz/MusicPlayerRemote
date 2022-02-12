@@ -7,14 +7,13 @@ android {
             keyAlias 'prezz'
         }
     }
-    compileSdkVersion 29
-    buildToolsVersion '30.0.0'
+    compileSdkVersion 30
     defaultConfig {
         applicationId 'net.prezz.mpr'
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 139
-        versionName '1.139.0'
+        versionCode 140
+        versionName '1.140.0'
     }
     buildTypes {
         release {
