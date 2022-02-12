@@ -46,6 +46,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
@@ -676,6 +677,8 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         private boolean running = false;
 
         public UpdateTimeHandler(PlayerControlFragment fragment) {
+            super(Looper.getMainLooper());
+
             this.fragmentRef = new WeakReference<PlayerControlFragment>(fragment);
         }
 

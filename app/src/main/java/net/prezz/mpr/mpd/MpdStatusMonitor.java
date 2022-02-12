@@ -10,6 +10,7 @@ import net.prezz.mpr.mpd.connection.RejectAllFilter;
 import net.prezz.mpr.service.PlaybackService;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -32,6 +33,8 @@ public class MpdStatusMonitor extends Handler {
     private MpdPartitionProvider partitionProvider;
 
     public MpdStatusMonitor(MpdSettings settings) {
+        super(Looper.getMainLooper());
+
         this.settings = settings;
         this.executor = Executors.newCachedThreadPool(new DaemonThreadFactory());
         this.monitor = null;
