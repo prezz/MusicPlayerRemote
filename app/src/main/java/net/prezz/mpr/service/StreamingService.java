@@ -200,14 +200,14 @@ public class StreamingService extends Service {
                 .setSmallIcon(R.drawable.ic_stream)
                 .setShowWhen(false)
 
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, ic_play), "", PendingIntent.getBroadcast(this, 0, pauseIntent, 0)).build())  // #0
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_stop_w), "", PendingIntent.getBroadcast(this, 0, stopIntent, 0)).build())  // #1
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, ic_play), "", PendingIntent.getBroadcast(this, 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE)).build())  // #0
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_stop_w), "", PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE)).build())  // #1
 
                 .setStyle(new Notification.MediaStyle().setMediaSession(mediaSession.getSessionToken()).setShowActionsInCompactView(1))
                 .setContentTitle(getString(R.string.notification_streaming_service_title))
                 .setContentText(text)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, 0))
+                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE))
                 .setAutoCancel(false)
                 .setOngoing(true);
 

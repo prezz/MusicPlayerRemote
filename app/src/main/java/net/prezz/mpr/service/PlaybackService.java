@@ -233,18 +233,18 @@ public class PlaybackService extends Service {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setShowWhen(false)
 
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_volume_down_w), "", PendingIntent.getBroadcast(this, 0, volDownIntent, 0)).build())  // #0
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_volume_up_w), "", PendingIntent.getBroadcast(this, 0, volUpIntent, 0)).build())      // #1
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_previous_w), "", PendingIntent.getBroadcast(this, 0, prevIntent, 0)).build())        // #2
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, ic_play), "", PendingIntent.getBroadcast(this, 0, playPauseIntent, 0)).build())                    // #3
-                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_next_w), "", PendingIntent.getBroadcast(this, 0, nextIntent, 0)).build())            // #4
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_volume_down_w), "", PendingIntent.getBroadcast(this, 0, volDownIntent, PendingIntent.FLAG_IMMUTABLE)).build())  // #0
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_volume_up_w), "", PendingIntent.getBroadcast(this, 0, volUpIntent, PendingIntent.FLAG_IMMUTABLE)).build())      // #1
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_previous_w), "", PendingIntent.getBroadcast(this, 0, prevIntent, PendingIntent.FLAG_IMMUTABLE)).build())        // #2
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, ic_play), "", PendingIntent.getBroadcast(this, 0, playPauseIntent, PendingIntent.FLAG_IMMUTABLE)).build())                    // #3
+                .addAction(new Notification.Action.Builder(Icon.createWithResource(this, R.drawable.ic_next_w), "", PendingIntent.getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_IMMUTABLE)).build())            // #4
 
                 .setStyle(new Notification.MediaStyle().setShowActionsInCompactView(3)) // #3 play toggle button
                 .setContentTitle(title)
                 .setContentText(artist)
                 .setSubText(volume)
                 .setLargeIcon(cover)
-                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, 0))
+                .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE))
                 .setAutoCancel(false)
                 .setOngoing(sticky);
 
