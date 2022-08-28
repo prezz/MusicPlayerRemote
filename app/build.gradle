@@ -7,13 +7,13 @@ android {
             keyAlias 'prezz'
         }
     }
-    compileSdkVersion 30
+    compileSdkVersion 33
     defaultConfig {
         applicationId 'net.prezz.mpr'
         minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 140
-        versionName '1.140.0'
+        targetSdk 33
+        versionCode 141
+        versionName '1.141.0'
     }
     buildTypes {
         release {
@@ -31,7 +31,7 @@ android {
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
 }
 
 tasks.withType(JavaCompile) {
