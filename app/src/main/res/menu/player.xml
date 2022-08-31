@@ -32,9 +32,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/player_action_start_streaming"
+        android:id="@+id/player_action_toggle_streaming"
         android:orderInCategory="600"
-        android:title="@string/player_action_start_streaming"
+        android:title="@string/player_action_toggle_streaming"
         app:showAsAction="never" />
 
 </menu>
