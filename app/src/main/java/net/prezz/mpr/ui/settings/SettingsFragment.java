@@ -34,6 +34,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 3003;
+    private static final int PERMISSIONS_REQUEST_POST_NOTIFICATIONS = 3004;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -47,6 +48,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     CheckBoxPreference pauseOnPhonePreference = (CheckBoxPreference) findPreference(getString(R.string.settings_behavior_pause_on_phonecall_key));
                     pauseOnPhonePreference.setChecked(true);
+                }
+                break;
+            case PERMISSIONS_REQUEST_POST_NOTIFICATIONS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    CheckBoxPreference showNotificationPreference = (CheckBoxPreference) findPreference(getString(R.string.settings_behavior_show_notification_key));
+                    showNotificationPreference.setChecked(true);
+                    handleNotificationPreference(Boolean.TRUE);
                 }
                 break;
         }
@@ -152,22 +160,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         notificationPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (Boolean.FALSE.equals(newValue)) {
-                    PlaybackService.stop();
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-                    String channelId = getString(R.string.notification_media_player_channel_id);
-
-                    if (Boolean.TRUE.equals(newValue)) {
-                        NotificationChannel channel = new NotificationChannel(channelId, getString(R.string.notification_media_player_channel_name), NotificationManager.IMPORTANCE_LOW);
-                        notificationManager.createNotificationChannel(channel);
-                    } else {
-                        notificationManager.deleteNotificationChannel(channelId);
+                if (Boolean.TRUE == newValue) {
+                    Context context = getContext();
+                    if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSIONS_REQUEST_POST_NOTIFICATIONS);
+                        return false;
                     }
                 }
 
+                handleNotificationPreference(newValue);
                 return true;
             }
         });
@@ -188,7 +189,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
          });
      }
 
-     private String getVersion() {
+    private void handleNotificationPreference(Object newValue) {
+
+        if (Boolean.FALSE.equals(newValue)) {
+            PlaybackService.stop();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+            String channelId = getString(R.string.notification_media_player_channel_id);
+
+            if (Boolean.TRUE.equals(newValue)) {
+                NotificationChannel channel = new NotificationChannel(channelId, getString(R.string.notification_media_player_channel_name), NotificationManager.IMPORTANCE_LOW);
+                notificationManager.createNotificationChannel(channel);
+            } else {
+                notificationManager.deleteNotificationChannel(channelId);
+            }
+        }
+    }
+
+    private String getVersion() {
          try {
             Activity activity = getActivity();
             PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), 0);

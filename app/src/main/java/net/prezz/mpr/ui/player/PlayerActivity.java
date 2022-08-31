@@ -14,6 +14,7 @@ import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.StatusListener;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.command.Command;
+import net.prezz.mpr.model.command.PauseCommand;
 import net.prezz.mpr.model.command.PlayCommand;
 import net.prezz.mpr.model.command.ToggleOutputCommand;
 import net.prezz.mpr.model.servers.ServerConfiguration;
@@ -192,10 +193,14 @@ public class PlayerActivity extends AppCompatActivity {
                 selectOutputs();
                 return true;
             }
-            case R.id.player_action_start_streaming: {
-                String streamingUrl = currentMpdSettings.getMpdStreamingUrl();
-                if (!Utils.nullOrEmpty(streamingUrl)) {
-                    startStreaming(streamingUrl);
+            case R.id.player_action_toggle_streaming: {
+                if (StreamingService.isStarted()) {
+                    stopStreaming();
+                } else {
+                    String streamingUrl = currentMpdSettings.getMpdStreamingUrl();
+                    if (!Utils.nullOrEmpty(streamingUrl)) {
+                        startStreaming(streamingUrl);
+                    }
                 }
                 return true;
             }
@@ -411,6 +416,14 @@ public class PlayerActivity extends AppCompatActivity {
         StreamingService.start(url);
     }
 
+    private void stopStreaming() {
+        if (playerStatus.getState() == PlayerState.PLAY) {
+            MusicPlayerControl.sendControlCommand(new PauseCommand(false));
+        }
+
+        StreamingService.stop();
+    }
+
     private int getDefaultFragment() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Resources resources = this.getResources();
@@ -431,7 +444,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void updateOptionsMenu(MpdPlayerSettings mpdSettings) {
         if (optionsMenu != null) {
-            MenuItem streamingItem = optionsMenu.findItem(R.id.player_action_start_streaming);
+            MenuItem streamingItem = optionsMenu.findItem(R.id.player_action_toggle_streaming);
             if (streamingItem != null) {
                 streamingItem.setVisible(!Utils.nullOrEmpty(mpdSettings.getMpdStreamingUrl()));
                 onPrepareOptionsMenu(optionsMenu);
