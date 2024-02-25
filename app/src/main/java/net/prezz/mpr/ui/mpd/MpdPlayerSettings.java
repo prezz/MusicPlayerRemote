@@ -8,12 +8,14 @@ import net.prezz.mpr.mpd.MpdSettings;
 
 public class MpdPlayerSettings implements MpdSettings {
 
+    private String name;
     private String mpdHost;
     private String mpdPort;
     private String mpdPassword;
     private String mpdStreamingUrl;
 
-    protected MpdPlayerSettings(String mpdHost, String mpdPort, String mpdPassword, String mpdStreamingUrl) {
+    protected MpdPlayerSettings(String name, String mpdHost, String mpdPort, String mpdPassword, String mpdStreamingUrl) {
+        this.name = name;
         this.mpdHost = mpdHost;
         this.mpdPort = mpdPort;
         this.mpdPassword = mpdPassword;
@@ -23,12 +25,18 @@ public class MpdPlayerSettings implements MpdSettings {
     public static MpdPlayerSettings create(Context context) {
         ServerConfiguration selectedConfiguration = ServerConfigurationService.getSelectedServerConfiguration();
 
+        String name = selectedConfiguration.getName();
         String mpdHost = selectedConfiguration.getHost();
         String mpdPort = selectedConfiguration.getPort();
         String mpdPassword = selectedConfiguration.getPassword();
         String mpdStreamingUrl = selectedConfiguration.getStreaming();
 
-        return new MpdPlayerSettings(mpdHost, mpdPort, mpdPassword, mpdStreamingUrl);
+        return new MpdPlayerSettings(name, mpdHost, mpdPort, mpdPassword, mpdStreamingUrl);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

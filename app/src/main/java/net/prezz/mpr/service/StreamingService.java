@@ -20,7 +20,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
-
 import android.util.Log;
 
 import net.prezz.mpr.R;
@@ -77,11 +76,7 @@ public class StreamingService extends Service {
 
             if (!started) {
                 started = true;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(new Intent(context, StreamingService.class).putExtra(URL_ARGUMENT_KEY, url));
-                } else {
-                    context.startService(new Intent(context, StreamingService.class).putExtra(URL_ARGUMENT_KEY, url));
-                }
+                context.startForegroundService(new Intent(context, StreamingService.class).putExtra(URL_ARGUMENT_KEY, url));
             } else {
                 Boast.makeText(context, "Stream already running,");
             }
@@ -135,7 +130,7 @@ public class StreamingService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CMD_STOP);
         filter.addAction(CMD_PAUSE);
-        registerReceiver(broadcastReceiver, filter);
+        registerReceiver(broadcastReceiver, filter, RECEIVER_EXPORTED);
 
         startMediaSession();
         startMediaPlayer(context);
@@ -195,7 +190,9 @@ public class StreamingService extends Service {
 
         int ic_play = (mediaPlayer.isPlaying()) ? R.drawable.ic_pause_w : R.drawable.ic_paused_w;
 
-        Notification.Builder notificationBuilder = new Notification.Builder(this)
+        String channelId = getString(R.string.notification_streaming_channel_id);
+
+        Notification notification = new Notification.Builder(this, channelId)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_stream)
                 .setShowWhen(false)
@@ -209,22 +206,17 @@ public class StreamingService extends Service {
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                 .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE))
                 .setAutoCancel(false)
-                .setOngoing(true);
+                .setOngoing(true)
+                .build();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = getString(R.string.notification_streaming_channel_id);
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
-            if (channel == null) {
-                channel = new NotificationChannel(channelId, getString(R.string.notification_streaming_channel_name), NotificationManager.IMPORTANCE_LOW);
-                notificationManager.createNotificationChannel(channel);
-            }
-
-            notificationBuilder.setChannelId(channelId);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
+        if (channel == null) {
+            channel = new NotificationChannel(channelId, getString(R.string.notification_streaming_channel_name), NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(channel);
         }
 
-        Notification notification = notificationBuilder.build();
         startForeground(NOTIFICATION_ID, notification);
     }
 
@@ -232,10 +224,6 @@ public class StreamingService extends Service {
         stopMediaSession();
 
         mediaSession = new MediaSession(this, "MPD Remote");
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
-        }
         mediaSession.setCallback(new MediaSessionCallback());
         mediaSession.setActive(true);
 

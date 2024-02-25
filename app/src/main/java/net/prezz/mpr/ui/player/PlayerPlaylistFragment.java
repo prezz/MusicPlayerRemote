@@ -1,15 +1,40 @@
 package net.prezz.mpr.ui.player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
+import androidx.viewpager2.widget.ViewPager2;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
+import net.prezz.mpr.model.ResponseReceiver;
+import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.model.command.ClearPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteFromPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteMultipleFromPlaylistCommand;
@@ -31,32 +56,10 @@ import net.prezz.mpr.ui.view.DragListView;
 import net.prezz.mpr.ui.view.DragListView.DragListener;
 import net.prezz.mpr.ui.view.DragListView.DropListener;
 import net.prezz.mpr.ui.view.DragListView.RemoveListener;
-import net.prezz.mpr.ui.view.SwipeToggleViewPager;
-import net.prezz.mpr.R;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.preference.PreferenceManager;
 
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, OnItemClickListener, OnMenuItemClickListener {
 
@@ -215,6 +218,9 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
                 case 3:
                     MusicPlayerControl.sendControlCommand(new ClearPlaylistCommand());
                     break;
+                case 4:
+                    updatePlayData();
+                    break;
                 }
             }
         });
@@ -228,6 +234,26 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
 
     private void shufflePlaylist() {
         MusicPlayerControl.sendControlCommands(Arrays.asList(new UnprioritizeCommand(0, adapterEntities.length), new ShuffleCommand()));
+    }
+
+    private void updatePlayData() {
+        if (adapterEntities != null && adapterEntities.length > 0) {
+            List<String> uris = new ArrayList<>();
+            for (PlaylistAdapterEntity entity : adapterEntities) {
+                UriEntity uriEntity = entity.getEntity().getUriEntity();
+                if (uriEntity.getUriType() == UriEntity.UriType.FILE) {
+                    uris.add(uriEntity.getFullUriPath(false));
+                }
+            }
+            MusicPlayerControl.updatePlayData(uris, new ResponseReceiver<Boolean>() {
+                @Override
+                public void receiveResponse(Boolean response) {
+                    if (response == Boolean.TRUE) {
+                        Boast.makeText(getActivity(), R.string.player_play_data_updated).show();
+                    }
+                }
+            });
+        }
     }
 
     private void createEntityAdapter() {
@@ -297,8 +323,9 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
 
     private void setSwipeEnabled(boolean enabled) {
         FragmentActivity activity = getActivity();
-        SwipeToggleViewPager viewPager = (SwipeToggleViewPager)activity.findViewById(R.id.player_view_pager_swipe);
-        viewPager.setSwipeEnabled(enabled);
+        ViewPager2 viewPager = (ViewPager2)activity.findViewById(R.id.player_view_pager_swipe);
+        viewPager.setUserInputEnabled(enabled);
+        //viewPager.requestDisallowInterceptTouchEvent(enabled);
     }
 
     private boolean showPriorities() {

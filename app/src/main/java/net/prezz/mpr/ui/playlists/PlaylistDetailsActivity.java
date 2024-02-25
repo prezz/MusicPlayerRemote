@@ -333,7 +333,7 @@ public class PlaylistDetailsActivity extends AppCompatActivity implements OnMenu
     }
 
     private StoredPlaylistEntity getPlaylistArgument() {
-        return (StoredPlaylistEntity)this.getIntent().getExtras().getSerializable(PLAYLIST_ARGUMENT_KEY);
+        return this.getIntent().getExtras().getSerializable(PLAYLIST_ARGUMENT_KEY, StoredPlaylistEntity.class);
     }
 
     private void refreshEntities(boolean refreshLocalEntities) {

@@ -332,7 +332,7 @@ public class FilteredUriActivity extends AppCompatActivity implements OnItemClic
     }
 
     private UriEntity getEntityArgument() {
-        return (UriEntity)this.getIntent().getExtras().getSerializable(ENTITY_ARGUMENT_KEY);
+        return this.getIntent().getExtras().getSerializable(ENTITY_ARGUMENT_KEY, UriEntity.class);
     }
 
     private ListView findListView() {

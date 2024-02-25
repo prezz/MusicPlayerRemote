@@ -1,7 +1,9 @@
 package net.prezz.mpr.ui.player;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
@@ -10,6 +12,7 @@ import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
+import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.model.command.ConsumeCommand;
@@ -27,6 +30,7 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
+import net.prezz.mpr.ui.adapter.PlaylistAdapterEntity;
 import net.prezz.mpr.ui.helpers.LyngdorfHelper;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
@@ -203,6 +207,9 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                         break;
                     case 3:
                         goToLastFm();
+                        break;
+                    case 4:
+                        updatePlayData();
                         break;
                 }
             }
@@ -566,6 +573,26 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void updatePlayData() {
+        if (playlistEntities != null && playlistEntities.length > 0) {
+            List<String> uris = new ArrayList<>();
+            for (PlaylistEntity entity : playlistEntities) {
+                UriEntity uriEntity = entity.getUriEntity();
+                if (uriEntity.getUriType() == UriEntity.UriType.FILE) {
+                    uris.add(uriEntity.getFullUriPath(false));
+                }
+            }
+            MusicPlayerControl.updatePlayData(uris, new ResponseReceiver<Boolean>() {
+                @Override
+                public void receiveResponse(Boolean response) {
+                    if (response == Boolean.TRUE) {
+                        Boast.makeText(getActivity(), R.string.player_play_data_updated).show();
+                    }
+                }
+            });
+        }
     }
 
     private void setVolumeText(int volume) {

@@ -1,13 +1,6 @@
 package net.prezz.mpr.ui.settings;
 
-import net.prezz.mpr.model.MusicPlayerControl;
-import net.prezz.mpr.model.ResponseReceiver;
-import net.prezz.mpr.service.PlaybackService;
-import net.prezz.mpr.ui.AboutActivity;
-import net.prezz.mpr.ui.ApplicationActivator;
-import net.prezz.mpr.ui.helpers.Boast;
-import net.prezz.mpr.ui.settings.servers.ServersActivity;
-import net.prezz.mpr.R;
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,48 +8,54 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
+import net.prezz.mpr.R;
+import net.prezz.mpr.model.MusicPlayerControl;
+import net.prezz.mpr.model.ResponseReceiver;
+import net.prezz.mpr.service.PlaybackService;
+import net.prezz.mpr.ui.AboutActivity;
+import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.settings.servers.ServersActivity;
+
+import java.util.Map;
 
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends PreferenceFragmentCompat implements ActivityResultCallback<Map<String, Boolean>> {
 
-    private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 3003;
-    private static final int PERMISSIONS_REQUEST_POST_NOTIFICATIONS = 3004;
+    private ActivityResultLauncher<String[]> activityResultLauncher;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setupSimplePreferencesScreen(rootKey);
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), this);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_PHONE_STATE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference pauseOnPhonePreference = (CheckBoxPreference) findPreference(getString(R.string.settings_behavior_pause_on_phonecall_key));
-                    pauseOnPhonePreference.setChecked(true);
-                }
-                break;
-            case PERMISSIONS_REQUEST_POST_NOTIFICATIONS:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference showNotificationPreference = (CheckBoxPreference) findPreference(getString(R.string.settings_behavior_show_notification_key));
-                    showNotificationPreference.setChecked(true);
-                    handleNotificationPreference(Boolean.TRUE);
-                }
-                break;
+    public void onActivityResult(Map<String, Boolean> result) {
+
+        if (result.get(Manifest.permission.READ_PHONE_STATE) == Boolean.TRUE) {
+            CheckBoxPreference pauseOnPhonePreference = (CheckBoxPreference) findPreference(getString(R.string.settings_behavior_pause_on_phonecall_key));
+            pauseOnPhonePreference.setChecked(true);
+        }
+
+        if (result.get(Manifest.permission.POST_NOTIFICATIONS) == Boolean.TRUE) {
+            CheckBoxPreference showNotificationPreference = (CheckBoxPreference) findPreference(getString(R.string.settings_behavior_show_notification_key));
+            showNotificationPreference.setChecked(true);
+            handleNotificationPreference(Boolean.TRUE);
         }
     }
 
@@ -146,7 +145,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (Boolean.TRUE == newValue) {
                     Context context = getContext();
                     if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_REQUEST_READ_PHONE_STATE);
+                        activityResultLauncher.launch(new String[]{Manifest.permission.READ_PHONE_STATE});
                         return false;
                     }
                 }
@@ -163,7 +162,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (Boolean.TRUE == newValue) {
                     Context context = getContext();
                     if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSIONS_REQUEST_POST_NOTIFICATIONS);
+                        activityResultLauncher.launch(new String[]{Manifest.permission.POST_NOTIFICATIONS});
                         return false;
                     }
                 }
@@ -211,7 +210,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private String getVersion() {
          try {
             Activity activity = getActivity();
-            PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
+            PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getApplicationContext().getPackageName(), PackageManager.PackageInfoFlags.of(0));
             return info.versionName ;
          } catch (Exception ex) {
          }

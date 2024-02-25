@@ -1,14 +1,14 @@
 package net.prezz.mpr.mpd.database;
 
-import net.prezz.mpr.Utils;
-import net.prezz.mpr.model.LibraryEntity;
-import net.prezz.mpr.model.UriEntity;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.LibraryEntity;
+import net.prezz.mpr.model.UriEntity;
 
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -18,8 +18,8 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
     public static final String LIBRARY_FILE_DB_POSTFIX = "_library.db";
 
 
-    public MpdLibraryDatabaseHelper(Context context, String host) {
-        super(context, host + LIBRARY_FILE_DB_POSTFIX, null, 8);
+    public MpdLibraryDatabaseHelper(Context context, String databaseName) {
+        super(context, databaseName + LIBRARY_FILE_DB_POSTFIX, null, 9);
     }
 
     @Override
@@ -31,6 +31,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS music_entities");
         db.execSQL("DROP TABLE IF EXISTS playlist_entities");
+        db.execSQL("DROP TABLE IF EXISTS play_data"); // <-- careful, you might loos all play data
         doCreate(db);
     }
 
@@ -234,6 +235,32 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Cursor getPlayData(String uri) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(String.format("SELECT play_date, play_count FROM play_data WHERE uri='%s'", Utils.fixDatabaseQuery(uri)), null);
+    }
+
+    public Cursor selectAllAlbumPlayData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT album, min(play_date), min(play_count) FROM music_entities JOIN play_data ON music_entities.uri = play_data.uri GROUP BY album", null);
+    }
+
+    public Cursor selectAlbumPlayData(String artist) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(String.format("SELECT album, min(play_date), min(play_count) FROM music_entities JOIN play_data ON music_entities.uri = play_data.uri WHERE music_entities.artist = '%s' GROUP BY album", Utils.fixDatabaseQuery(artist)), null);
+    }
+
+    public long upsertPlayData(String uri, String date, int count) {
+
+        ContentValues values = new ContentValues();
+        values.put("uri", uri);
+        values.put("play_date", date);
+        values.put("play_count", count);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.replace("play_data", null, values);
+    }
+
     private String buildFilter(String prefix, LibraryEntity entity) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -377,5 +404,7 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX idx_uri ON music_entities (uri);");
 
         db.execSQL("CREATE TABLE playlist_entities (id INTEGER PRIMARY KEY, uri TEXT)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS play_data (uri TEXT PRIMARY KEY, play_date TEXT, play_count INTEGER)");
     }
 }

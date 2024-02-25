@@ -88,8 +88,12 @@ public class MusicPlayerControl {
         return musicPlayer.getPartitions(responseReceiver);
     }
 
-    public static void switchPartition(String partition, ResponseReceiver<PartitionEntity[]> responseReceiver) {
-        musicPlayer.switchPartition(partition, responseReceiver);
+    public static TaskHandle switchPartition(String partition, ResponseReceiver<PartitionEntity[]> responseReceiver) {
+        return musicPlayer.switchPartition(partition, responseReceiver);
+    }
+
+    public static TaskHandle updatePlayData(List<String> uris, ResponseReceiver<Boolean> responseReceiver) {
+        return musicPlayer.updatePlayData(uris, responseReceiver);
     }
 
     public static void sendControlCommand(Command command) {

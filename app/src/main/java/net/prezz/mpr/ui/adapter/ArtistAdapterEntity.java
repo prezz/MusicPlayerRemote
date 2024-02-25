@@ -48,7 +48,12 @@ public class ArtistAdapterEntity extends LibraryAdapterEntity {
 
     @Override
     public String getTime() {
-        return null;
+        return "";
+    }
+
+    @Override
+    public String getData() {
+        return "";
     }
 
     public String getEntityText() {

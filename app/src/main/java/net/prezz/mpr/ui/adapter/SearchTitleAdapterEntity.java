@@ -47,4 +47,9 @@ public class SearchTitleAdapterEntity extends LibraryAdapterEntity {
     public String getTime() {
         return "";
     }
+
+    @Override
+    public String getData() {
+        return "";
+    }
 }

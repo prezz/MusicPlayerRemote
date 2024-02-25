@@ -247,7 +247,7 @@ public abstract class FilteredActivity extends AppCompatActivity implements OnIt
     }
 
     protected LibraryEntity getEntityArgument() {
-        return (LibraryEntity)this.getIntent().getExtras().getSerializable(ENTITY_ARGUMENT_KEY);
+        return this.getIntent().getExtras().getSerializable(ENTITY_ARGUMENT_KEY, LibraryEntity.class);
     }
 
     protected abstract int getLayout();
