@@ -30,7 +30,7 @@ public class AddEditServerActivity extends AppCompatActivity implements OnEditor
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_add_edit_server);
 
-        editConfiguration = (ServerConfiguration)getIntent().getExtras().getSerializable(CONFIGURATION_ARGUMENT_KEY);
+        editConfiguration = getIntent().getExtras().getSerializable(CONFIGURATION_ARGUMENT_KEY, ServerConfiguration.class);
         if (editConfiguration != null) {
             setTitle(R.string.add_edit_server_edit_title);
             setTextViewText(R.id.add_edit_server_name_text, editConfiguration.getName());

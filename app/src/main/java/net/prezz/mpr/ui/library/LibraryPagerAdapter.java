@@ -1,25 +1,27 @@
 package net.prezz.mpr.ui.library;
 
-import net.prezz.mpr.R;
 import android.content.Context;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 
-class LibraryPagerAdapter extends FragmentPagerAdapter {
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import net.prezz.mpr.R;
+
+class LibraryPagerAdapter extends FragmentStateAdapter {
 
     public static final int FRAGMENT_COUNT = 4;
 
     private Context context;
 
-    public LibraryPagerAdapter(FragmentManager fm, Context context) {
-        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+    public LibraryPagerAdapter(FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
 
-        this.context = context;
+        this.context = fragmentActivity;
     }
 
-    public String getTitle(int i) {
-        switch (i) {
+    public String getTitle(int position) {
+        switch (position) {
         case 0:
             return context.getString(R.string.library_musicians);
         case 1:
@@ -34,8 +36,8 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int i) {
-        switch (i) {
+    public Fragment createFragment(int position) {
+        switch (position) {
         case 0:
             return new LibraryArtistFragment();
         case 1:
@@ -50,7 +52,7 @@ class LibraryPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return FRAGMENT_COUNT;
     }
 }

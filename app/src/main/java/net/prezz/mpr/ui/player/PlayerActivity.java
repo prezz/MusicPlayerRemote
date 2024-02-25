@@ -1,9 +1,25 @@
 package net.prezz.mpr.ui.player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
+import androidx.viewpager2.widget.ViewPager2;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.MusicPlayerControl;
@@ -31,27 +47,13 @@ import net.prezz.mpr.ui.partitions.PartitionsActivity;
 import net.prezz.mpr.ui.playlists.StoredPlaylistsActivity;
 import net.prezz.mpr.ui.search.SearchActivity;
 import net.prezz.mpr.ui.settings.SettingsActivity;
-import net.prezz.mpr.R;
 import net.prezz.mpr.ui.view.DataFragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Bundle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.ViewPager;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-public class PlayerActivity extends AppCompatActivity {
-
-    private static final int SETTINGS_ACTIVITY_RESULT = 1001;
+public class PlayerActivity extends AppCompatActivity implements ActivityResultCallback<ActivityResult> {
 
     private static final String PREFERENCE_SHOW_SWIPE_HINT_KEY = "player_show_swipe_hint";
 
@@ -61,6 +63,8 @@ public class PlayerActivity extends AppCompatActivity {
     private MpdPlayerSettings currentMpdSettings;
 
     private final MusicPlayerRefreshListener musicPlayerRefreshListener = new MusicPlayerRefreshListener();
+    private ViewPager2.OnPageChangeCallback pageChangeCallback = new PageChangeCallback();
+    private ActivityResultLauncher<Intent> activityResultLauncher;
     private PlayerFragment[] attachedFragments = new PlayerFragment[2];
     private int fragmentPosition;
     private PlayerStatus playerStatus;
@@ -80,8 +84,9 @@ public class PlayerActivity extends AppCompatActivity {
         darkTheme = ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_player);
 
-        final PlayerPagerAdapter pageAdapter = new PlayerPagerAdapter(getSupportFragmentManager(), this);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.player_view_pager_swipe);
+
+        final PlayerPagerAdapter pageAdapter = new PlayerPagerAdapter(this);
+        ViewPager2 viewPager = (ViewPager2) findViewById(R.id.player_view_pager_swipe);
         viewPager.setAdapter(pageAdapter);
 
         fragmentPosition = getDefaultFragment();
@@ -89,13 +94,8 @@ public class PlayerActivity extends AppCompatActivity {
             viewPager.setCurrentItem(fragmentPosition);
         }
 
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                fragmentPosition = position;
-                setActivityTitle();
-            }
-        });
+        viewPager.registerOnPageChangeCallback(pageChangeCallback);
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this);
 
         DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
         if (dataFragment != null) {
@@ -137,8 +137,8 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.player_view_pager_swipe);
-        viewPager.clearOnPageChangeListeners();
+        ViewPager2 viewPager = (ViewPager2) findViewById(R.id.player_view_pager_swipe);
+        viewPager.unregisterOnPageChangeCallback(pageChangeCallback);
 
         super.onDestroy();
     }
@@ -172,7 +172,7 @@ public class PlayerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.player_action_settings: {
                 Intent intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, SETTINGS_ACTIVITY_RESULT);
+                activityResultLauncher.launch(intent);
                 return true;
             }
             case R.id.player_action_server: {
@@ -210,20 +210,16 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SETTINGS_ACTIVITY_RESULT) {
-            if (ThemeHelper.useDarkTheme(this) != darkTheme) {
-                finish();
-                startActivity(new Intent(this, PlayerActivity.class));
-            } else {
-                if (reconnectMusicPlayerOnSettingsChanged(false)) {
-                    showSwipeHint();
-                } else {
-                    attachedFragments[PlayerPlaylistFragment.FRAGMENT_POSITION].playlistUpdated(playlistEntities);
-                }
-            }
+    public void onActivityResult(ActivityResult result) {
+        if (ThemeHelper.useDarkTheme(this) != darkTheme) {
+            finish();
+            startActivity(new Intent(this, PlayerActivity.class));
         } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            if (reconnectMusicPlayerOnSettingsChanged(false)) {
+                showSwipeHint();
+            } else {
+                attachedFragments[PlayerPlaylistFragment.FRAGMENT_POSITION].playlistUpdated(playlistEntities);
+            }
         }
     }
 
@@ -373,7 +369,7 @@ public class PlayerActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(PlayerActivity.this, SettingsActivity.class);
-                    startActivityForResult(intent, SETTINGS_ACTIVITY_RESULT);
+                    activityResultLauncher.launch(intent);
                 }
             });
             AlertDialog alert = builder.create();
@@ -431,7 +427,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void setActivityTitle() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.player_view_pager_swipe);
+        ViewPager2 viewPager = (ViewPager2) findViewById(R.id.player_view_pager_swipe);
         if (viewPager != null) {
             PlayerPagerAdapter pageAdapter = (PlayerPagerAdapter) viewPager.getAdapter();
             String title = pageAdapter.getTitle(fragmentPosition);
@@ -537,6 +533,14 @@ public class PlayerActivity extends AppCompatActivity {
                 }
             }
 
+            setActivityTitle();
+        }
+    }
+
+    private final class PageChangeCallback extends ViewPager2.OnPageChangeCallback {
+        @Override
+        public void onPageSelected(int position) {
+            fragmentPosition = position;
             setActivityTitle();
         }
     }

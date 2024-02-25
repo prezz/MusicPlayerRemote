@@ -1,5 +1,21 @@
 package net.prezz.mpr.ui.library;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+import androidx.preference.PreferenceManager;
+import androidx.viewpager2.widget.ViewPager2;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.model.LibraryEntity;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
@@ -8,26 +24,10 @@ import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.mpd.database.MpdDatabaseBuilder;
 import net.prezz.mpr.mpd.database.MpdDatabaseBuilder.UpdateDatabaseResult;
 import net.prezz.mpr.ui.helpers.MiniControlHelper;
-import net.prezz.mpr.R;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.view.DataFragment;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.ViewPager;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import java.util.SortedSet;
 
@@ -46,6 +46,8 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
     private MiniControlHelper controlHelper;
     private UriFilterHelper uriFilterHelper;
 
+    private ViewPager2.OnPageChangeCallback pageChangeCallback;
+
     private AlertDialog buildDatabaseErrorDialog;
     private AlertDialog swipeHintDialog;
 
@@ -62,23 +64,26 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
         swipeHintDialog = null;
 
         //setup swipe between fragments
-        final LibraryPagerAdapter pageAdapter = new LibraryPagerAdapter(getSupportFragmentManager(), this);
-        ViewPager viewPager = (ViewPager)findViewById(R.id.library_view_pager_swipe);
+        final LibraryPagerAdapter pageAdapter = new LibraryPagerAdapter(this);
+        ViewPager2 viewPager = (ViewPager2)findViewById(R.id.library_view_pager_swipe);
         viewPager.setAdapter(pageAdapter);
         
-        fragmentPosition = Math.min(readFragmentPosition(), pageAdapter.getCount());
+        fragmentPosition = Math.min(readFragmentPosition(), pageAdapter.getItemCount());
         if (fragmentPosition > 0) {
             viewPager.setCurrentItem(fragmentPosition);
         }
         
         setTitle(pageAdapter.getTitle(fragmentPosition));
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+        this.pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 fragmentPosition = position;
                 setTitle(pageAdapter.getTitle(position));
             }
-        });
+        };
+
+        viewPager.registerOnPageChangeCallback(pageChangeCallback);
 
         controlHelper = new MiniControlHelper(this);
         uriFilterHelper = new UriFilterHelper(this, this);
@@ -141,8 +146,8 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
 
     @Override
     public void onDestroy() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.library_view_pager_swipe);
-        viewPager.clearOnPageChangeListeners();
+        ViewPager2 viewPager = (ViewPager2) findViewById(R.id.library_view_pager_swipe);
+        viewPager.unregisterOnPageChangeCallback(pageChangeCallback);
 
         super.onDestroy();
     }

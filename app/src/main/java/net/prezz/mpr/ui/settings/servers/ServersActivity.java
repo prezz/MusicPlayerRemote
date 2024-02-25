@@ -6,6 +6,7 @@ import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.servers.ServerConfiguration;
 import net.prezz.mpr.model.servers.ServerConfigurationService;
 import net.prezz.mpr.R;
+import net.prezz.mpr.ui.CoverActivity;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 
@@ -23,11 +24,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ServersActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
+public class ServersActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener, ActivityResultCallback<ActivityResult> {
 
-    private static final int ADD_EDIT_SERVER_ACTIVITY_RESULT = 3002;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
     private ServerConfiguration[] serverConfigurations;
 
 
@@ -37,6 +42,8 @@ public class ServersActivity extends AppCompatActivity implements OnItemClickLis
 
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_servers);
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this);
     }
 
     @Override
@@ -88,7 +95,7 @@ public class ServersActivity extends AppCompatActivity implements OnItemClickLis
         Bundle args = new Bundle();
         args.putSerializable(AddEditServerActivity.CONFIGURATION_ARGUMENT_KEY, configuration);
         intent.putExtras(args);
-        startActivityForResult(intent, ADD_EDIT_SERVER_ACTIVITY_RESULT);
+        activityResultLauncher.launch(intent);
     }
 
     public void onAddServerClick(View view) {
@@ -97,17 +104,14 @@ public class ServersActivity extends AppCompatActivity implements OnItemClickLis
             Bundle args = new Bundle();
             args.putSerializable(AddEditServerActivity.CONFIGURATION_ARGUMENT_KEY, null);
             intent.putExtras(args);
-
-            startActivityForResult(intent, ADD_EDIT_SERVER_ACTIVITY_RESULT);
+            activityResultLauncher.launch(intent);
         }
     }
 
-    @Override 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_EDIT_SERVER_ACTIVITY_RESULT) {
-            if (resultCode == RESULT_OK) {
-                updateListView();
-            }
+    @Override
+    public void onActivityResult(ActivityResult result) {
+        if (result.getResultCode() == RESULT_OK) {
+            updateListView();
         }
     }
 

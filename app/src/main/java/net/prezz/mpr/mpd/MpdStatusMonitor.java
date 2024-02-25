@@ -66,7 +66,7 @@ public class MpdStatusMonitor extends Handler {
         switch (msg.what) {
             case STATUS_EVENT:
                 Bundle bundle = msg.getData();
-                PlayerStatus status = (PlayerStatus)bundle.getSerializable(STATUS_BUNDLE_KEY);
+                PlayerStatus status = bundle.getSerializable(STATUS_BUNDLE_KEY, PlayerStatus.class);
                 if (status != null && statusListener != null) {
                     statusListener.statusUpdated(status);
                     if (status.isConnected() && status.getState() != PlayerState.STOP) {

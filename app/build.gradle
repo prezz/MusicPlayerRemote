@@ -10,10 +10,10 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId 'net.prezz.mpr'
-        minSdkVersion 23
-        targetSdk 33
-        versionCode 141
-        versionName '1.141.0'
+        minSdk 33
+        targetSdk 34
+        versionCode 142
+        versionName '1.142.0'
     }
     buildTypes {
         release {
@@ -27,11 +27,13 @@ android {
     }
     productFlavors {
     }
+    namespace 'net.prezz.mpr'
 }
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
 }
 
 tasks.withType(JavaCompile) {
