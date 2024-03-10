@@ -25,4 +25,6 @@ public abstract class LibraryAdapterEntity implements AdapterEntity {
     public abstract String getSubText();
 
     public abstract String getTime();
+
+    public abstract String getData();
 }

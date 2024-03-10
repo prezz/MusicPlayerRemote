@@ -29,9 +29,9 @@ public class MpdCoverService implements CoverService {
 
             if (album != null) {
                 MpdPlayerSettings mpdSettings = MpdPlayerSettings.create(context);
-                String mpdHost = mpdSettings.getMpdHost();
+                String databaseName = mpdSettings.getName();
 
-                Set<String> files = getFileFromEachDirectories(context, mpdHost, artist, album);
+                Set<String> files = getFileFromEachDirectories(context, databaseName, artist, album);
                 List<String> result = getValidUrls(mpdSettings, files);
                 return result;
             }
@@ -42,10 +42,10 @@ public class MpdCoverService implements CoverService {
         return Collections.emptyList();
     }
 
-    private static Set<String> getFileFromEachDirectories(Context context, String mpdHost, String artist, String album) {
+    private static Set<String> getFileFromEachDirectories(Context context, String databaseName, String artist, String album) {
         Map<String, String> result = new HashMap<String, String>();
 
-        MpdLibraryDatabaseHelper databaseHelper = new MpdLibraryDatabaseHelper(context, mpdHost);
+        MpdLibraryDatabaseHelper databaseHelper = new MpdLibraryDatabaseHelper(context, databaseName);
         try {
             Cursor c = databaseHelper.findUris(artist, album);
             try {

@@ -34,10 +34,12 @@ public class LibraryEntity implements Serializable {
     private String lookupArtist;
     private String lookupAlbum;
     private SortedSet<String> uriFilter;
+    private Integer playedDaysAgo;
+    private Integer playedCount;
 
 
     private LibraryEntity(Tag tag, String artist, String albumArtist, String composer, String album, String title, String genre, UriEntity uriEntity, Integer metaDisc, Integer metaTrack, String metaArtist, String metaAlbumArtist,
-                          String metaAlbum, String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, SortedSet<String> uriFilter) {
+                          String metaAlbum, String metaGenre, Integer metaCount, Integer metaYear, Integer metaLength, Boolean metaCompilation, String lookupArtist, String lookupAlbum, SortedSet<String> uriFilter, Integer playedDaysAgo, Integer playedCount) {
         this.tag = tag;
         this.artist = artist;
         this.albumArtist = albumArtist;
@@ -59,6 +61,8 @@ public class LibraryEntity implements Serializable {
         this.lookupArtist = lookupArtist;
         this.lookupAlbum = lookupAlbum;
         this.uriFilter = uriFilter;
+        this.playedDaysAgo = playedDaysAgo;
+        this.playedCount = playedCount;
     }
 
     public Tag getTag() {
@@ -141,6 +145,14 @@ public class LibraryEntity implements Serializable {
         return lookupAlbum;
     }
 
+    public Integer getPlayedDaysAgo() {
+        return playedDaysAgo;
+    }
+
+    public Integer getPlayedCount() {
+        return playedCount;
+    }
+
     public SortedSet<String> getUriFilter() {
         return (uriFilter != null) ? Collections.unmodifiableSortedSet(uriFilter) : null;
     }
@@ -217,6 +229,12 @@ public class LibraryEntity implements Serializable {
             if (!Utils.equals(this.uriFilter, other.uriFilter)) {
                 return false;
             }
+            if (!Utils.equals(this.playedDaysAgo, other.playedDaysAgo)) {
+                return false;
+            }
+            if (!Utils.equals(this.playedCount, other.playedCount)) {
+                return false;
+            }
 
             return true;
         }
@@ -249,6 +267,8 @@ public class LibraryEntity implements Serializable {
         hash = 31 * hash + Utils.hashCode(lookupArtist);
         hash = 31 * hash + Utils.hashCode(lookupAlbum);
         hash = 31 * hash + Utils.hashCode(uriFilter);
+        hash = 31 * hash + Utils.hashCode(playedDaysAgo);
+        hash = 31 * hash + Utils.hashCode(playedCount);
 
         return hash;
     }
@@ -286,6 +306,8 @@ public class LibraryEntity implements Serializable {
         private String lookupArtist;
         private String lookupAlbum;
         private SortedSet<String> uriFilter;
+        private Integer playedDaysAgo;
+        private Integer playedCount;
 
         public Builder clear() {
             tag = null;
@@ -309,6 +331,8 @@ public class LibraryEntity implements Serializable {
             lookupArtist = null;
             lookupAlbum = null;
             uriFilter = null;
+            playedDaysAgo = null;
+            playedCount = null;
             return this;
         }
 
@@ -417,10 +441,20 @@ public class LibraryEntity implements Serializable {
             return this;
         }
 
+        public Builder setPlayedDaysAgo(Integer playedDaysAgo) {
+            this.playedDaysAgo = playedDaysAgo;
+            return this;
+        }
+
+        public Builder setPlayedCount(Integer playedCount) {
+            this.playedCount = playedCount;
+            return this;
+        }
+
         public LibraryEntity build() {
             return new LibraryEntity(tag, artist, albumArtist, composer, album, title, genre, uriEntity, metaDisc, metaTrack,
                     metaArtist, metaAlbumArtist, metaAlbum, metaGenre, metaCount, metaYear, metaLength, metaCompilation,
-                    lookupArtist, lookupAlbum, uriFilter);
+                    lookupArtist, lookupAlbum, uriFilter, playedDaysAgo, playedCount);
         }
     }
 }

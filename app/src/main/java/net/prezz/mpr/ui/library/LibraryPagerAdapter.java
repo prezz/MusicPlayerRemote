@@ -23,11 +23,11 @@ class LibraryPagerAdapter extends FragmentStateAdapter {
     public String getTitle(int position) {
         switch (position) {
         case 0:
-            return context.getString(R.string.library_musicians);
-        case 1:
             return context.getString(R.string.library_albums);
-        case 2:
+        case 1:
             return context.getString(R.string.library_genres);
+        case 2:
+            return context.getString(R.string.library_musicians);
         case 3:
             return context.getString(R.string.library_files);
         }
@@ -39,11 +39,11 @@ class LibraryPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
         case 0:
-            return new LibraryArtistFragment();
-        case 1:
             return new LibraryAlbumFragment();
-        case 2:
+        case 1:
             return new LibraryGenreFragment();
+        case 2:
+            return new LibraryArtistFragment();
         case 3:
             return new LibraryUriFragment();
         }

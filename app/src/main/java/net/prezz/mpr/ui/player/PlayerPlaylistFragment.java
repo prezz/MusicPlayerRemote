@@ -33,6 +33,7 @@ import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
 import net.prezz.mpr.model.PlaylistEntity;
+import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.command.ClearPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteFromPlaylistCommand;
 import net.prezz.mpr.model.command.DeleteMultipleFromPlaylistCommand;
@@ -216,11 +217,19 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
                 case 3:
                     MusicPlayerControl.sendControlCommand(new ClearPlaylistCommand());
                     break;
+                case 4:
+                    updatePlayData();
+                    break;
                 }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void forceRefresh() {
+        findListView().invalidateViews();
     }
 
     private void scrollToPlayingSong() {
@@ -229,6 +238,40 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
 
     private void shufflePlaylist() {
         MusicPlayerControl.sendControlCommands(Arrays.asList(new UnprioritizeCommand(0, adapterEntities.length), new ShuffleCommand()));
+    }
+
+    private void updatePlayData() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setTitle(R.string.player_mark_played_header);
+        builder.setMessage(R.string.player_mark_played_message);
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (adapterEntities != null && adapterEntities.length > 0) {
+                    List<PlaylistEntity> entities = new ArrayList<>();
+                    for (PlaylistAdapterEntity entity : adapterEntities) {
+                        entities.add(entity.getEntity());
+                    }
+                    MusicPlayerControl.updatePlayData(entities, new ResponseReceiver<Boolean>() {
+                        @Override
+                        public void receiveResponse(Boolean response) {
+                            if (response == Boolean.TRUE) {
+                                Boast.makeText(getActivity(), R.string.player_play_data_updated).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void createEntityAdapter() {

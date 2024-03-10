@@ -18,7 +18,7 @@ import android.widget.AdapterView;
 
 public class LibraryGenreFragment extends LibraryFragment {
 
-    private static final int FRAGMENT_POSITION = 2;
+    private static final int FRAGMENT_POSITION = 1;
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
