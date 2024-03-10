@@ -25,6 +25,9 @@
     <string name="player_consume_off_toast">Consume off: Tracks will remain in playlist after play</string>
     <string name="player_not_possible">Not possible</string>
     <string name="player_entity_drag_image">Drag</string>
+    <string name="player_mark_played_header">Mark played</string>
+    <string name="player_mark_played_message">Mark tracks in current playlist as played</string>
+    <string name="player_play_data_updated">Play data updated</string>
     <string-array name="player_playlist_context_menu">
         <item>Play</item>
         <item>Enqueue</item>
@@ -43,6 +46,7 @@
         <item>Shuffle</item>
         <item>Unqueue all</item>
         <item>Clear playlist</item>
+        <item>Mark played</item>
     </string-array>
     
     <string name="player_seek_bar_enable">Enable</string>
@@ -52,6 +56,7 @@
         <item>What\'s next?</item>
         <item>Go to&#8230;</item>
         <item>Search Last.fm&#8230;</item>
+        <item>Mark played</item>
     </string-array>
     
     <string name="player_lastfm_goto_header">Search Last.fm&#8230;</string>

@@ -138,6 +138,7 @@ public class LibraryArrayAdapter extends ArrayAdapter<AdapterEntity> implements 
     private static final class Wrapper {
         private View view;
         private TextView textView1;
+        private TextView textViewData;
         private TextView textView2;
         private TextView textViewTime;
         private ImageView coverView;
@@ -155,6 +156,7 @@ public class LibraryArrayAdapter extends ArrayAdapter<AdapterEntity> implements 
                 this.showCover = showCover;
                 this.coverSize = coverSize;
                 this.textView1 = (TextView)view.findViewById(R.id.library_list_item_text1);
+                this.textViewData = (TextView)view.findViewById(R.id.library_list_item_data);
                 this.textView2 = (TextView)view.findViewById(R.id.library_list_item_text2);
                 this.textViewTime = (TextView)view.findViewById(R.id.library_list_item_time);
                 this.coverView = (ImageView) view.findViewById(R.id.library_list_item_cover_image);
@@ -170,8 +172,9 @@ public class LibraryArrayAdapter extends ArrayAdapter<AdapterEntity> implements 
             currentAdapterEntity = entity;
             if (entity instanceof LibraryAdapterEntity) {
                 textView1.setText(((LibraryAdapterEntity) entity).getSubText());
+                textViewData.setText(((LibraryAdapterEntity) entity).getData());
                 textView2.setText(entity.getText());
-                textViewTime.setText(((LibraryAdapterEntity) entity).getTime() != null ? ((LibraryAdapterEntity) entity).getTime() : "");
+                textViewTime.setText(((LibraryAdapterEntity) entity).getTime());
                 if (showCover) {
                     loadCover((LibraryAdapterEntity) entity);
                 }

@@ -45,5 +45,7 @@ public interface MusicPlayer {
 
     TaskHandle switchPartition(String partition, ResponseReceiver<PartitionEntity[]> responseReceiver);
 
+    TaskHandle updatePlayData(List<PlaylistEntity> entities, ResponseReceiver<Boolean> responseReceiver);
+
     TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver);
 }

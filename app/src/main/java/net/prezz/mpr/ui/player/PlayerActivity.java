@@ -541,6 +541,7 @@ public class PlayerActivity extends AppCompatActivity implements ActivityResultC
         @Override
         public void onPageSelected(int position) {
             fragmentPosition = position;
+            attachedFragments[fragmentPosition].forceRefresh();
             setActivityTitle();
         }
     }

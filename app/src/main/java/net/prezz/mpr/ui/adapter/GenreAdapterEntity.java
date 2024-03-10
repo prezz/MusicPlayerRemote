@@ -38,6 +38,11 @@ public class GenreAdapterEntity extends LibraryAdapterEntity {
 
     @Override
     public String getTime() {
-        return null;
+        return "";
+    }
+
+    @Override
+    public String getData() {
+        return "";
     }
 }

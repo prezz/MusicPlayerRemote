@@ -39,4 +39,10 @@ public class AlbumAdapterEntity extends LibraryAdapterEntity {
         Integer metaLength = getEntity().getMetaLength();
         return (metaLength != null) ? String.format("%d:%02d", metaLength.intValue() / 60, metaLength.intValue() % 60) : "";
     }
+
+    @Override
+    public String getData() {
+        Integer playedDaysAgo = getEntity().getPlayedDaysAgo();
+        return (playedDaysAgo != null) ? String.format("%d", playedDaysAgo) : "-";
+    }
 }

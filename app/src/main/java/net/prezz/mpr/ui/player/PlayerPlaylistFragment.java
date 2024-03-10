@@ -46,6 +46,7 @@ import net.prezz.mpr.model.command.UpdatePrioritiesCommand;
 import net.prezz.mpr.ui.adapter.PlaylistAdapterEntity;
 import net.prezz.mpr.ui.adapter.PlaylistArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.UpdatePlayDataHelper;
 import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.library.filtered.FilteredActivity;
 import net.prezz.mpr.ui.library.filtered.FilteredAlbumAndTitleActivity;
@@ -216,11 +217,19 @@ public class PlayerPlaylistFragment extends Fragment implements PlayerFragment, 
                 case 3:
                     MusicPlayerControl.sendControlCommand(new ClearPlaylistCommand());
                     break;
+                case 4:
+                    UpdatePlayDataHelper.updatePlayData(getActivity(), adapterEntities);
+                    break;
                 }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void forceRefresh() {
+        findListView().invalidateViews();
     }
 
     private void scrollToPlayingSong() {

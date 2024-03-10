@@ -22,7 +22,7 @@ import android.widget.AdapterView;
 
 public class LibraryArtistFragment extends LibraryFragment {
 
-    private static final int FRAGMENT_POSITION = 0;
+    private static final int FRAGMENT_POSITION = 2;
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
