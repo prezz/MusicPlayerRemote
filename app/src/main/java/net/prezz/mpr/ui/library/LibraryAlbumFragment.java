@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class LibraryAlbumFragment extends LibraryFragment {
 
-    private static final int FRAGMENT_POSITION = 1;
+    private static final int FRAGMENT_POSITION = 0;
 
     private boolean sortByArtist;
 

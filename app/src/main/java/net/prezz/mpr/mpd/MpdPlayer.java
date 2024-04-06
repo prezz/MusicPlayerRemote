@@ -38,6 +38,7 @@ import net.prezz.mpr.mpd.command.MpdGetStoredPlaylistsCommand;
 import net.prezz.mpr.mpd.command.MpdGetUriCommand;
 import net.prezz.mpr.mpd.command.MpdSearchLibraryCommand;
 import net.prezz.mpr.mpd.command.MpdSendControlCommands;
+import net.prezz.mpr.mpd.command.MpdUpdatePlayDataCommand;
 import net.prezz.mpr.mpd.connection.MpdConnection;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 import net.prezz.mpr.ui.ApplicationActivator;
@@ -54,7 +55,7 @@ public class MpdPlayer implements MusicPlayer {
         this.connection = new MpdConnection(settings);
         this.monitor = new MpdStatusMonitor(settings);
         this.partitionStore = new MpdPartitionStore(ApplicationActivator.getContext(), settings);
-        this.databaseHelper = new MpdLibraryDatabaseHelper(ApplicationActivator.getContext(), settings.getMpdHost());
+        this.databaseHelper = new MpdLibraryDatabaseHelper(ApplicationActivator.getContext(), settings.getName());
     }
 
     @Override
@@ -315,6 +316,22 @@ public class MpdPlayer implements MusicPlayer {
                     monitor.switchPartition(partitionStore);
                 }
 
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle updatePlayData(List<PlaylistEntity> entities, ResponseReceiver<Boolean> responseReceiver) {
+        MpdUpdatePlayDataCommand command = new MpdUpdatePlayDataCommand(entities);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<Boolean>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(Boolean result) {
                 responseReceiver.receiveResponse(result);
             }
         });

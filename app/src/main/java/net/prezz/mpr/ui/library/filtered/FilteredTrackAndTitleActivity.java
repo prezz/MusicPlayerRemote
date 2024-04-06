@@ -35,12 +35,24 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class FilteredTrackAndTitleActivity extends FilteredActivity {
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
-    private static final int COVER_ACTIVITY_RESULT = 1010;
+public class FilteredTrackAndTitleActivity extends FilteredActivity implements ActivityResultCallback<ActivityResult> {
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private TaskHandle getCoverHandle = TaskHandle.NULL_HANDLE;
     private TaskHandle lastFmHandle = TaskHandle.NULL_HANDLE;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this);
+    }
 
     @Override
     public void onStop() {
@@ -108,15 +120,11 @@ public class FilteredTrackAndTitleActivity extends FilteredActivity {
         return new LibraryArrayAdapter(this, android.R.layout.simple_list_item_1, adapterEntities, SortedAdapterIndexStrategy.INSTANCE, false);
     }
 
-    @Override 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == COVER_ACTIVITY_RESULT) {
-            if (resultCode == RESULT_OK) {
-                String url = data.getStringExtra(CoverActivity.URL_RESULT_KEY);
-                setCover(url);
-            }
+    @Override
+    public void onActivityResult(ActivityResult result) {
+        if (result.getResultCode() == RESULT_OK) {
+            String url = result.getData().getStringExtra(CoverActivity.URL_RESULT_KEY);
+            setCover(url);
         }
     }
 
@@ -162,7 +170,7 @@ public class FilteredTrackAndTitleActivity extends FilteredActivity {
         args.putString(CoverActivity.ARTIST_ARGUMENT_KEY, artist);
         args.putString(CoverActivity.ALBUM_ARGUMENT_KEY, album);
         intent.putExtras(args);
-        startActivityForResult(intent, COVER_ACTIVITY_RESULT);
+        activityResultLauncher.launch(intent);
     }
 
     private void goToLastFm() {
@@ -327,7 +335,8 @@ public class FilteredTrackAndTitleActivity extends FilteredActivity {
     }
 
     private boolean isLandscape() {
-        Display display = getWindowManager().getDefaultDisplay();
+
+        Display display = this.getDisplay();
         int rotation = display.getRotation();
         return (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270);
     }

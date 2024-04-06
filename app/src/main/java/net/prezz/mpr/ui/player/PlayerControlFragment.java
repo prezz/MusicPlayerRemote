@@ -1,8 +1,31 @@
 package net.prezz.mpr.ui.player;
 
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.AudioOutput;
 import net.prezz.mpr.model.LibraryEntity;
@@ -27,39 +50,18 @@ import net.prezz.mpr.model.external.CoverReceiver;
 import net.prezz.mpr.model.external.ExternalInformationService;
 import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.mpd.MpdPartitionProvider;
-import net.prezz.mpr.ui.helpers.LyngdorfHelper;
 import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.LyngdorfHelper;
 import net.prezz.mpr.ui.helpers.ToggleButtonHelper;
+import net.prezz.mpr.ui.helpers.UpdatePlayDataHelper;
 import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.filtered.FilteredActivity;
 import net.prezz.mpr.ui.library.filtered.FilteredAlbumAndTitleActivity;
 import net.prezz.mpr.ui.library.filtered.FilteredTrackAndTitleActivity;
-import net.prezz.mpr.R;
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
+import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
 public class PlayerControlFragment extends Fragment implements PlayerFragment, OnClickListener {
 
@@ -204,11 +206,19 @@ public class PlayerControlFragment extends Fragment implements PlayerFragment, O
                     case 3:
                         goToLastFm();
                         break;
+                    case 4:
+                        UpdatePlayDataHelper.updatePlayData(getActivity(), playlistEntities);
+                        break;
                 }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void forceRefresh() {
+        // do nothing
     }
 
     @Override

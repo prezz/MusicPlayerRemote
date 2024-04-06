@@ -1,7 +1,23 @@
 package net.prezz.mpr.service;
 
-import java.util.Arrays;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
+import android.os.IBinder;
 
+import androidx.preference.PreferenceManager;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.PlayerState;
 import net.prezz.mpr.model.PlayerStatus;
@@ -24,25 +40,8 @@ import net.prezz.mpr.ui.ApplicationActivator;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.mpd.MpdPlayerSettings;
 import net.prezz.mpr.ui.player.PlayerActivity;
-import net.prezz.mpr.R;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Icon;
-import android.os.Build;
-import android.os.IBinder;
-
-import androidx.preference.PreferenceManager;
+import java.util.Arrays;
 
 public class PlaybackService extends Service {
 
@@ -131,7 +130,7 @@ public class PlaybackService extends Service {
         filter.addAction(CMD_NEXT);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(broadcastReceiver, filter);
+        registerReceiver(broadcastReceiver, filter, RECEIVER_EXPORTED);
 
         if (player != null) {
             updateCoverHandle.cancelTask();
@@ -228,7 +227,9 @@ public class PlaybackService extends Service {
 
         int ic_play = (playerState == PlayerState.PLAY) ? R.drawable.ic_pause_w : (playerState == PlayerState.PAUSE) ? R.drawable.ic_paused_w : R.drawable.ic_play_w;
 
-        Notification.Builder notificationBuilder = new Notification.Builder(this)
+        String channelId = getString(R.string.notification_media_player_channel_id);
+
+        Notification notification = new Notification.Builder(this, channelId)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setShowWhen(false)
@@ -246,30 +247,22 @@ public class PlaybackService extends Service {
                 .setLargeIcon(cover)
                 .setContentIntent(PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE))
                 .setAutoCancel(false)
-                .setOngoing(sticky);
+                .setOngoing(sticky)
+                .build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = getString(R.string.notification_media_player_channel_id);
-
-            NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
-            if (channel == null) {
-                channel = new NotificationChannel(channelId, getString(R.string.notification_media_player_channel_name), NotificationManager.IMPORTANCE_LOW);
-                notificationManager.createNotificationChannel(channel);
-            }
-
-            notificationBuilder.setChannelId(channelId);
+        NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
+        if (channel == null) {
+            channel = new NotificationChannel(channelId, getString(R.string.notification_media_player_channel_name), NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(channel);
         }
-
-        Notification notification = notificationBuilder.build();
 
         if (sticky) {
             startForeground(NOTIFICATION_ID, notification);
             isForegroundService = true;
         } else {
             if (isForegroundService) {
-                stopForeground(false);
+                stopForeground(STOP_FOREGROUND_DETACH);
             }
 
             notificationManager.notify(NOTIFICATION_ID, notification);

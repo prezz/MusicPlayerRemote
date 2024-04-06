@@ -107,6 +107,11 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
+    public TaskHandle updatePlayData(List<PlaylistEntity> entities, ResponseReceiver<Boolean> responseReceiver) {
+        return createNullHandle();
+    }
+
+    @Override
     public TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver) {
         return createNullHandle();
     }
