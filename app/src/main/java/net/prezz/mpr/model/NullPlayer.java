@@ -112,6 +112,21 @@ class NullPlayer implements MusicPlayer {
     }
 
     @Override
+    public TaskHandle clearPlayData(ResponseReceiver<Boolean> responseReceiver) {
+        return createNullHandle();
+    }
+
+    @Override
+    public TaskHandle exportPlayData(int offset, int limit, ResponseReceiver<String> responseReceiver) {
+        return createNullHandle();
+    }
+
+    @Override
+    public TaskHandle importPlayData(String csvData, ResponseReceiver<Boolean> responseReceiver) {
+        return createNullHandle();
+    }
+
+    @Override
     public TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver) {
         return createNullHandle();
     }

@@ -19,9 +19,11 @@ import net.prezz.mpr.model.StoredPlaylistEntity;
 import net.prezz.mpr.model.TaskHandle;
 import net.prezz.mpr.model.UriEntity;
 import net.prezz.mpr.model.command.Command;
+import net.prezz.mpr.mpd.command.MpdClearPlayDataCommand;
 import net.prezz.mpr.mpd.command.MpdConnectionCommand.MpdConnectionCommandReceiver;
 import net.prezz.mpr.mpd.command.MpdDatabaseCommand.MpdDatabaseCommandReceiver;
 import net.prezz.mpr.mpd.command.MpdDeleteLocalLibraryDatabaseCommand;
+import net.prezz.mpr.mpd.command.MpdExportPlayDataCommand;
 import net.prezz.mpr.mpd.command.MpdGetAlbumsCommand;
 import net.prezz.mpr.mpd.command.MpdGetArtistsCommand;
 import net.prezz.mpr.mpd.command.MpdGetGenresCommand;
@@ -36,6 +38,7 @@ import net.prezz.mpr.mpd.command.MpdGetPlaylistEntityCommand;
 import net.prezz.mpr.mpd.command.MpdGetStatisticsCommand;
 import net.prezz.mpr.mpd.command.MpdGetStoredPlaylistsCommand;
 import net.prezz.mpr.mpd.command.MpdGetUriCommand;
+import net.prezz.mpr.mpd.command.MpdImportPlayDataCommand;
 import net.prezz.mpr.mpd.command.MpdSearchLibraryCommand;
 import net.prezz.mpr.mpd.command.MpdSendControlCommands;
 import net.prezz.mpr.mpd.command.MpdUpdatePlayDataCommand;
@@ -324,6 +327,54 @@ public class MpdPlayer implements MusicPlayer {
     @Override
     public TaskHandle updatePlayData(List<PlaylistEntity> entities, ResponseReceiver<Boolean> responseReceiver) {
         MpdUpdatePlayDataCommand command = new MpdUpdatePlayDataCommand(entities);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<Boolean>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(Boolean result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle clearPlayData(ResponseReceiver<Boolean> responseReceiver) {
+        MpdClearPlayDataCommand command = new MpdClearPlayDataCommand();
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<Boolean>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(Boolean result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle exportPlayData(int offset, int limit, ResponseReceiver<String> responseReceiver) {
+        MpdExportPlayDataCommand command = new MpdExportPlayDataCommand(offset, limit);
+        return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<String>() {
+            @Override
+            public void build() {
+                responseReceiver.buildingDatabase();
+            }
+
+            @Override
+            public void receive(String result) {
+                responseReceiver.receiveResponse(result);
+            }
+        });
+    }
+
+    @Override
+    public TaskHandle importPlayData(String csvData, ResponseReceiver<Boolean> responseReceiver) {
+        MpdImportPlayDataCommand command = new MpdImportPlayDataCommand(csvData);
         return command.execute(databaseHelper, connection, new MpdDatabaseCommandReceiver<Boolean>() {
             @Override
             public void build() {

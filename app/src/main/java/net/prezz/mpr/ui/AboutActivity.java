@@ -37,11 +37,6 @@ public class AboutActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void onPrivacyPolicyClick(View view) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://mpd-remote.s3.eu-west-1.amazonaws.com/index.html"));
-        startActivity(browserIntent);
-    }
-
     public void onLastfmClick(View view) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm"));
         startActivity(browserIntent);

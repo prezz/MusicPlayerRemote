@@ -1,11 +1,25 @@
 package net.prezz.mpr.ui.library;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import androidx.fragment.app.Fragment;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.ResponseReceiver;
 import net.prezz.mpr.model.StoredPlaylistEntity;
@@ -28,26 +42,13 @@ import net.prezz.mpr.ui.adapter.UriAdapterEntity;
 import net.prezz.mpr.ui.helpers.AddToStoredPlaylistHelper;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.library.filtered.FilteredUriActivity;
-import net.prezz.mpr.R;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.ProgressBar;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class LibraryUriFragment extends Fragment implements LibraryCommonsFragment, OnItemClickListener, OnMenuItemClickListener {
 
@@ -65,9 +66,9 @@ public class LibraryUriFragment extends Fragment implements LibraryCommonsFragme
 
         getFromLibraryHandle = TaskHandle.NULL_HANDLE;
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(getActivity(), getClass());
-        if (dataFragment != null) {
-            Object[] objectEntities = (Object[]) dataFragment.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
+        DataState dataState = DataState.get(getActivity());
+        if (dataState != null) {
+            Object[] objectEntities = (Object[]) dataState.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 adapterEntities = Arrays.copyOf(objectEntities, objectEntities.length, AdapterEntity[].class);
             }
@@ -117,9 +118,9 @@ public class LibraryUriFragment extends Fragment implements LibraryCommonsFragme
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(getActivity(), getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
+        DataState dataState = DataState.get(getActivity());
+        if (dataState != null) {
+            dataState.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
         }
 
         super.onSaveInstanceState(outState);

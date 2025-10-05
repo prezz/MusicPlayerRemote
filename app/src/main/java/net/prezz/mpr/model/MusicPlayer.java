@@ -47,5 +47,11 @@ public interface MusicPlayer {
 
     TaskHandle updatePlayData(List<PlaylistEntity> entities, ResponseReceiver<Boolean> responseReceiver);
 
+    TaskHandle clearPlayData(ResponseReceiver<Boolean> responseReceiver);
+
+    TaskHandle exportPlayData(int offset, int limit, ResponseReceiver<String> responseReceiver);
+
+    TaskHandle importPlayData(String csvData, ResponseReceiver<Boolean> responseReceiver);
+
     TaskHandle sendControlCommands(List<Command> commands, ResponseReceiver<ResponseResult> responseReceiver);
 }

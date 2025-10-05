@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="play_data_activity_title">Manage play data</string>
+    <string name="play_data_action_clear">Clear</string>
+    <string name="play_data_import_button">Import</string>
+    <string name="play_data_export_button">Export</string>
+
+    <string name="play_data_export_page_hint">Page (default: 0)</string>
+    <string name="play_data_export_limit_hint">Limit (default: %1$d)</string>
+    <string name="play_data_export_count_toast">%1$d lines exported</string>
+
+    <string name="play_data_clear_header">Clear</string>
+    <string name="play_data_clear_message">Clear current play data?</string>
+    <string name="play_data_clear_success_toast">Play Data clear successful</string>
+    <string name="play_data_clear_failed_toast">Play Data clear failed</string>
+
+    <string name="play_data_import_header">Import</string>
+    <string name="play_data_import_message">Import play data from CSV?</string>
+    <string name="play_data_import_success_toast">Play Data import successful</string>
+    <string name="play_data_import_failed_toast">Play Data import failed</string>
+
+</resources>
