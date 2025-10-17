@@ -96,6 +96,18 @@ public class MusicPlayerControl {
         return musicPlayer.updatePlayData(entities, responseReceiver);
     }
 
+    public static TaskHandle clearPlayData(ResponseReceiver<Boolean> responseReceiver) {
+        return musicPlayer.clearPlayData(responseReceiver);
+    }
+
+    public static TaskHandle exportPlayData(int offset, int limit, ResponseReceiver<String> responseReceiver) {
+        return musicPlayer.exportPlayData(offset, limit, responseReceiver);
+    }
+
+    public static TaskHandle importPlayData(String csvData, ResponseReceiver<Boolean> responseReceiver) {
+        return musicPlayer.importPlayData(csvData, responseReceiver);
+    }
+
     public static void sendControlCommand(Command command) {
         sendControlCommands(Arrays.asList(command), new ResponseReceiver<ResponseResult>() {
             @Override

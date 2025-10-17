@@ -7,13 +7,13 @@ android {
             keyAlias 'prezz'
         }
     }
-    compileSdkVersion 33
+    compileSdk = 36
     defaultConfig {
         applicationId 'net.prezz.mpr'
-        minSdk 33
-        targetSdk 34
-        versionCode 142
-        versionName '1.142.0'
+        minSdk 35
+        targetSdk 36
+        versionCode 143
+        versionName '1.143.0'
     }
     buildTypes {
         release {
@@ -27,13 +27,19 @@ android {
     }
     productFlavors {
     }
-    namespace 'net.prezz.mpr'
+    namespace = 'net.prezz.mpr'
 }
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'org.apache.commons:commons-csv:1.14.1'
+}
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 tasks.withType(JavaCompile) {

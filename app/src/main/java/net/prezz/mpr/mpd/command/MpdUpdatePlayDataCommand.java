@@ -6,7 +6,6 @@ import net.prezz.mpr.model.PlaylistEntity;
 import net.prezz.mpr.mpd.database.MpdLibraryDatabaseHelper;
 
 import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -18,6 +17,12 @@ public class MpdUpdatePlayDataCommand extends MpdDatabaseCommand<List<PlaylistEn
 
     @Override
     protected Boolean doExecute(MpdLibraryDatabaseHelper databaseHelper, List<PlaylistEntity> param) throws Exception {
+
+        for (PlaylistEntity entity : param) {
+            if (entity.getArtist() == null || entity.getAlbum() == null || entity.getTitle() == null) {
+                return Boolean.FALSE;
+            }
+        }
 
         Boolean result = Boolean.FALSE;
         String today = LocalDate.now().format(DateTimeFormatter.ISO_DATE);

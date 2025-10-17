@@ -2,7 +2,6 @@ package net.prezz.mpr.ui.helpers;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.widget.Toast;
 
 public class Boast {
@@ -49,9 +48,7 @@ public class Boast {
             }
             lastBoast = this;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                toast.setMargin(toast.getHorizontalMargin(), 0.05f);
-            }
+            toast.setMargin(toast.getHorizontalMargin(), 0.05f);
             toast.show();
         }
     }

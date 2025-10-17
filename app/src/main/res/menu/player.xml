@@ -20,20 +20,26 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/player_action_partitions"
+        android:id="@+id/player_action_play_data"
         android:orderInCategory="400"
+        android:title="@string/player_action_play_data"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/player_action_partitions"
+        android:orderInCategory="500"
         android:title="@string/player_action_partitions"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/player_action_outputs"
-        android:orderInCategory="500"
+        android:orderInCategory="600"
         android:title="@string/player_action_outputs"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/player_action_toggle_streaming"
-        android:orderInCategory="600"
+        android:orderInCategory="700"
         android:title="@string/player_action_toggle_streaming"
         app:showAsAction="never" />
 

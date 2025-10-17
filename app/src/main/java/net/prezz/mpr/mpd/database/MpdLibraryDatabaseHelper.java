@@ -263,6 +263,16 @@ public class MpdLibraryDatabaseHelper extends SQLiteOpenHelper {
         return db.replace("play_data", null, values);
     }
 
+    public Cursor exportPlayData(int offset, int limit) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(String.format("SELECT artist, album, title, play_date, play_count FROM play_data order by artist, album, title LIMIT %s OFFSET %s", limit, offset), null);
+    }
+
+    public void clearPlayData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("DELETE FROM play_data");
+    }
+
     private String buildFilter(String prefix, LibraryEntity entity) {
 
         StringBuilder stringBuilder = new StringBuilder();

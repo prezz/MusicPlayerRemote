@@ -4,6 +4,7 @@
     <string name="player_action_settings">Settings</string>
     <string name="player_action_server">Select server</string>
     <string name="player_action_database">Update library</string>
+    <string name="player_action_play_data">Manage play data</string>
     <string name="player_action_partitions">Manage partitions</string>
     <string name="player_action_outputs">Select outputs</string>
     <string name="player_action_toggle_streaming">Toggle streaming</string>

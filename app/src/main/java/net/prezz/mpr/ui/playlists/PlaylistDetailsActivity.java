@@ -1,11 +1,28 @@
 package net.prezz.mpr.ui.playlists;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
+import net.prezz.mpr.R;
 import net.prezz.mpr.Utils;
 import net.prezz.mpr.model.MusicPlayerControl;
 import net.prezz.mpr.model.PlayerState;
@@ -33,32 +50,16 @@ import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.MiniControlHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 import net.prezz.mpr.ui.view.DragListView;
 import net.prezz.mpr.ui.view.DragListView.DropListener;
 import net.prezz.mpr.ui.view.DragListView.RemoveListener;
-import net.prezz.mpr.R;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
-import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PlaylistDetailsActivity extends AppCompatActivity implements OnMenuItemClickListener {
 
@@ -84,10 +85,10 @@ public class PlaylistDetailsActivity extends AppCompatActivity implements OnMenu
         String title = getPlaylistArgument().getPlaylistName();
         setTitle(title);
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
             //restore entities if loaded into memory again (or after rotation)
-            Object[] objectEntities = (Object[]) dataFragment.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
+            Object[] objectEntities = (Object[]) dataState.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 adapterEntities = Arrays.copyOf(objectEntities, objectEntities.length, PlaylistAdapterEntity[].class);
             }
@@ -125,7 +126,7 @@ public class PlaylistDetailsActivity extends AppCompatActivity implements OnMenu
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
+        DataState dataFragment = DataState.get(this);
         if (dataFragment != null) {
             dataFragment.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
         }

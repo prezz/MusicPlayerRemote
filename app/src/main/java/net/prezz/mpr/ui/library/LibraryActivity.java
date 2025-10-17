@@ -27,7 +27,7 @@ import net.prezz.mpr.ui.helpers.MiniControlHelper;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.UriFilterHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 
 import java.util.SortedSet;
 
@@ -88,10 +88,10 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
         controlHelper = new MiniControlHelper(this);
         uriFilterHelper = new UriFilterHelper(this, this);
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
-            entitiesChanged = (boolean[]) dataFragment.getData(ENTITIES_CHANGED, entitiesChanged);
-            uriEntityFilter = (UriEntity) dataFragment.getData(URI_ENTITY_FILTER, uriEntityFilter);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            entitiesChanged = (boolean[]) dataState.getData(ENTITIES_CHANGED, entitiesChanged);
+            uriEntityFilter = (UriEntity) dataState.getData(URI_ENTITY_FILTER, uriEntityFilter);
         }
     }
 
@@ -154,10 +154,10 @@ public class LibraryActivity extends AppCompatActivity implements UriFilterHelpe
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(ENTITIES_CHANGED, entitiesChanged);
-            dataFragment.setData(URI_ENTITY_FILTER, uriEntityFilter);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            dataState.setData(ENTITIES_CHANGED, entitiesChanged);
+            dataState.setData(URI_ENTITY_FILTER, uriEntityFilter);
         }
 
         super.onSaveInstanceState(outState);

@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -194,16 +193,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Activi
             PlaybackService.stop();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-            String channelId = getString(R.string.notification_media_player_channel_id);
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+        String channelId = getString(R.string.notification_media_player_channel_id);
 
-            if (Boolean.TRUE.equals(newValue)) {
-                NotificationChannel channel = new NotificationChannel(channelId, getString(R.string.notification_media_player_channel_name), NotificationManager.IMPORTANCE_LOW);
-                notificationManager.createNotificationChannel(channel);
-            } else {
-                notificationManager.deleteNotificationChannel(channelId);
-            }
+        if (Boolean.TRUE.equals(newValue)) {
+            NotificationChannel channel = new NotificationChannel(channelId, getString(R.string.notification_media_player_channel_name), NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(channel);
+        } else {
+            notificationManager.deleteNotificationChannel(channelId);
         }
     }
 

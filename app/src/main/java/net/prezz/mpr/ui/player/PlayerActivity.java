@@ -39,6 +39,7 @@ import net.prezz.mpr.mpd.MpdPlayer;
 import net.prezz.mpr.service.PlaybackService;
 import net.prezz.mpr.service.StreamingService;
 import net.prezz.mpr.ui.DatabaseActivity;
+import net.prezz.mpr.ui.PlayDataActivity;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
 import net.prezz.mpr.ui.library.LibraryActivity;
@@ -47,7 +48,7 @@ import net.prezz.mpr.ui.partitions.PartitionsActivity;
 import net.prezz.mpr.ui.playlists.StoredPlaylistsActivity;
 import net.prezz.mpr.ui.search.SearchActivity;
 import net.prezz.mpr.ui.settings.SettingsActivity;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,7 +85,6 @@ public class PlayerActivity extends AppCompatActivity implements ActivityResultC
         darkTheme = ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_player);
 
-
         final PlayerPagerAdapter pageAdapter = new PlayerPagerAdapter(this);
         ViewPager2 viewPager = (ViewPager2) findViewById(R.id.player_view_pager_swipe);
         viewPager.setAdapter(pageAdapter);
@@ -97,10 +97,10 @@ public class PlayerActivity extends AppCompatActivity implements ActivityResultC
         viewPager.registerOnPageChangeCallback(pageChangeCallback);
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this);
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
-            playerStatus = (PlayerStatus) dataFragment.getData(PLAYER_STATUS_INSTANCE_STATE, null);
-            Object[] objectEntities = (Object[]) dataFragment.getData(PLAYLIST_ENTITIES_INSTANCE_STATE, null);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            playerStatus = (PlayerStatus) dataState.getData(PLAYER_STATUS_INSTANCE_STATE, null);
+            Object[] objectEntities = (Object[]) dataState.getData(PLAYLIST_ENTITIES_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 playlistEntities = Arrays.copyOf(objectEntities, objectEntities.length, PlaylistEntity[].class);
             }
@@ -145,10 +145,10 @@ public class PlayerActivity extends AppCompatActivity implements ActivityResultC
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(PLAYER_STATUS_INSTANCE_STATE, playerStatus);
-            dataFragment.setData(PLAYLIST_ENTITIES_INSTANCE_STATE, playlistEntities);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            dataState.setData(PLAYER_STATUS_INSTANCE_STATE, playerStatus);
+            dataState.setData(PLAYLIST_ENTITIES_INSTANCE_STATE, playlistEntities);
         }
         super.onSaveInstanceState(outState);
     }
@@ -181,6 +181,11 @@ public class PlayerActivity extends AppCompatActivity implements ActivityResultC
             }
             case R.id.player_action_database: {
                 Intent intent = new Intent(this, DatabaseActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            case R.id.player_action_play_data: {
+                Intent intent = new Intent(this, PlayDataActivity.class);
                 startActivity(intent);
                 return true;
             }

@@ -41,7 +41,7 @@ import net.prezz.mpr.ui.adapter.PartitionArrayAdapter;
 import net.prezz.mpr.ui.helpers.Boast;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,10 +70,10 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_partitions);
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
             //restore entities if loaded into memory again (or after rotation)
-            Object[] objectEntities = (Object[]) dataFragment.getData(PARTITIONS_SAVED_INSTANCE_STATE, null);
+            Object[] objectEntities = (Object[]) dataState.getData(PARTITIONS_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 adapterEntities = Arrays.copyOf(objectEntities, objectEntities.length, PartitionAdapterEntity[].class);
             }
@@ -93,9 +93,9 @@ public class PartitionsActivity extends AppCompatActivity implements OnItemClick
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(PARTITIONS_SAVED_INSTANCE_STATE, adapterEntities);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            dataState.setData(PARTITIONS_SAVED_INSTANCE_STATE, adapterEntities);
         }
 
         super.onSaveInstanceState(outState);

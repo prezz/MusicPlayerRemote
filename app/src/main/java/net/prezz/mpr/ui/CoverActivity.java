@@ -10,7 +10,7 @@ import net.prezz.mpr.model.external.UrlReceiver;
 import net.prezz.mpr.R;
 import net.prezz.mpr.ui.helpers.ThemeHelper;
 import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 
 import android.content.Context;
 import android.content.Intent;
@@ -64,12 +64,12 @@ public class CoverActivity extends AppCompatActivity implements OnEditorActionLi
 
         getCoverHandle = TaskHandle.NULL_HANDLE;
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
-            coverIndex = (Integer) dataFragment.getData(INDEX_SAVED_INSTANCE_STATE, Integer.valueOf(0));
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            coverIndex = (Integer) dataState.getData(INDEX_SAVED_INSTANCE_STATE, Integer.valueOf(0));
 
             //restore entities if loaded into memory again (or after rotation)
-            Object[] objectEntities = (Object[]) dataFragment.getData(URLS_SAVED_INSTANCE_STATE, null);
+            Object[] objectEntities = (Object[]) dataState.getData(URLS_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 coverUrls = Arrays.copyOf(objectEntities, objectEntities.length, String[].class);
             }
@@ -92,10 +92,10 @@ public class CoverActivity extends AppCompatActivity implements OnEditorActionLi
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(INDEX_SAVED_INSTANCE_STATE, coverIndex);
-            dataFragment.setData(URLS_SAVED_INSTANCE_STATE, coverUrls);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            dataState.setData(INDEX_SAVED_INSTANCE_STATE, coverIndex);
+            dataState.setData(URLS_SAVED_INSTANCE_STATE, coverUrls);
         }
 
         super.onSaveInstanceState(outState);
@@ -110,7 +110,7 @@ public class CoverActivity extends AppCompatActivity implements OnEditorActionLi
             getCoverUrls(artistText.getText().toString(), albumText.getText().toString());
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(albumText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            imm.hideSoftInputFromWindow(albumText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             return true;
         }
 

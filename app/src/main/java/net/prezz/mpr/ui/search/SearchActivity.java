@@ -41,7 +41,7 @@ import net.prezz.mpr.ui.library.filtered.FilteredAlbumAndTitleActivity;
 import net.prezz.mpr.ui.library.filtered.FilteredTrackAndTitleActivity;
 import net.prezz.mpr.ui.library.filtered.FilteredUriActivity;
 import net.prezz.mpr.R;
-import net.prezz.mpr.ui.view.DataFragment;
+import net.prezz.mpr.ui.state.DataState;
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -94,13 +94,13 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
 
         searchLibraryHandle = TaskHandle.NULL_HANDLE;
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
             //restore entities if loaded into memory again (or after rotation)
-            activityTitle = (String) dataFragment.getData(ACTIVITY_TITLE_SAVED_INSTANCE_STATE, null);
-            setSearchFocus = (Boolean) dataFragment.getData(FOCUS_SEARCH_SAVED_INSTANCE_STATE, Boolean.FALSE);
+            activityTitle = (String) dataState.getData(ACTIVITY_TITLE_SAVED_INSTANCE_STATE, null);
+            setSearchFocus = (Boolean) dataState.getData(FOCUS_SEARCH_SAVED_INSTANCE_STATE, Boolean.FALSE);
 
-            Object[] objectEntities = (Object[]) dataFragment.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
+            Object[] objectEntities = (Object[]) dataState.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 adapterEntities = Arrays.copyOf(objectEntities, objectEntities.length, AdapterEntity[].class);
             }
@@ -147,16 +147,16 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(ACTIVITY_TITLE_SAVED_INSTANCE_STATE, getTitle());
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            dataState.setData(ACTIVITY_TITLE_SAVED_INSTANCE_STATE, getTitle());
 
             SearchView searchView = (SearchView) this.findViewById(R.id.search_action_search);
             if (searchView != null) {
-                dataFragment.setData(FOCUS_SEARCH_SAVED_INSTANCE_STATE, Boolean.valueOf(searchView.hasFocus()));
+                dataState.setData(FOCUS_SEARCH_SAVED_INSTANCE_STATE, Boolean.valueOf(searchView.hasFocus()));
             }
 
-            dataFragment.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
+            dataState.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
         }
 
         super.onSaveInstanceState(outState);

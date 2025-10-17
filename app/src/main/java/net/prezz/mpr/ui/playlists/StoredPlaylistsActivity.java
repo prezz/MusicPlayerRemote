@@ -1,38 +1,10 @@
 package net.prezz.mpr.ui.playlists;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.prezz.mpr.Utils;
-import net.prezz.mpr.model.MusicPlayerControl;
-import net.prezz.mpr.model.ResponseReceiver;
-import net.prezz.mpr.model.ResponseResult;
-import net.prezz.mpr.model.StoredPlaylistEntity;
-import net.prezz.mpr.model.TaskHandle;
-import net.prezz.mpr.model.command.ClearPlaylistCommand;
-import net.prezz.mpr.model.command.Command;
-import net.prezz.mpr.model.command.DeleteStoredPlaylistCommand;
-import net.prezz.mpr.model.command.LoadStoredPlaylistCommand;
-import net.prezz.mpr.model.command.PlayCommand;
-import net.prezz.mpr.model.command.SaveCurrentPlaylistCommand;
-import net.prezz.mpr.model.command.UpdatePrioritiesCommand;
-import net.prezz.mpr.ui.adapter.StoredPlaylistAdapterEntity;
-import net.prezz.mpr.ui.helpers.Boast;
-import net.prezz.mpr.ui.helpers.MiniControlHelper;
-import net.prezz.mpr.R;
-import net.prezz.mpr.ui.helpers.ThemeHelper;
-import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
-import net.prezz.mpr.ui.view.DataFragment;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -49,6 +21,34 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
+import net.prezz.mpr.R;
+import net.prezz.mpr.Utils;
+import net.prezz.mpr.model.MusicPlayerControl;
+import net.prezz.mpr.model.ResponseReceiver;
+import net.prezz.mpr.model.ResponseResult;
+import net.prezz.mpr.model.StoredPlaylistEntity;
+import net.prezz.mpr.model.TaskHandle;
+import net.prezz.mpr.model.command.ClearPlaylistCommand;
+import net.prezz.mpr.model.command.Command;
+import net.prezz.mpr.model.command.DeleteStoredPlaylistCommand;
+import net.prezz.mpr.model.command.LoadStoredPlaylistCommand;
+import net.prezz.mpr.model.command.PlayCommand;
+import net.prezz.mpr.model.command.SaveCurrentPlaylistCommand;
+import net.prezz.mpr.model.command.UpdatePrioritiesCommand;
+import net.prezz.mpr.ui.adapter.StoredPlaylistAdapterEntity;
+import net.prezz.mpr.ui.helpers.Boast;
+import net.prezz.mpr.ui.helpers.MiniControlHelper;
+import net.prezz.mpr.ui.helpers.ThemeHelper;
+import net.prezz.mpr.ui.helpers.VolumeButtonsHelper;
+import net.prezz.mpr.ui.state.DataState;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class StoredPlaylistsActivity extends AppCompatActivity implements OnItemClickListener, OnMenuItemClickListener {
 
@@ -69,10 +69,10 @@ public class StoredPlaylistsActivity extends AppCompatActivity implements OnItem
         ThemeHelper.applyTheme(this);
         setContentView(R.layout.activity_stored_playlists);
 
-        DataFragment dataFragment = DataFragment.getRestoreFragment(this, getClass());
-        if (dataFragment != null) {
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
             //restore entities if loaded into memory again (or after rotation)
-            Object[] objectEntities = (Object[]) dataFragment.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
+            Object[] objectEntities = (Object[]) dataState.getData(ENTITIES_SAVED_INSTANCE_STATE, null);
             if (objectEntities != null) {
                 adapterEntities = Arrays.copyOf(objectEntities, objectEntities.length, StoredPlaylistAdapterEntity[].class);
             }
@@ -108,9 +108,9 @@ public class StoredPlaylistsActivity extends AppCompatActivity implements OnItem
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DataFragment dataFragment = DataFragment.getSaveFragment(this, getClass());
-        if (dataFragment != null) {
-            dataFragment.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
+        DataState dataState = DataState.get(this);
+        if (dataState != null) {
+            dataState.setData(ENTITIES_SAVED_INSTANCE_STATE, adapterEntities);
         }
 
         super.onSaveInstanceState(outState);
